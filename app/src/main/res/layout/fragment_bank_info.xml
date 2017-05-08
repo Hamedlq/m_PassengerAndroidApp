@@ -1,0 +1,92 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="10dp"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:contentDescription="Bank"
+        android:textColorHint="@color/text_hint">
+
+        <AutoCompleteTextView
+            android:id="@+id/bank_shaba"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:completionThreshold="1"
+            android:hint="@string/shaba"
+            android:imeOptions="actionNext"
+            android:inputType="number"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/text_light" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:contentDescription="Bank"
+        android:textColorHint="@color/text_hint">
+
+        <AutoCompleteTextView
+            android:id="@+id/bank_Name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:completionThreshold="1"
+            android:hint="@string/bank_name"
+            android:imeOptions="actionNext"
+            android:inputType="text"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/text_light" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:contentDescription="bank account"
+        android:textColorHint="@color/text_hint">
+
+        <AutoCompleteTextView
+            android:id="@+id/bank_account"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:completionThreshold="1"
+            android:hint="@string/bank_account"
+            android:imeOptions="actionNext"
+            android:inputType="text"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/text_light" />
+    </android.support.design.widget.TextInputLayout>
+
+    <!--<TextView
+        android:id="@+id/textView14"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/bank_card"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <com.beardedhen.androidbootstrap.BootstrapThumbnail
+        android:id="@+id/bank_card_image"
+        android:layout_width="fill_parent"
+        android:layout_height="150dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:src="@mipmap/ic_camera" />-->
+
+
+</LinearLayout>

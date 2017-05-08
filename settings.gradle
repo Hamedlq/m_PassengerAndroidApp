@@ -1,0 +1,2 @@
+include ':AndroidBootstrap', ':app', ':vertical-stepper-form'
+// include ':integration-tests'

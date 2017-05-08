@@ -1,0 +1,38 @@
+{
+  "project_info": {
+    "project_number": "723613288557",
+    "project_id": "firebase-mibarim"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:723613288557:android:0333885a2cbe2282",
+        "android_client_info": {
+          "package_name": "com.mibarim.main"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-RayS5yqfNe6eNWJQ2G23XXebuitC-Fw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 2,
+          "analytics_property": {
+            "tracking_id": "UA-82788541-1"
+          }
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

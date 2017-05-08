@@ -1,0 +1,113 @@
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/three_buttons_activity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.activities.MainActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fff">
+
+        <com.mibarim.main.ui.view.CustomViewPager
+            android:id="@+id/cf_pages"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <RelativeLayout
+            android:id="@+id/flag_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginBottom="50dp"
+                android:background="@mipmap/ic_point" />
+
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_margin="15dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/my_location"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/roundedwhitebutton"
+                android:src="@drawable/ic_location"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="15dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/go_to_trip"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/roundedredbutton"
+                android:src="@drawable/ic_route"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <!--
+                <android.support.v4.view.ViewPager
+                    android:id="@+id/cf_pages"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+        -->
+        <FrameLayout
+            android:id="@+id/update_message_fragment"
+            android:name="com.mibarim.main.ui.fragments.UpdateMessageFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout="@layout/fragment_update_message">
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/ride_request_fragment"
+            android:name="com.mibarim.main.ui.fragments.RideRequestFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:layout="@layout/fragment_request_ride" />
+
+        <!--<FrameLayout
+            android:id="@+id/main_map_fragment"
+            android:name="com.mibarim.main.ui.fragments.mainFragments.MainMapfragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout="@layout/fragment_main_map" />
+
+        <FrameLayout
+            android:id="@+id/event_list_fragment"
+            android:name="com.mibarim.main.ui.fragments.eventFragments.EventListFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />-->
+
+    </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>
+

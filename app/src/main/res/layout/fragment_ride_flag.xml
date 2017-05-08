@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <RelativeLayout
+        android:id="@+id/flag_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:layout_centerVertical="true"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="60dp"
+            android:layout_height="80dp"
+            android:layout_marginBottom="90dp"
+            android:background="@drawable/roundicon" />
+
+        <ImageView
+            android:id="@+id/imageView14"
+            android:layout_width="60dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="90dp"
+            android:background="@color/transparent" />
+
+
+        <TextView
+            android:id="@+id/src_mid_flag"
+            android:layout_width="60dp"
+            android:layout_height="80dp"
+            android:paddingRight="22dp"
+            android:paddingTop="15dp"
+            android:text="@string/source"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#ffffff"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/dst_mid_flag"
+            android:layout_width="60dp"
+            android:layout_height="80dp"
+            android:paddingRight="18dp"
+            android:paddingTop="15dp"
+            android:text="@string/destination"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#ffffff"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/home_mid_flag"
+            android:layout_width="60dp"
+            android:layout_height="80dp"
+            android:paddingRight="22dp"
+            android:paddingTop="15dp"
+            android:text="@string/home"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#ffffff"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/work_mid_flag"
+            android:layout_width="60dp"
+            android:layout_height="80dp"
+            android:paddingRight="12dp"
+            android:paddingTop="15dp"
+            android:text="@string/work"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="#ffffff"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/wait_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="horizontal">
+
+        <ProgressBar
+            android:id="@+id/waiting_flag"
+            style="@style/FlagSpinner"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginBottom="125dp"
+            android:paddingRight="8dp"
+            android:paddingTop="8dp" />
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/address_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/address_block"
+        android:paddingLeft="10dp"
+        android:paddingRight="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/src_address_editText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/click_on_map"
+                android:paddingBottom="5dp"
+                android:paddingTop="0dp"
+                android:textAlignment="center" />
+
+            <View
+                android:id="@+id/src_dst_divide"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/dst_address_editText"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:hint="@string/click_on_map"
+                android:paddingBottom="0dp"
+                android:paddingTop="5dp"
+                android:textAlignment="center" />
+
+        </LinearLayout>
+
+        <com.beardedhen.androidbootstrap.AwesomeTextView
+            android:id="@+id/fa_dst"
+            style="@style/wrapping_fa_text"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="5dp"
+            app:bootstrapBrand="success"
+            app:fontAwesomeIcon="fa_search" />
+
+        <!--
+                <TextView
+                    android:id="@+id/src_address_label"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="7dp"
+                    android:background="@drawable/roundedbutton"
+                    android:paddingRight="8dp"
+                    android:paddingTop="8dp"
+                    android:text="@string/source"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="#ffffff"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/dst_address_label"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="7dp"
+                    android:background="@drawable/roundedbutton"
+                    android:paddingRight="5dp"
+                    android:paddingTop="8dp"
+                    android:text="@string/destination"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="#ffffff"
+                    android:textStyle="bold" />
+        -->
+
+    </RelativeLayout>
+
+</RelativeLayout>

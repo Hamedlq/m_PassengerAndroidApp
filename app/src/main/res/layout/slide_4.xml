@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/silver"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <!--<TextView
+        android:id="@+id/slide_3_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:text="@string/slide_3_title"
+        android:textAlignment="center"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/help_text"
+        android:textStyle="bold" />-->
+
+    <ImageView
+        android:id="@+id/slide3"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_centerInParent="true"
+        android:paddingBottom="90dp"
+        android:src="@drawable/co2" />
+
+    <TextView
+        android:id="@+id/slide_3_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="90dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:gravity="center"
+        android:text="@string/slide_4_msg"
+        android:textAlignment="center"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/text"
+        android:layout_alignStart="@+id/slide3"
+        android:layout_alignEnd="@+id/slide3" />
+
+    <TextView
+        android:id="@+id/slide_1_msg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:gravity="center"
+        android:text="@string/slide_4_title"
+        android:textAlignment="center"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="@dimen/titleSlide"
+        android:textColor="@color/text"
+        android:layout_marginBottom="22dp"
+        android:layout_above="@+id/slide3"
+        android:layout_alignStart="@+id/slide3"
+        android:layout_alignEnd="@+id/slide3" />
+
+</RelativeLayout>
