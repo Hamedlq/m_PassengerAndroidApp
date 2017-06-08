@@ -31,6 +31,11 @@ public final class Constants {
         /**
          * mobile login
          */
+        /**
+         * Auth token
+         */
+        public static final String AUTH_TOKEN = "AuthToken";
+
         public static final String REG_MOBILE = "mobile";
         public static final String REG_PASSWORD = "password";
     }
@@ -48,8 +53,8 @@ public final class Constants {
          */
 //        public static final String URL_BASE = "http://localhost:50226";
 //        public static final String URL_BASE = "http://mibarim.ir/CoreApi";
-//        public static final String URL_BASE = "http://mibarimapp.com/testapp";
-        public static final String URL_BASE = "http://mibarimapp.com/CoreApi";
+        public static final String URL_BASE = "http://mibarimapp.com/testapp";
+//        public static final String URL_BASE = "http://mibarimapp.com/CoreApi";
 //          public static final String URL_BASE = "http://CoreApi.mibarim.ir/";
 //        public static final String URL_BASE = "http://mibarim.ir/testApp/CoreApi";
 
@@ -187,6 +192,7 @@ public final class Constants {
         public static final String GET_PASSENGER_ROUTE_URL = "/GetPassengerRoutes";
         public static final String SIMILAR_SUGGEST_ROUTE_URL = "/GetSimilarSuggestRoute";
         public static final String TRIP_PROFILE_URL = "/GetTripProfile";
+        public static final String URL_SET_TRIP_LOCATION = "/SetPassLocation";
 
         public static final String URL_GET_EVENT = "/GetAllEvents";
         public static final String URL_GET_CITY_LOCATION = "/GetCityLocations";
@@ -251,6 +257,13 @@ public final class Constants {
 
         public static final int TIMER_NOTIFICATION_ID = 1000; // Why 1000? Why not? :)
     }
+
+    public static final class GlobalConstants {
+        public static final String CREDIT_REMAIN = "CREDIT_REMAIN";
+        public static final String PASS_ROUTE_MODEL = "PassRouteModel";
+
+    }
+
 
 }
 

@@ -3,7 +3,6 @@
 package com.mibarim.main.ui.activities;
 
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -17,10 +16,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.os.OperationCanceledException;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
@@ -28,7 +25,6 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.ImageView;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -36,27 +32,22 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
-import com.google.gson.Gson;
 import com.mibarim.main.BootstrapApplication;
 import com.mibarim.main.BootstrapServiceProvider;
 import com.mibarim.main.R;
 import com.mibarim.main.authenticator.LogoutService;
 import com.mibarim.main.authenticator.TokenRefreshActivity;
+import com.mibarim.main.core.Constants;
 import com.mibarim.main.core.ImageUtils;
 import com.mibarim.main.data.UserData;
 import com.mibarim.main.events.NetworkErrorEvent;
 import com.mibarim.main.events.RestAdapterErrorEvent;
 import com.mibarim.main.events.UnAuthorizedErrorEvent;
-import com.mibarim.main.models.Address.Location;
-import com.mibarim.main.models.Address.PathPoint;
 import com.mibarim.main.models.ApiResponse;
-import com.mibarim.main.models.ContactModel;
 import com.mibarim.main.models.ImageResponse;
-import com.mibarim.main.models.PersonalInfoModel;
 import com.mibarim.main.models.Plus.PassRouteModel;
 import com.mibarim.main.models.Plus.PaymentDetailModel;
-import com.mibarim.main.models.Route.BriefRouteModel;
-import com.mibarim.main.models.Route.RouteResponse;
+import com.mibarim.main.models.RouteResponse;
 import com.mibarim.main.models.UserInfoModel;
 import com.mibarim.main.services.AuthenticateService;
 import com.mibarim.main.services.RouteRequestService;
@@ -64,11 +55,9 @@ import com.mibarim.main.services.RouteResponseService;
 import com.mibarim.main.services.UserInfoService;
 import com.mibarim.main.ui.BootstrapActivity;
 import com.mibarim.main.ui.HandleApiMessages;
-import com.mibarim.main.ui.fragments.MapFragment;
+
 import com.mibarim.main.ui.fragments.PlusFragments.PassengerCardFragment;
-import com.mibarim.main.ui.fragments.routeFragments.SuggestRouteCardFragment;
 import com.mibarim.main.util.SafeAsyncTask;
-import com.mibarim.main.util.Toaster;
 import com.squareup.otto.Subscribe;
 
 import javax.inject.Inject;
@@ -107,7 +96,6 @@ public class MainCardActivity extends BootstrapActivity {
     private int appVersion = 0;
     private ApiResponse theSuggestRoute;
     //private RouteResponse selfRoute;
-    private BriefRouteModel selectedRoute;
     private PaymentDetailModel paymentDetailModel;
     private Tracker mTracker;
     protected Bitmap result;//concurrency must be considered
@@ -199,33 +187,6 @@ public class MainCardActivity extends BootstrapActivity {
         }.execute();
     }
 
-    private void getUserInfoFromServer() {
-        new SafeAsyncTask<Boolean>() {
-            @Override
-            public Boolean call() throws Exception {
-                if (authToken == null) {
-                    serviceProvider.invalidateAuthToken();
-                    authToken = serviceProvider.getAuthToken(MainCardActivity.this);
-                }
-                userInfoModel = userInfoService.getUserInfo(authToken);
-                return true;
-            }
-
-            @Override
-            protected void onException(final Exception e) throws RuntimeException {
-                super.onException(e);
-            }
-
-            @Override
-            protected void onSuccess(final Boolean state) throws Exception {
-                super.onSuccess(state);
-                userData.insertUserInfo(userInfoModel);
-                getImageById(userInfoModel.UserImageId, R.mipmap.ic_camera);
-                setInfoValues(userInfoModel.IsUserRegistered);
-                //setEmail();
-            }
-        }.execute();
-    }
 
     private void setInfoValues(boolean IsUserRegistered) {
         SharedPreferences prefs = this.getSharedPreferences(
@@ -313,6 +274,10 @@ public class MainCardActivity extends BootstrapActivity {
                 }
             }, 5000);
         }
+        if (requestCode ==FINISH_USER_INFO  && resultCode == RESULT_OK) {
+            getUserInfoFromServer();
+        }
+
     }
 
     @Override
@@ -571,6 +536,13 @@ public class MainCardActivity extends BootstrapActivity {
         }.execute();
     }
 
+    public void gotoRidingActivity(PassRouteModel dm) {
+        Intent intent = new Intent(this, RidingActivity.class);
+        intent.putExtra(Constants.GlobalConstants.PASS_ROUTE_MODEL, dm);
+        intent.putExtra(Constants.Auth.AUTH_TOKEN, authToken);
+        this.startActivity(intent);
+    }
+
     private void showUpdateDialog(String msg) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(msg).setPositiveButton("باشه", dialogClickListener).setNegativeButton("بستن برنامه", dialogClickListener).show();
@@ -590,4 +562,38 @@ public class MainCardActivity extends BootstrapActivity {
             }
         }
     };
+
+    private void getUserInfoFromServer() {
+        new SafeAsyncTask<Boolean>() {
+            @Override
+            public Boolean call() throws Exception {
+                if (authToken == null) {
+                    serviceProvider.invalidateAuthToken();
+                    authToken = serviceProvider.getAuthToken(MainCardActivity.this);
+                }
+                userInfoModel = userInfoService.getUserInfo(authToken);
+                return true;
+            }
+
+            @Override
+            protected void onException(final Exception e) throws RuntimeException {
+                super.onException(e);
+            }
+
+            @Override
+            protected void onSuccess(final Boolean state) throws Exception {
+                super.onSuccess(state);
+                userData.insertUserInfo(userInfoModel);
+                getImageById(userInfoModel.UserImageId, R.mipmap.ic_camera);
+                setInfoValues(userInfoModel.IsUserRegistered);
+                //setEmail();
+            }
+        }.execute();
+    }
+
+    public void gotoWebView(String link) {
+        Intent i = new Intent(MainCardActivity.this, WebViewActivity.class);
+        i.putExtra("URL", link);
+        startActivity(i);
+    }
 }

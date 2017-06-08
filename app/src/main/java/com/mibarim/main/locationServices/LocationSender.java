@@ -3,33 +3,15 @@ package com.mibarim.main.locationServices;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.mibarim.main.core.Constants;
-import com.mibarim.main.services.RouteRequestService;
-import com.mibarim.main.services.TripService;
 import com.mibarim.main.util.DynamicJsonConverter;
 import com.mibarim.main.util.SafeAsyncTask;
-
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.net.ssl.HttpsURLConnection;
 
 import retrofit.RestAdapter;
 
@@ -92,8 +74,8 @@ public class LocationSender extends Service {
                             .setLogLevel(RestAdapter.LogLevel.FULL)
                             .setConverter(new DynamicJsonConverter())
                             .build();
-                    TripService tripService= new TripService(rest);
-                    tripService.sendUserLocation(mobile, latitude, longitude);
+                    /*TripService tripService= new TripService(rest);
+                    tripService.sendUserLocation(mobile, latitude, longitude);*/
                     return true;
                 }
                 return false;

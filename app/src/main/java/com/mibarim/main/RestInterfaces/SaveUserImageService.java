@@ -1,21 +1,13 @@
 package com.mibarim.main.RestInterfaces;
 
-import android.graphics.Bitmap;
-
 import com.mibarim.main.core.Constants;
 import com.mibarim.main.models.ApiResponse;
-import com.mibarim.main.models.CarInfoModel;
-import com.mibarim.main.models.LicenseInfoModel;
-import com.mibarim.main.models.PersonalInfoModel;
 //import com.squareup.okhttp.RequestBody;
 
-import retrofit.http.Field;
-import retrofit.http.FormUrlEncoded;
 import retrofit.http.Header;
 import retrofit.http.Multipart;
 import retrofit.http.POST;
 import retrofit.http.Part;
-import retrofit.http.Path;
 import retrofit.mime.TypedFile;
 
 /**

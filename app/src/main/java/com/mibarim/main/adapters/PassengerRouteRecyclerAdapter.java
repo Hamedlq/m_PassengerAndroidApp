@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -13,15 +14,15 @@ import android.widget.TextView;
 import com.beardedhen.androidbootstrap.BootstrapCircleThumbnail;
 import com.mibarim.main.R;
 import com.mibarim.main.models.Plus.PassRouteModel;
-import com.mibarim.main.models.Route.BriefRouteModel;
+import com.mibarim.main.models.enums.TripStates;
 import com.mibarim.main.ui.activities.MainCardActivity;
-import com.mibarim.main.ui.activities.SuggestRouteCardActivity;
 import com.mibarim.main.ui.fragments.PlusFragments.PassengerCardFragment;
-import com.mibarim.main.ui.fragments.routeFragments.SuggestRouteCardFragment;
 
 import java.util.List;
 
 import cn.nekocode.badge.BadgeDrawable;
+
+import static com.mibarim.main.R.string.event;
 
 /**
  * Created by Hamed on 10/16/2016.
@@ -63,13 +64,36 @@ public class PassengerRouteRecyclerAdapter extends RecyclerView.Adapter<Passenge
             dst_distance = (TextView) v.findViewById(R.id.dst_distance);*/
             userimage = (BootstrapCircleThumbnail) v.findViewById(R.id.userimage);
             book_trip = (AppCompatButton) v.findViewById(R.id.book_trip);
-            book_trip.setOnClickListener(new View.OnClickListener() {
+            book_trip.setOnTouchListener(new View.OnTouchListener() {
                 @Override
-                public void onClick(View v) {
-                    onItemTouchListener.onBookBtnClick(v, getPosition());
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        onItemTouchListener.onBookBtnClick(v, getPosition());
+                        return true;
+                    }
+                    return false;
                 }
             });
-
+            src_address.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        onItemTouchListener.onSrcLinkClick(v, getPosition());
+                        return true;
+                    }
+                    return false;
+                }
+            });
+            dst_address.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        onItemTouchListener.onDstLinkClick(v, getPosition());
+                        return true;
+                    }
+                    return false;
+                }
+            });
 
             /*v.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -130,9 +154,15 @@ public class PassengerRouteRecyclerAdapter extends RecyclerView.Adapter<Passenge
                             drawableBadge.toSpannable()
                     ));
             holder.timing.setText(spannableString);
-            holder.book_trip.setVisibility(View.GONE);
+            if (items.get(position).TripState == TripStates.InPreTripTime.toInt() ||
+                    items.get(position).TripState == TripStates.InRiding.toInt() ||
+                    items.get(position).TripState == TripStates.InTripTime.toInt()) {
+                holder.book_trip.setText("مشاهده سفر");
+            } else {
+                holder.book_trip.setVisibility(View.GONE);
+            }
         } else {
-            if (items.get(position).EmptySeat == 0) {
+            if (items.get(position).EmptySeats == 0) {
                 BadgeDrawable drawableBadge =
                         new BadgeDrawable.Builder()
                                 .type(BadgeDrawable.TYPE_ONLY_ONE_TEXT)
@@ -178,7 +208,7 @@ public class PassengerRouteRecyclerAdapter extends RecyclerView.Adapter<Passenge
         holder.src_address.setText(items.get(position).SrcAddress);
         holder.dst_address.setText(items.get(position).DstAddress);
         holder.carString.setText(items.get(position).CarString);
-        holder.seats.setText("ظرفیت: " + items.get(position).EmptySeat + " از " + items.get(position).CarSeats);
+        holder.seats.setText("ظرفیت: " + items.get(position).EmptySeats + " از " + items.get(position).CarSeats);
         /*holder.src_distance.setText(items.get(position).SrcDistance);
         holder.dst_distance.setText(items.get(position).DstDistance);*/
 

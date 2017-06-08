@@ -66,8 +66,9 @@ public class LocationService implements LocationListener, GpsStatus.Listener {
         return instance;
     }
 
-    public static void destroy() {
+    public static void destroy(Activity activity) {
         if (instance != null) {
+            instance.removeLocation(activity);
             instance = null;
         }
     }
@@ -169,6 +170,7 @@ public class LocationService implements LocationListener, GpsStatus.Listener {
         }
     }
 
+
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
     }
@@ -181,6 +183,18 @@ public class LocationService implements LocationListener, GpsStatus.Listener {
     @Override
     public void onProviderDisabled(String provider) {
 
+    }
+
+    public void removeLocation(Activity activity) {
+        if (locationManager != null) {
+            if (ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+
+                return;
+            }
+            locationManager.removeUpdates(this);
+        }
     }
 
     public void onGpsStatusChanged(int event) {

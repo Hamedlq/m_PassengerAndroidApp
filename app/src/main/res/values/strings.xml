@@ -365,7 +365,7 @@
     <string name="ms_next">بعدی</string>
     <string name="morning">صبح</string>
     <string name="morning_sher">هر روز صبح چه ساعتی از خانه شروع به حرکت می کنید؟</string>
-    <string name="mobile_hint">شماره موبایل خود را برای دریافت پیامک احراز هویت وارد کنید. شماره شما توسط کاربران دیگر رویت نمی‌شود.</string>
+    <string name="mobile_hint">شماره موبایل خود را برای دریافت پیامک احراز هویت وارد کنید.</string>
     <string name="help_title">تماس با ما</string>
     <string name="q_2">آدرس الکترونیکی</string>
     <string name="faq_4">سوالات متداول</string>
@@ -382,4 +382,7 @@
     <string name="trip_info">اطلاعات سفر</string>
     <string name="text_station">ایستگاه مبدا</string>
     <string name="book_trip">رزرو صندلی</string>
+    <string name="ent_login">ورود با حساب سازمانی</string>
+    <string name="driver_place">محل توقف راننده</string>
+    <string name="call_driver">تماس با راننده</string>
 </resources>

@@ -2,8 +2,6 @@ package com.mibarim.main.RestInterfaces;
 
 import com.mibarim.main.core.Constants;
 import com.mibarim.main.models.ApiResponse;
-import com.mibarim.main.models.PersonalInfoModel;
-import com.mibarim.main.models.UserInfo.UserRouteModel;
 
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
@@ -19,10 +17,6 @@ public interface GetRouteResponseService {
     ApiResponse GetUserRoutes(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
                                       @Field("UserId") String Id);
 
-    @POST(Constants.Http.ROUTE_IMAGE_URL)
-    @FormUrlEncoded
-    PersonalInfoModel GetRouteUserImage(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
-                              @Field("RouteRequestId") long Id);
 
     @POST(Constants.Http.SUGGEST_ROUTE_URL)
     @FormUrlEncoded
@@ -38,8 +32,12 @@ public interface GetRouteResponseService {
     ApiResponse GetRouteSimilarSuggests(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
                                          @Field("ContactId") long Id);
 
-    @POST(Constants.Http.TRIP_PROFILE_URL)
+    @POST(Constants.Http.URL_SET_TRIP_LOCATION)
     @FormUrlEncoded
-    UserRouteModel GetTripProfileInfo(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
-                                      @Field("RouteRequestId") long Id);
+    ApiResponse SetTripPoint(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
+                             @Field("SrcLatitude") String lat,
+                             @Field("SrcLongitude") String lng,
+                             @Field("TripId") long tripId,
+                             @Field("TripState") int tripState
+    );
 }

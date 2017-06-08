@@ -1,7 +1,6 @@
 package com.mibarim.main.ui.fragments.PlusFragments;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -11,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.github.brnunes.swipeablerecyclerview.SwipeableRecyclerViewTouchListener;
@@ -22,18 +20,15 @@ import com.mibarim.main.BootstrapApplication;
 import com.mibarim.main.BootstrapServiceProvider;
 import com.mibarim.main.R;
 import com.mibarim.main.adapters.PassengerRouteRecyclerAdapter;
-import com.mibarim.main.adapters.SuggestRouteRecyclerAdapter;
 import com.mibarim.main.authenticator.LogoutService;
 import com.mibarim.main.data.UserData;
 import com.mibarim.main.models.ApiResponse;
-import com.mibarim.main.models.ContactModel;
 import com.mibarim.main.models.Plus.PassRouteModel;
-import com.mibarim.main.models.Route.BriefRouteModel;
-import com.mibarim.main.models.Route.RouteResponse;
+import com.mibarim.main.models.RouteResponse;
+import com.mibarim.main.models.enums.TripStates;
 import com.mibarim.main.services.RouteResponseService;
 import com.mibarim.main.ui.ThrowableLoader;
 import com.mibarim.main.ui.activities.MainCardActivity;
-import com.mibarim.main.ui.activities.SuggestRouteCardActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -109,7 +104,29 @@ public class PassengerCardFragment extends Fragment
             public void onBookBtnClick(View view, int position) {
                 if(getActivity() instanceof MainCardActivity){
                     PassRouteModel selectedItem = ((PassRouteModel) items.get(position));
-                    ((MainCardActivity) getActivity()).BookSeat(selectedItem);
+                    if (selectedItem.IsBooked &&(selectedItem.TripState == TripStates.InPreTripTime.toInt() ||
+                            selectedItem.TripState == TripStates.InRiding.toInt() ||
+                            selectedItem.TripState == TripStates.InTripTime.toInt())) {
+                        ((MainCardActivity) getActivity()).gotoRidingActivity(selectedItem);
+                    }else {
+                        ((MainCardActivity) getActivity()).BookSeat(selectedItem);
+                    }
+
+                }
+            }
+
+            @Override
+            public void onSrcLinkClick(View view, int position) {
+                if(getActivity() instanceof MainCardActivity){
+                    PassRouteModel selectedItem = ((PassRouteModel) items.get(position));
+                    ((MainCardActivity) getActivity()).gotoWebView(selectedItem.SrcLink);
+                }
+            }
+            @Override
+            public void onDstLinkClick(View view, int position) {
+                if(getActivity() instanceof MainCardActivity){
+                    PassRouteModel selectedItem = ((PassRouteModel) items.get(position));
+                    ((MainCardActivity) getActivity()).gotoWebView(selectedItem.DstLink);
                 }
             }
             /*@Override
@@ -155,9 +172,9 @@ public class PassengerCardFragment extends Fragment
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mTracker.setScreenName("SuggestRouteCardFragment");
+        mTracker.setScreenName("PassengerCardFragment");
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-        mTracker.send(new HitBuilders.EventBuilder().setCategory("Fragment").setAction("SuggestRouteCardFragment").build());
+        mTracker.send(new HitBuilders.EventBuilder().setCategory("Fragment").setAction("PassengerCardFragment").build());
         getLoaderManager().initLoader(0, null, this);
         //setEmptyText(R.string.no_routes);
     }
@@ -256,6 +273,8 @@ public class PassengerCardFragment extends Fragment
     public interface ItemTouchListener {
         //public void onCardViewTap(View view, int position);
         public void onBookBtnClick(View view, int position);
+        public void onSrcLinkClick(View view, int position);
+        public void onDstLinkClick(View view, int position);
         //public void onUserImageClick(View view, int position);
 
     }

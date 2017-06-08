@@ -1,7 +1,5 @@
 package com.mibarim.main.models;
 
-import com.mibarim.main.models.Address.LocationPoint;
-import com.mibarim.main.models.enums.CityLocationTypes;
 
 import java.io.Serializable;
 

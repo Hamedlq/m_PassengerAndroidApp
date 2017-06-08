@@ -22,7 +22,7 @@
             android:background="@drawable/roundedbutton"
             android:contentDescription="Logo"
             android:padding="5dp"
-            android:src="@mipmap/ic_logo_white" />
+            android:src="@mipmap/ic_circle_logo" />
     </RelativeLayout>
 
     <RelativeLayout

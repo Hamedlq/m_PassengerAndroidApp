@@ -2,14 +2,9 @@ package com.mibarim.main.services;
 
 import com.google.gson.Gson;
 import com.mibarim.main.RestInterfaces.SaveRouteRequestService;
-import com.mibarim.main.models.Address.Location;
-import com.mibarim.main.models.Address.PathPoint;
 import com.mibarim.main.models.ApiResponse;
-import com.mibarim.main.models.CityLocation;
-import com.mibarim.main.models.ConfirmationModel;
 import com.mibarim.main.models.NotificationModel;
 import com.mibarim.main.models.Plus.PaymentDetailModel;
-import com.mibarim.main.models.RouteRequest;
 
 import java.util.List;
 
@@ -34,67 +29,6 @@ public class RouteRequestService {
         return getRestAdapter().create(SaveRouteRequestService.class);
     }
 
-    public ApiResponse SubmitNewRoute(String authToken, RouteRequest routeRequest) {
-        ApiResponse res = getService().SubmitNewRoute("Bearer " + authToken,
-                routeRequest.SrcGAddress,
-                routeRequest.SrcDetailAddress,
-                routeRequest.SrcLatitude,
-                routeRequest.SrcLongitude,
-                routeRequest.DstGAddress,
-                routeRequest.DstDetailAddress,
-                routeRequest.DstLatitude,
-                routeRequest.DstLongitude,
-                routeRequest.AccompanyCount,
-                routeRequest.TimingOption,
-                routeRequest.PricingOption,
-                routeRequest.TheDateString(),
-                routeRequest.TheTimeString(),
-                routeRequest.SatDatetimeString(),
-                routeRequest.SunDatetimeString(),
-                routeRequest.MonDatetimeString(),
-                routeRequest.TueDatetimeString(),
-                routeRequest.WedDatetimeString(),
-                routeRequest.ThuDatetimeString(),
-                routeRequest.FriDatetimeString(),
-                routeRequest.CostMinMax,
-                routeRequest.IsDrive,
-                routeRequest.RecommendPathId
-        );
-        return res;
-    }
-
-    public ApiResponse SubmitNewEventRoute(String authToken, RouteRequest routeRequest) {
-        ApiResponse res = getService().SubmitNewEventRoute("Bearer " + authToken,
-                routeRequest.EventId,
-                routeRequest.SrcGAddress,
-                routeRequest.SrcDetailAddress,
-                routeRequest.SrcLatitude,
-                routeRequest.SrcLongitude,
-                routeRequest.DstGAddress,
-                routeRequest.DstDetailAddress,
-                routeRequest.DstLatitude,
-                routeRequest.DstLongitude,
-                routeRequest.CostMinMax,
-                routeRequest.IsDrive,
-                routeRequest.RecommendPathId
-        );
-        return res;
-    }
-
-    public ApiResponse ConfirmRoute(String authToken, ConfirmationModel confirmModel) {
-        ApiResponse res = getService().ConfirmRoute("Bearer " + authToken,
-                confirmModel.Ids,
-                confirmModel.ConfirmedText
-        );
-        return res;
-    }
-
-    public ApiResponse notConfirmRoute(String authToken, ConfirmationModel confirmModel) {
-        ApiResponse res = getService().NotConfirmRoute("Bearer " + authToken,
-                confirmModel.Ids
-        );
-        return res;
-    }
 
 
     public ApiResponse joinGroup(String authToken, String routeId, String groupId) {
@@ -162,12 +96,6 @@ public class RouteRequestService {
         return res;
     }
 
-    public ApiResponse getGoogleRoute(String srcLatitude, String srcLongitude, String dstLatitude, String dstLongitude, List<Location> wayPoints) {
-        Gson gson = new Gson();
-        String waypointsjson = gson.toJson(wayPoints);
-        ApiResponse res = getService().getGRoute(srcLatitude, srcLongitude, dstLatitude, dstLongitude, waypointsjson);
-        return res;
-    }
 
     public ApiResponse getLocalRoutes(String latitude, String longitude) {
         ApiResponse res = getService().getLocalRoutes(latitude, longitude);
@@ -209,33 +137,4 @@ public class RouteRequestService {
         return res;
     }
 
-    public ApiResponse SubmitRideRequest(String authToken, RouteRequest routeRequest, String routeUId) {
-        ApiResponse res = getService().SubmitRideRequest("Bearer " + authToken,
-                routeRequest.SrcGAddress,
-                routeRequest.SrcDetailAddress,
-                routeRequest.SrcLatitude,
-                routeRequest.SrcLongitude,
-                routeRequest.DstGAddress,
-                routeRequest.DstDetailAddress,
-                routeRequest.DstLatitude,
-                routeRequest.DstLongitude,
-                routeRequest.AccompanyCount,
-                routeRequest.TimingOption,
-                routeRequest.PricingOption,
-                routeRequest.TheDateString(),
-                routeRequest.TheTimeString(),
-                routeRequest.SatDatetimeString(),
-                routeRequest.SunDatetimeString(),
-                routeRequest.MonDatetimeString(),
-                routeRequest.TueDatetimeString(),
-                routeRequest.WedDatetimeString(),
-                routeRequest.ThuDatetimeString(),
-                routeRequest.FriDatetimeString(),
-                routeRequest.CostMinMax,
-                routeRequest.IsDrive,
-                routeRequest.ServiceType,
-                routeUId
-        );
-        return res;
-    }
 }

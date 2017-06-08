@@ -11,7 +11,6 @@ import com.mibarim.main.authenticator.LogoutService;
 import com.mibarim.main.authenticator.LogoutServiceImpl;
 import com.mibarim.main.core.PostFromAnyThreadBus;
 import com.mibarim.main.data.UserData;
-import com.mibarim.main.services.AddressService;
 import com.mibarim.main.services.AuthenticateService;
 import com.mibarim.main.core.Constants;
 import com.mibarim.main.core.RestAdapterRequestInterceptor;
@@ -19,13 +18,9 @@ import com.mibarim.main.core.RestErrorHandler;
 import com.mibarim.main.core.UserAgentProvider;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mibarim.main.services.ContactService;
-import com.mibarim.main.services.EventService;
-import com.mibarim.main.services.GroupService;
 import com.mibarim.main.services.RegisterService;
 import com.mibarim.main.services.RouteRequestService;
 import com.mibarim.main.services.RouteResponseService;
-import com.mibarim.main.services.TripService;
 import com.mibarim.main.services.UserImageService;
 import com.mibarim.main.services.UserInfoService;
 import com.mibarim.main.util.DynamicJsonConverter;
@@ -77,31 +72,14 @@ public class BootstrapModule {
     }
 
     @Provides
-    TripService provideTripService(RestAdapter restAdapter) {
-        return new TripService(restAdapter);
+    UserInfoService provideUserInfoService(RestAdapter restAdapter) {
+        return new UserInfoService(restAdapter);
     }
+
 
     @Provides
     RouteResponseService provideRouteResponseService(RestAdapter restAdapter) {
         return new RouteResponseService(restAdapter);
-    }
-
-    @Provides
-    GroupService provideGroupService(RestAdapter restAdapter) {
-        return new GroupService(restAdapter);
-    }
-
-    @Provides
-    EventService provideEventService(RestAdapter restAdapter) {
-        return new EventService(restAdapter);
-    }
-    @Provides
-    ContactService provideContactService(RestAdapter restAdapter) {
-        return new ContactService(restAdapter);
-    }
-    @Provides
-    UserInfoService provideUserInfoService(RestAdapter restAdapter) {
-        return new UserInfoService(restAdapter);
     }
 
     @Provides
@@ -114,11 +92,6 @@ public class BootstrapModule {
         return new UserData(context);
     }
 
-
-    @Provides
-    AddressService provideAddressService(RestAdapter restAdapter) {
-        return new AddressService();
-    }
 
     @Provides
     BootstrapServiceProvider provideBootstrapServiceProvider(RestAdapter restAdapter, ApiKeyProvider apiKeyProvider) {

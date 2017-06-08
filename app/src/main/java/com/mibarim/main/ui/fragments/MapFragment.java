@@ -25,11 +25,6 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.mibarim.main.BootstrapApplication;
 import com.mibarim.main.R;
-import com.mibarim.main.models.Address.LocationPoint;
-import com.mibarim.main.models.Address.PathPoint;
-import com.mibarim.main.models.Route.SuggestBriefRouteModel;
-import com.mibarim.main.ui.activities.SuggestRouteActivity;
-import com.mibarim.main.models.Address.Location;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +59,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private Marker greenSrcMarker;
     private Marker yellowSrcMarker;
     private Marker redSrcMarker;
+    private Marker stMarker;
+    private Marker driverMarker;
 
     private Marker dstMarker;
     private Marker blueDstMarker;
@@ -117,39 +114,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         return mapViewLayout;
     }
 
-
-    private void setSourceFlag() {
-        if (srcMarker != null) {
-            srcMarker.remove();
-        }
-        Location srcPoint = new Location();
-         if (getActivity() instanceof SuggestRouteActivity) {
-            srcPoint = ((SuggestRouteActivity) getActivity()).getRouteSource();
-        }
-        srcMarker = mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(Double.parseDouble(srcPoint.lat), Double.parseDouble(srcPoint.lng)))
-                .icon(BitmapDescriptorFactory
-                        .fromResource(R.mipmap.ic_from)));
-        setMinMaxValues(Double.parseDouble(srcPoint.lat), Double.parseDouble(srcPoint.lng));
-    }
-
-    private void setDestinationFlag() {
-        if (dstMarker != null) {
-            dstMarker.remove();
-        }
-        Location dstPoint = new Location();
-         if (getActivity() instanceof SuggestRouteActivity) {
-            dstPoint = ((SuggestRouteActivity) getActivity()).getRouteDestination();
-        }
-        dstMarker = mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(Double.parseDouble(dstPoint.lat), Double.parseDouble(dstPoint.lng)))
-                .icon(BitmapDescriptorFactory
-                        .fromResource(R.mipmap.ic_to)));
-
-        setMinMaxValues(Double.parseDouble(dstPoint.lat), Double.parseDouble(dstPoint.lng));
-        zoomToBoundry();
-    }
-
     private void setMinMaxValues(double lat, double lng) {
         if (minLat > lat) {
             minLat = lat;
@@ -166,47 +130,26 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
 
-    public void setRoute(String srcLat, String srcLng, String dstLat, String dstLng, PathPoint pathRoute, int color) {
-        setMinMaxValues(Double.parseDouble(srcLat), Double.parseDouble(srcLng));
-        setMinMaxValues(Double.parseDouble(dstLat), Double.parseDouble(dstLng));
-        if (redSrcMarker != null) {
-            redSrcMarker.remove();
+    public void setStation(String stLat, String stLng, String driverLat, String driverLng) {
+        setMinMaxValues(Double.parseDouble(stLat), Double.parseDouble(stLng));
+        setMinMaxValues(Double.parseDouble(driverLat), Double.parseDouble(driverLng));
+        if (stMarker != null) {
+            stMarker.remove();
         }
-        redSrcMarker = mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(Double.parseDouble(srcLat), Double.parseDouble(srcLng)))
-                .icon(BitmapDescriptorFactory
-                        .fromResource(R.mipmap.ic_red_o)));
-        if (redDstMarker != null) {
-            redDstMarker.remove();
+        if(stLat!=null && stLng!=null) {
+            stMarker = mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(Double.parseDouble(stLat), Double.parseDouble(stLng)))
+                    .icon(BitmapDescriptorFactory
+                            .fromResource(R.mipmap.ic_car_start)));
         }
-        redDstMarker = mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(Double.parseDouble(dstLat), Double.parseDouble(dstLng)))
+        if (driverMarker != null) {
+            driverMarker.remove();
+        }
+        driverMarker = mMap.addMarker(new MarkerOptions()
+                .position(new LatLng(Double.parseDouble(driverLat), Double.parseDouble(driverLng)))
                 .icon(BitmapDescriptorFactory
-                        .fromResource(R.mipmap.ic_red_d)));
-        drawPath(pathRoute);
+                        .fromResource(R.mipmap.ic_red)));
         zoomToBoundry();
-
-    }
-
-    private void drawPath(PathPoint pathRoute){
-        if(routeOverlay!=null){
-            routeOverlay.remove();
-        }
-        routeOverlayList = new ArrayList<Polyline>();
-        PolylineOptions polylineOptions = new PolylineOptions();
-        polylineOptions.color(Color.BLUE);
-        polylineOptions.width(5);
-        List<LatLng> points = new ArrayList<>();
-        if (pathRoute.path.size() > 0) {
-            for (LocationPoint location : pathRoute.path) {
-                if (location != null) {
-                    points.add(new LatLng(Double.parseDouble(location.Lat), Double.parseDouble(location.Lng)));
-                }
-            }
-            polylineOptions.addAll(points);
-            routeOverlay = mMap.addPolyline(polylineOptions);
-            routeOverlayList.add(routeOverlay);
-        }
     }
     private void zoomToBoundry() {
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
@@ -224,47 +167,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mMap.animateCamera(cu);
     }
 
-
-    public void setRouteSuggests(SuggestBriefRouteModel selectedItem, int position) {
-        mMap.clear();
-
-        Location srcPoint = new Location();
-        srcPoint.lat = selectedItem.SelfRouteModel.SrcLatitude;
-        srcPoint.lng = selectedItem.SelfRouteModel.SrcLongitude;
-        srcMarker = mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(Double.parseDouble(srcPoint.lat), Double.parseDouble(srcPoint.lng)))
-                .icon(BitmapDescriptorFactory
-                        .fromResource(R.mipmap.ic_from)));
-        setMinMaxValues(Double.parseDouble(srcPoint.lat), Double.parseDouble(srcPoint.lng));
-
-        Location dstPoint = new Location();
-        dstPoint.lat = selectedItem.SelfRouteModel.DstLatitude;
-        dstPoint.lng = selectedItem.SelfRouteModel.DstLongitude;
-        dstMarker = mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(Double.parseDouble(dstPoint.lat), Double.parseDouble(dstPoint.lng)))
-                .icon(BitmapDescriptorFactory
-                        .fromResource(R.mipmap.ic_to)));
-        setMinMaxValues(Double.parseDouble(dstPoint.lat), Double.parseDouble(dstPoint.lng));
-
-        srcPoint.lat = selectedItem.SuggestRouteModel.SrcLatitude;
-        srcPoint.lng = selectedItem.SuggestRouteModel.SrcLongitude;
-        redSrcMarker = mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(Double.parseDouble(srcPoint.lat), Double.parseDouble(srcPoint.lng)))
-                .icon(BitmapDescriptorFactory
-                        .fromResource(R.mipmap.ic_red_o)));
-        setMinMaxValues(Double.parseDouble(srcPoint.lat), Double.parseDouble(srcPoint.lng));
-
-        dstPoint.lat = selectedItem.SuggestRouteModel.DstLatitude;
-        dstPoint.lng = selectedItem.SuggestRouteModel.DstLongitude;
-        dstMarker = mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(Double.parseDouble(dstPoint.lat), Double.parseDouble(dstPoint.lng)))
-                .icon(BitmapDescriptorFactory
-                        .fromResource(R.mipmap.ic_red_d)));
-        setMinMaxValues(Double.parseDouble(dstPoint.lat), Double.parseDouble(dstPoint.lng));
-
-        zoomToBoundry();
-    }
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap=googleMap;
@@ -273,11 +175,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mMap.getUiSettings().setRotateGesturesEnabled(false);
         mMap.getUiSettings().setZoomGesturesEnabled(true);
-
-        if (getActivity() instanceof SuggestRouteActivity) {
-            setSourceFlag();
-            setDestinationFlag();
-        }
 
     }
 }

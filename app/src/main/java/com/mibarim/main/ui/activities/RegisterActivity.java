@@ -13,36 +13,26 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.widget.AppCompatButton;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.google.gson.Gson;
 import com.mibarim.main.BootstrapApplication;
 import com.mibarim.main.BootstrapServiceProvider;
 import com.mibarim.main.R;
-import com.mibarim.main.core.Constants;
 import com.mibarim.main.events.NetworkErrorEvent;
 import com.mibarim.main.models.ApiResponse;
-import com.mibarim.main.models.Password;
-import com.mibarim.main.models.TokenResponse;
 import com.mibarim.main.models.UserInfoModel;
 import com.mibarim.main.services.AuthenticateService;
-import com.mibarim.main.services.RegisterService;
 import com.mibarim.main.services.UserInfoService;
-import com.mibarim.main.ui.HandleApiMessages;
 import com.mibarim.main.ui.HandleApiMessagesBySnackbar;
 import com.mibarim.main.ui.TextWatcherAdapter;
 import com.mibarim.main.util.SafeAsyncTask;
-import com.mibarim.main.util.Toaster;
+import com.mibarim.main.util.Strings;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 
@@ -52,10 +42,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import retrofit.RetrofitError;
 import timber.log.Timber;
-
-import static android.view.KeyEvent.ACTION_DOWN;
-import static android.view.KeyEvent.KEYCODE_ENTER;
-import static android.view.inputmethod.EditorInfo.IME_ACTION_DONE;
 
 /**
  * Created by Hamed on 2/27/2016.
@@ -100,6 +86,8 @@ public class RegisterActivity extends AccountAuthenticatorActivity {
 
     @Bind(R.id.b_register)
     protected AppCompatButton registerButton;
+    @Bind(R.id.b_register_ent)
+    protected AppCompatButton entRegisterButton;
 
     private final TextWatcher watcher = validationTextWatcher();
 
@@ -108,6 +96,10 @@ public class RegisterActivity extends AccountAuthenticatorActivity {
     private String authToken;
 
     private ApiResponse response;
+
+    private int FINISH_REGISTER_SERVICE = 4561;
+
+    private String user_mobile ;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -129,6 +121,11 @@ public class RegisterActivity extends AccountAuthenticatorActivity {
         setContentView(R.layout.register_activity);
 
         ButterKnife.bind(this);
+        SharedPreferences prefs = this.getSharedPreferences(
+                "com.mibarim.main", Context.MODE_PRIVATE);
+        user_mobile = prefs.getString("UserMobile", "");
+
+
         registerButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -150,6 +147,19 @@ public class RegisterActivity extends AccountAuthenticatorActivity {
                 return false;
             }
         });
+        entRegisterButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    Intent i = new Intent(RegisterActivity.this, WebViewActivity.class);
+                    i.putExtra("URL", "http://mibarimapp.com/coreapi/FanapLogin?mobileNo="+user_mobile);
+                    startActivityForResult(i, FINISH_REGISTER_SERVICE);
+                    return true;
+                }
+                return false;
+            }
+        });
+
         et_name.addTextChangedListener(watcher);
         et_family.addTextChangedListener(watcher);
         et_regEmail.addTextChangedListener(watcher);
@@ -167,6 +177,16 @@ public class RegisterActivity extends AccountAuthenticatorActivity {
         super.onPause();
         bus.unregister(this);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == FINISH_REGISTER_SERVICE && resultCode == RESULT_OK) {
+            Intent i=getIntent();
+            setResult(RESULT_OK,i);
+            finish();
+        }
+    }
+
 
     @Override
     public void onBackPressed() {

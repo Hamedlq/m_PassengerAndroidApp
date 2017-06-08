@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--release key-->
-    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyD-7YAuNfomgHKL3DHjRCvuXC6MpFC7bac</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyBbDiZnEznRjNa7ROBU1zbQqgzEwmOTpKI</string>
     <!--debug key-->
     <!--<string name="google_maps_key" translatable="false" templateMergeStrategy="preserve">AIzaSyDGuR7SvgffT8SCFk6nKB5vgb-8c-Y843U</string>-->
 </resources>

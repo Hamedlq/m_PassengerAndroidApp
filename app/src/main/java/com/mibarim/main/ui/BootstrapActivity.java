@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.mibarim.main.BootstrapApplication;
-import com.mibarim.main.ui.activities.MainActivity;
+import com.mibarim.main.ui.activities.MainCardActivity;
 import com.squareup.otto.Bus;
 
 import javax.inject.Inject;
@@ -64,7 +64,7 @@ public abstract class BootstrapActivity extends AppCompatActivity {
             case android.R.id.home:
                 // Don't call finish! Because activity could have been started by an
                 // outside activity and the home button would not operated as expected!
-                final Intent homeIntent = new Intent(this, MainActivity.class);
+                final Intent homeIntent = new Intent(this, MainCardActivity.class);
                 startActivity(homeIntent);
                 return true;
             default:

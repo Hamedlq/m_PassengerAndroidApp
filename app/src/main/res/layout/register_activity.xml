@@ -51,19 +51,19 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="20dp"
-                            android:textColor="@color/primary_text"
                             android:layout_marginStart="20dp"
-                            android:text="@string/woman" />
+                            android:text="@string/woman"
+                            android:textColor="@color/primary_text" />
 
                         <RadioButton
                             android:id="@+id/man_rdo"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="20dp"
-                            android:textColor="@color/primary_text"
                             android:layout_marginStart="20dp"
                             android:checked="true"
-                            android:text="@string/man" />
+                            android:text="@string/man"
+                            android:textColor="@color/primary_text" />
 
 
                     </RadioGroup>
@@ -177,6 +177,18 @@
                 android:elevation="5dp"
                 android:padding="12dp"
                 android:text="@string/label_login"
+                android:textColor="@color/text"
+                android:textStyle="bold" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/b_register_ent"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/button_background_states"
+                android:elevation="5dp"
+                android:padding="12dp"
+                android:text="@string/ent_login"
                 android:textColor="@color/text"
                 android:textStyle="bold" />
 

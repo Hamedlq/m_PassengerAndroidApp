@@ -1,30 +1,18 @@
 package com.mibarim.main.ui.activities;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.transition.CircularPropagation;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.ViewFlipper;
 
 import com.mibarim.main.R;
 import com.mibarim.main.adapters.ViewPagerAdapter;
-import com.mibarim.main.ui.fragments.helpFragments.fifthSlide;
 import com.mibarim.main.ui.fragments.helpFragments.firstSlide;
 import com.mibarim.main.ui.fragments.helpFragments.fourthSlide;
 import com.mibarim.main.ui.fragments.helpFragments.secondSlide;
-import com.mibarim.main.ui.fragments.helpFragments.seventhSlide;
-import com.mibarim.main.ui.fragments.helpFragments.sixthSlide;
 import com.mibarim.main.ui.fragments.helpFragments.thirdSlide;
 import com.viewpagerindicator.CirclePageIndicator;
 

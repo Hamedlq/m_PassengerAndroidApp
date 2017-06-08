@@ -1,16 +1,10 @@
 package com.mibarim.main.services;
 
-import android.graphics.Bitmap;
-
-import com.mibarim.main.RestInterfaces.GetUserInfoService;
 import com.mibarim.main.RestInterfaces.SaveUserImageService;
 import com.mibarim.main.core.Constants;
 import com.mibarim.main.core.RestAdapterImageInterceptor;
 import com.mibarim.main.core.RestErrorHandler;
 import com.mibarim.main.models.ApiResponse;
-import com.mibarim.main.models.CarInfoModel;
-import com.mibarim.main.models.LicenseInfoModel;
-import com.mibarim.main.models.PersonalInfoModel;
 import com.mibarim.main.util.DynamicJsonConverter;
 //import com.squareup.okhttp.RequestBody;
 

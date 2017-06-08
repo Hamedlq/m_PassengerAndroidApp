@@ -1,17 +1,8 @@
 package com.mibarim.main.RestInterfaces;
 
-import android.graphics.Bitmap;
-
 import com.mibarim.main.core.Constants;
-import com.mibarim.main.models.AboutMeModel;
 import com.mibarim.main.models.ApiResponse;
-import com.mibarim.main.models.CarInfoModel;
-import com.mibarim.main.models.ContactStateModel;
 import com.mibarim.main.models.ImageResponse;
-import com.mibarim.main.models.InviteModel;
-import com.mibarim.main.models.LicenseInfoModel;
-import com.mibarim.main.models.PersonalInfoModel;
-import com.mibarim.main.models.ScoreModel;
 import com.mibarim.main.models.UserInfoModel;
 import com.mibarim.main.models.UserInitialModel;
 
@@ -24,20 +15,6 @@ import retrofit.http.POST;
  * Created by Hamed on 3/10/2016.
  */
 public interface GetUserInfoService {
-    @POST(Constants.Http.URL_LICENSE_INFO)
-    @FormUrlEncoded
-    LicenseInfoModel getLicenseInfo(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
-                                    @Field("UserId") String Id);
-
-    @POST(Constants.Http.URL_CAR_INFO)
-    @FormUrlEncoded
-    CarInfoModel getCarInfo(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
-                            @Field("UserId") String Id);
-
-    @POST(Constants.Http.URL_GET_USER_INFO)
-    @FormUrlEncoded
-    UserInfoModel getUserInfo(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
-                                    @Field("UserId") String Id);
 
     @POST(Constants.Http.URL_SET_PERSON_INFO)
     @FormUrlEncoded
@@ -58,6 +35,11 @@ public interface GetUserInfoService {
                                      @Field("Gender") String gender,
                                      @Field("Email") String email,
                                      @Field("Code") String code);
+
+    @POST(Constants.Http.URL_GET_USER_INFO)
+    @FormUrlEncoded
+    UserInfoModel getUserInfo(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
+                              @Field("UserId") String Id);
 
     @POST(Constants.Http.URL_SET_LICENSE_INFO)
     @FormUrlEncoded
@@ -113,11 +95,6 @@ public interface GetUserInfoService {
     ApiResponse SaveUserEmailInfo(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
                                   @Field("Email") String email);
 
-    @POST(Constants.Http.URL_GET_SCORE)
-    @FormUrlEncoded
-    ScoreModel getUserScores(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
-                             @Field("UserId") String Id);
-
     @POST(Constants.Http.URL_SET_GOOGLE_TOKEN)
     @FormUrlEncoded
     ApiResponse SaveGoogleToken(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
@@ -148,16 +125,6 @@ public interface GetUserInfoService {
     ApiResponse saveAboutMe(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
                              @Field("Desc") String desc);
 
-    @POST(Constants.Http.URL_GET_ABOUT_ME)
-    @FormUrlEncoded
-    AboutMeModel getAboutMe(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
-                             @Field("UserId") String userId);
-
-    @POST(Constants.Http.URL_GET_INVITE)
-    @FormUrlEncoded
-    InviteModel getInvite(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
-                            @Field("UserId") String userId);
-
     @POST(Constants.Http.URL_SET_WITHDRAW)
     @FormUrlEncoded
     ApiResponse submitWithdrawRequest(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
@@ -170,11 +137,6 @@ public interface GetUserInfoService {
                                          @Field("State") boolean state
     );
 
-    @POST(Constants.Http.URL_GET_SCORE_CONTACT)
-    @FormUrlEncoded
-    ScoreModel getUserScoresByContact(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
-                             @Field("ContactId") long contactId);
-
     @POST(Constants.Http.URL_SET_SCORE)
     @FormUrlEncoded
     ApiResponse SetUserScore(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
@@ -182,20 +144,16 @@ public interface GetUserInfoService {
                                    @Field("ContactScore") Float rating
     );
 
-    @POST(Constants.Http.URL_GET_SCORE_Route)
-    @FormUrlEncoded
-    ScoreModel getUserScoresByRoute(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
-                                      @Field("RouteRequestId") long routeId);
-
-    @POST(Constants.Http.URL_GET_INITIAL_INFO)
-    @FormUrlEncoded
-    UserInitialModel getUserInitialInfo(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
-                                        @Field("UserId") String userId);
 
     @POST(Constants.Http.URL_SEND_FEEDBACK)
     @FormUrlEncoded
     ApiResponse sendFeedback(@Field("Name") String mobile,
                                   @Field("Email") String email,
                                   @Field("Text") String txt);
+
+    @POST(Constants.Http.URL_GET_INITIAL_INFO)
+    @FormUrlEncoded
+    UserInitialModel getUserInitialInfo(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
+                                        @Field("UserId") String userId);
 
 }

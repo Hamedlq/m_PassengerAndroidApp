@@ -5,25 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.provider.BaseColumns;
 import android.util.Log;
 
-import com.mibarim.main.models.AboutMeModel;
-import com.mibarim.main.models.Address.LocationPoint;
-import com.mibarim.main.models.Address.PathPoint;
-import com.mibarim.main.models.CarInfoModel;
-import com.mibarim.main.models.ContactModel;
 import com.mibarim.main.models.ImageResponse;
-import com.mibarim.main.models.InviteModel;
-import com.mibarim.main.models.LicenseInfoModel;
-import com.mibarim.main.models.MessageModel;
-import com.mibarim.main.models.PersonalInfoModel;
-import com.mibarim.main.models.Route.RouteResponse;
-import com.mibarim.main.models.RouteRequest;
+import com.mibarim.main.models.RouteResponse;
 import com.mibarim.main.models.UserInfoModel;
 import com.mibarim.main.models.enums.ImageTypes;
-import com.mibarim.main.models.enums.ServiceTypes;
-import com.mibarim.main.models.enums.TimingOptions;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -163,104 +150,6 @@ public class UserData {
         dbHelper = new DbHelper();
     }
 
-    public long insertAboutMeInfo(AboutMeModel model) {
-        db = dbHelper.getWritableDatabase();
-        db.delete(ABOUT_ME_TABLE, null, null);
-        ContentValues values = new ContentValues();
-        values.put(C_AM_DESC, model.Desc);
-        long res = db.insertWithOnConflict(ABOUT_ME_TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-        Log.d(TAG, "About Me Info Inserted");
-        db.close();
-        return res;
-    }
-
-
-    public long insertInvite(InviteModel model) {
-        db = dbHelper.getWritableDatabase();
-        db.delete(INVITE_TABLE, null, null);
-        ContentValues values = new ContentValues();
-        values.put(C_I_INVITE_CODE, model.InviteCode);
-        values.put(C_I_INVITE_LINK, model.InviteLink);
-        long res = db.insertWithOnConflict(INVITE_TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-        Log.d(TAG, "Invite Inserted");
-        db.close();
-        return res;
-    }
-
-
-    public long insertUserInfo(UserInfoModel user) {
-        //DeleteUserInfo();
-        db = dbHelper.getWritableDatabase();
-        db.delete(NEW_USER_INFO_TABLE, null, null);
-        ContentValues values = new ContentValues();
-        values.put(C_USER_MOBILE, user.Mobile);
-        values.put(C_USER_GENDER, user.Gender);
-        values.put(C_USER_NAME, user.Name);
-        values.put(C_USER_FAMILY, user.Family);
-        values.put(C_USER_NATIONAL_CODE, user.NationalCode);
-        values.put(C_USER_NATIONAL_CARD_IMAGE_ID, user.NationalCardImageId);
-        values.put(C_USER_EMAIL, user.Email);
-        values.put(C_USER_CODE, user.Code);
-        values.put(C_COMPANY_NAME, user.CompanyName);
-        values.put(C_USER_IMAGE_ID, user.UserImageId);
-        values.put(C_LICENSE_IMAGE_ID, user.LicenseImageId);
-        values.put(C_CAR_TYPE, user.CarType);
-        values.put(C_CAR_COLOR, user.CarColor);
-        values.put(C_CAR_PLATE_NO, user.CarPlateNo);
-        values.put(C_CAR_IMAGE_ID_1, user.CarCardImageId);
-        values.put(C_CAR_IMAGE_ID_2, user.CarCardBckImageId);
-        values.put(C_BANK_ACCOUNT, user.BankAccountNo);
-        values.put(C_BANK_NAME, user.BankName);
-        values.put(C_BANK_SHABA, user.BankShaba);
-        values.put(C_BANK_CARD_IMAGE_ID, user.BankImageId);
-        values.put(C_COMPANY_IMAGE_ID, user.CompanyImageId);
-        long res = db.insertWithOnConflict(NEW_USER_INFO_TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-        Log.d(TAG, "User Info Inserted");
-        db.close();
-        return res;
-    }
-
-    public long insertTempUserInfo(UserInfoModel user) {
-        db = dbHelper.getWritableDatabase();
-        db.delete(USER_INFO_TEMP_TABLE, null, null);
-        ContentValues values = new ContentValues();
-        values.put(C_USER_GENDER, user.Gender);
-        values.put(C_USER_NAME, user.Name);
-        values.put(C_USER_FAMILY, user.Family);
-        values.put(C_USER_NATIONAL_CODE, user.NationalCode);
-        values.put(C_USER_EMAIL, user.Email);
-        values.put(C_USER_CODE, user.Code);
-        values.put(C_COMPANY_NAME, user.CompanyName);
-        long res = db.insertWithOnConflict(USER_INFO_TEMP_TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-        Log.d(TAG, "Temp User Info Inserted");
-        db.close();
-        return res;
-    }
-    public long insertTempCarInfo(UserInfoModel user) {
-        db = dbHelper.getWritableDatabase();
-        db.delete(CAR_TEMP_TABLE, null, null);
-        ContentValues values = new ContentValues();
-        values.put(C_CAR_TYPE, user.CarType);
-        values.put(C_CAR_COLOR, user.CarColor);
-        values.put(C_CAR_PLATE_NO, user.CarPlateNo);
-        long res = db.insertWithOnConflict(CAR_TEMP_TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-        Log.d(TAG, "Temp Car Info Inserted");
-        db.close();
-        return res;
-    }
-
-    public long insertTempBankInfo(UserInfoModel user) {
-        db = dbHelper.getWritableDatabase();
-        db.delete(BANK_TEMP_TABLE, null, null);
-        ContentValues values = new ContentValues();
-        values.put(C_BANK_ACCOUNT, user.BankAccountNo);
-        values.put(C_BANK_NAME, user.BankName);
-        values.put(C_BANK_SHABA, user.BankShaba);
-        long res = db.insertWithOnConflict(BANK_TEMP_TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-        Log.d(TAG, "Temp Bank Info Inserted");
-        db.close();
-        return res;
-    }
 
 
     public long insertImage(ImageResponse img, String imageFilePath) {
@@ -311,87 +200,6 @@ public class UserData {
         db.close();
     }
 
-    public void insertContacts(List<ContactModel> contactModelList) {
-        db = dbHelper.getWritableDatabase();
-        db.delete(NEW_CONTACT_TABLE, null, null);
-        ContentValues values;
-        for (ContactModel contactModel:contactModelList){
-            values = new ContentValues();
-            values.put(C_C_CONTACT_ID, contactModel.ContactId);
-            values.put(C_C_Name, contactModel.Name);
-            values.put(C_C_FAMILY, contactModel.Family);
-            values.put(C_C_GENDER, contactModel.Gender);
-            values.put(C_C_LAST_MSG_TIME, contactModel.LastMsgTime);
-            values.put(C_C_LAST_MSG, contactModel.LastMsg);
-            values.put(C_C_SUPPORT, contactModel.IsSupport);
-            values.put(C_C_DRIVER, contactModel.IsDriver);
-            values.put(C_C_RIDE_ACCEPT, contactModel.IsRideAccepted);
-            values.put(C_C_PASSENGER_ACCEPT, contactModel.IsPassengerAccepted);
-            values.put(C_C_IMAGE_ID, contactModel.UserImageId);
-            values.put(C_C_ABOUT_USER, contactModel.AboutUser);
-            db.insertWithOnConflict(NEW_CONTACT_TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-            Log.d(TAG, "contactModel info inserted");
-        }
-        db.close();
-    }
-
-    public long insertNewRouteSrc(RouteRequest routeRequest) {
-        db = dbHelper.getWritableDatabase();
-        db.delete(NEW_REQUEST_TABLE, null, null);
-        ContentValues values = new ContentValues();
-        values.put(C_NR_SERVICE_TYPE, routeRequest.ServiceType.toString());
-        values.put(C_NR_EVENT_ID, routeRequest.EventId);
-        values.put(C_NR_SRC_LAT, routeRequest.SrcLatitude);
-        values.put(C_NR_SRC_LNG, routeRequest.SrcLongitude);
-        values.put(C_NR_SRC_ADD, routeRequest.SrcGAddress);
-        //null problem
-        values.put(C_NR_TIMING_OPTION, TimingOptions.Weekly.toString());
-        values.put(C_NR_PRICE, routeRequest.CostMinMax);
-        long res = db.insertWithOnConflict(NEW_REQUEST_TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-        Log.d(TAG, "New Route Request Src Inserted");
-        db.close();
-        return res;
-    }
-
-    public long insertNewRouteDst(RouteRequest routeRequest) {
-        db = dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(C_NR_DST_LAT, routeRequest.DstLatitude);
-        values.put(C_NR_DST_LNG, routeRequest.DstLongitude);
-        values.put(C_NR_DST_ADD, routeRequest.DstGAddress);
-        values.put(C_NR_PRICE, routeRequest.CostMinMax);
-        values.put(C_NR_DRIVE, routeRequest.IsDrive);
-        long res = db.update(NEW_REQUEST_TABLE, values, null, null);
-        Log.d(TAG, "New Route Request Dst Inserted");
-        db.close();
-        return res;
-    }
-
-    public long insertNewRouteEventDst(RouteRequest routeRequest) {
-        long res =0;
-        RouteRequest rr= routeRequestQuery();
-        db = dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(C_NR_SERVICE_TYPE, routeRequest.ServiceType.toString());
-        values.put(C_NR_EVENT_ID, routeRequest.EventId);
-        values.put(C_NR_DST_LAT, routeRequest.DstLatitude);
-        values.put(C_NR_DST_LNG, routeRequest.DstLongitude);
-        values.put(C_NR_DST_ADD, routeRequest.DstGAddress);
-        values.put(C_NR_PRICE, routeRequest.CostMinMax);
-        values.put(C_NR_DRIVE, routeRequest.IsDrive);
-        //null problem
-        values.put(C_NR_TIMING_OPTION, TimingOptions.Weekly.toString());
-        values.put(C_NR_PRICE, routeRequest.CostMinMax);
-        if(rr.EventId>0){
-           res = db.update(NEW_REQUEST_TABLE, values, null, null);
-        }else {
-            res = db.insertWithOnConflict(NEW_REQUEST_TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-        }
-
-        Log.d(TAG, "New Route Request Dst Inserted");
-        db.close();
-        return res;
-    }
 
 
     public long insertNewRouteIndex(String index) {
@@ -404,101 +212,38 @@ public class UserData {
         return res;
     }
 
-    public long insertNewRouteDate(RouteRequest routeRequest) {
+    public long insertUserInfo(UserInfoModel user) {
+        //DeleteUserInfo();
         db = dbHelper.getWritableDatabase();
+        db.delete(NEW_USER_INFO_TABLE, null, null);
         ContentValues values = new ContentValues();
-        values.put(C_NR_TIMING_OPTION, routeRequest.TimingOption.toString());
-        values.put(C_NR_THE_DATE, routeRequest.TheDateString());
-        values.put(C_NR_THE_TIME, routeRequest.TheTimeString());
-        values.put(C_NR_THE_RETURN_TIME, routeRequest.TheReturnTimeString());
-        values.put(C_NR_IS_RETURN, routeRequest.IsReturn);
-        values.put(C_NR_SAT, routeRequest.SatDatetimeString());
-        values.put(C_NR_SUN, routeRequest.SunDatetimeString());
-        values.put(C_NR_MON, routeRequest.MonDatetimeString());
-        values.put(C_NR_TUE, routeRequest.TueDatetimeString());
-        values.put(C_NR_WED, routeRequest.WedDatetimeString());
-        values.put(C_NR_THU, routeRequest.ThuDatetimeString());
-        values.put(C_NR_FRI, routeRequest.FriDatetimeString());
-        long res = db.update(NEW_REQUEST_TABLE, values, null, null);
-        Log.d(TAG, "New Route Request Date Inserted");
+        values.put(C_USER_MOBILE, user.Mobile);
+        values.put(C_USER_GENDER, user.Gender);
+        values.put(C_USER_NAME, user.Name);
+        values.put(C_USER_FAMILY, user.Family);
+        values.put(C_USER_NATIONAL_CODE, user.NationalCode);
+        values.put(C_USER_NATIONAL_CARD_IMAGE_ID, user.NationalCardImageId);
+        values.put(C_USER_EMAIL, user.Email);
+        values.put(C_USER_CODE, user.Code);
+        values.put(C_COMPANY_NAME, user.CompanyName);
+        values.put(C_USER_IMAGE_ID, user.UserImageId);
+        values.put(C_LICENSE_IMAGE_ID, user.LicenseImageId);
+        values.put(C_CAR_TYPE, user.CarType);
+        values.put(C_CAR_COLOR, user.CarColor);
+        values.put(C_CAR_PLATE_NO, user.CarPlateNo);
+        values.put(C_CAR_IMAGE_ID_1, user.CarCardImageId);
+        values.put(C_CAR_IMAGE_ID_2, user.CarCardBckImageId);
+        values.put(C_BANK_ACCOUNT, user.BankAccountNo);
+        values.put(C_BANK_NAME, user.BankName);
+        values.put(C_BANK_SHABA, user.BankShaba);
+        values.put(C_BANK_CARD_IMAGE_ID, user.BankImageId);
+        values.put(C_COMPANY_IMAGE_ID, user.CompanyImageId);
+        long res = db.insertWithOnConflict(NEW_USER_INFO_TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        Log.d(TAG, "User Info Inserted");
         db.close();
         return res;
     }
 
-    public long insertMessages(List<MessageModel> msgs,long contactId) {
-        db = dbHelper.getWritableDatabase();
-        int res = db.delete(MESSAGING_TABLE, C_MSG_CONTACT_ID + " =? ", new String[]{String.valueOf(contactId)});
-        long longRes=0;
-        if(res>0){
-            for (MessageModel msg:msgs){
-                ContentValues values = new ContentValues();
-                values.put(C_MSG_CONTACT_ID, msg.GroupId);
-                values.put(C_MSG_MESSAGE_ID, msg.CommentId);
-                values.put(C_MSG_NAME_FAMILY, msg.NameFamily);
-                values.put(C_MSG_TIME_STRING, msg.TimingString);
-                values.put(C_MSG_MESSAGE, msg.Comment);
-                values.put(C_MSG_USER_PIC, msg.Base64UserPic);
-                longRes =+ db.insertWithOnConflict(MESSAGING_TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-            }
-        }
-        Log.d(TAG, "Messages Inserted");
-        db.close();
-        return longRes;
-    }
-
-
-    public List<MessageModel> messagesQuery(long contactId) {
-        db = dbHelper.getReadableDatabase();
-        List<MessageModel> messageModelList = new ArrayList<>();
-        Cursor cursor = db.query(MESSAGING_TABLE, null, C_MSG_CONTACT_ID + " = ?", new String[]{String.valueOf(contactId)}, null, null, C_MSG_MESSAGE_ID);
-        while (cursor.moveToNext()) {
-            MessageModel messageModel = new MessageModel();
-            messageModel.GroupId=cursor.getInt(cursor.getColumnIndex(UserData.C_MSG_CONTACT_ID));
-            messageModel.CommentId=cursor.getLong(cursor.getColumnIndex(UserData.C_MSG_MESSAGE_ID));
-            messageModel.NameFamily=cursor.getString(cursor.getColumnIndex(UserData.C_MSG_NAME_FAMILY));
-            messageModel.TimingString=cursor.getString(cursor.getColumnIndex(UserData.C_MSG_TIME_STRING));
-            messageModel.Comment=cursor.getString(cursor.getColumnIndex(UserData.C_MSG_MESSAGE));
-            messageModel.IsDeletable=cursor.getInt(cursor.getColumnIndex(UserData.C_MSG_IS_DELETABLE))>0;
-            messageModel.Base64UserPic=cursor.getString(cursor.getColumnIndex(UserData.C_MSG_USER_PIC));
-            messageModelList.add(messageModel);
-        }
-        db.close();
-        return messageModelList;
-    }
-
-
-    public RouteRequest routeRequestQuery() {
-        db = dbHelper.getReadableDatabase();
-        RouteRequest routeRequest = new RouteRequest();
-        Cursor cursor = db.query(NEW_REQUEST_TABLE, null, null, null, null, null, null);
-        while (cursor.moveToNext()) {
-            routeRequest.ServiceType = ServiceTypes.valueOf(cursor.getString(cursor.getColumnIndex(UserData.C_NR_SERVICE_TYPE)));
-            routeRequest.EventId = cursor.getLong(cursor.getColumnIndex(UserData.C_NR_EVENT_ID));
-            routeRequest.SrcLatitude = cursor.getString(cursor.getColumnIndex(UserData.C_NR_SRC_LAT));
-            routeRequest.SrcLongitude = cursor.getString(cursor.getColumnIndex(UserData.C_NR_SRC_LNG));
-            routeRequest.SrcGAddress = cursor.getString(cursor.getColumnIndex(UserData.C_NR_SRC_ADD));
-            routeRequest.DstLatitude = cursor.getString(cursor.getColumnIndex(UserData.C_NR_DST_LAT));
-            routeRequest.DstLongitude = cursor.getString(cursor.getColumnIndex(UserData.C_NR_DST_LNG));
-            routeRequest.DstGAddress = cursor.getString(cursor.getColumnIndex(UserData.C_NR_DST_ADD));
-            routeRequest.TimingOption = TimingOptions.valueOf(cursor.getString(cursor.getColumnIndex(UserData.C_NR_TIMING_OPTION)));
-            routeRequest.TheTime = castStringToCal(cursor.getString(cursor.getColumnIndex(UserData.C_NR_THE_TIME)));
-            routeRequest.TheReturnTime = castStringToCal(cursor.getString(cursor.getColumnIndex(UserData.C_NR_THE_RETURN_TIME)));
-            routeRequest.IsReturn = cursor.getInt(cursor.getColumnIndex(UserData.C_NR_IS_RETURN))>0;
-            routeRequest.TheDate = castStringToDate(cursor.getString(cursor.getColumnIndex(UserData.C_NR_THE_DATE)));
-            routeRequest.SatDatetime = castStringToCal(cursor.getString(cursor.getColumnIndex(UserData.C_NR_SAT)));
-            routeRequest.SunDatetime = castStringToCal(cursor.getString(cursor.getColumnIndex(UserData.C_NR_SUN)));
-            routeRequest.MonDatetime = castStringToCal(cursor.getString(cursor.getColumnIndex(UserData.C_NR_MON)));
-            routeRequest.TueDatetime = castStringToCal(cursor.getString(cursor.getColumnIndex(UserData.C_NR_TUE)));
-            routeRequest.WedDatetime = castStringToCal(cursor.getString(cursor.getColumnIndex(UserData.C_NR_WED)));
-            routeRequest.ThuDatetime = castStringToCal(cursor.getString(cursor.getColumnIndex(UserData.C_NR_THU)));
-            routeRequest.FriDatetime = castStringToCal(cursor.getString(cursor.getColumnIndex(UserData.C_NR_FRI)));
-            routeRequest.IsDrive = cursor.getInt(cursor.getColumnIndex(UserData.C_NR_DRIVE))>0;
-            routeRequest.CostMinMax = Float.parseFloat(cursor.getString(cursor.getColumnIndex(UserData.C_NR_PRICE)));
-            routeRequest.RecommendPathId = cursor.getLong(cursor.getColumnIndex(UserData.C_NR_RECOMMEND_ID));
-        }
-        db.close();
-        return routeRequest;
-    }
 
 
     public List<RouteResponse> routeResponseListQuery() {
@@ -537,96 +282,6 @@ public class UserData {
         return routeResponseList;
     }
 
-    public List<ContactModel> contactModelListQuery() {
-        db = dbHelper.getReadableDatabase();
-        ContactModel contactModel = new ContactModel();
-        List<ContactModel> contactModelList = new ArrayList<ContactModel>();
-        Cursor cursor = db.query(NEW_CONTACT_TABLE, null, null, null, null, null, null);
-        while (cursor.moveToNext()) {
-            contactModel = new ContactModel();
-            contactModel.ContactId = cursor.getInt(cursor.getColumnIndex(UserData.C_C_CONTACT_ID));
-            contactModel.Name = cursor.getString(cursor.getColumnIndex(UserData.C_C_Name));
-            contactModel.Family = cursor.getString(cursor.getColumnIndex(UserData.C_C_FAMILY));
-            contactModel.Gender = cursor.getString(cursor.getColumnIndex(UserData.C_C_GENDER));
-            contactModel.LastMsgTime = cursor.getString(cursor.getColumnIndex(UserData.C_C_LAST_MSG_TIME));
-            contactModel.LastMsg = cursor.getString(cursor.getColumnIndex(UserData.C_C_LAST_MSG));
-            contactModel.IsSupport = cursor.getInt(cursor.getColumnIndex(UserData.C_C_SUPPORT));
-            contactModel.IsDriver = cursor.getInt(cursor.getColumnIndex(UserData.C_C_DRIVER));
-            contactModel.IsRideAccepted = cursor.getInt(cursor.getColumnIndex(UserData.C_C_RIDE_ACCEPT));
-            contactModel.IsPassengerAccepted = cursor.getInt(cursor.getColumnIndex(UserData.C_C_PASSENGER_ACCEPT));
-            contactModel.UserImageId = cursor.getString(cursor.getColumnIndex(UserData.C_C_IMAGE_ID));
-            contactModel.AboutUser = cursor.getString(cursor.getColumnIndex(UserData.C_C_ABOUT_USER));
-            contactModelList.add(contactModel);
-        }
-        db.close();
-        return contactModelList;
-    }
-
-
-    public List<RouteRequest> routeRequestListQuery() {
-        db = dbHelper.getReadableDatabase();
-        RouteRequest routeRequest = new RouteRequest();
-        List<RouteRequest> routeRequestList = new ArrayList<RouteRequest>();
-        Cursor cursor = db.query(NEW_REQUEST_TABLE, null, null, null, null, null, null);
-        while (cursor.moveToNext()) {
-            routeRequest = new RouteRequest();
-            routeRequest.ServiceType = ServiceTypes.valueOf(cursor.getString(cursor.getColumnIndex(UserData.C_NR_SERVICE_TYPE)));
-            routeRequest.EventId = cursor.getLong(cursor.getColumnIndex(UserData.C_NR_EVENT_ID));
-            routeRequest.SrcLatitude = cursor.getString(cursor.getColumnIndex(UserData.C_NR_SRC_LAT));
-            routeRequest.SrcLongitude = cursor.getString(cursor.getColumnIndex(UserData.C_NR_SRC_LNG));
-            routeRequest.SrcGAddress = cursor.getString(cursor.getColumnIndex(UserData.C_NR_SRC_ADD));
-            routeRequest.DstLatitude = cursor.getString(cursor.getColumnIndex(UserData.C_NR_DST_LAT));
-            routeRequest.DstLongitude = cursor.getString(cursor.getColumnIndex(UserData.C_NR_DST_LNG));
-            routeRequest.DstGAddress = cursor.getString(cursor.getColumnIndex(UserData.C_NR_DST_ADD));
-            routeRequest.TimingOption = TimingOptions.valueOf(cursor.getString(cursor.getColumnIndex(UserData.C_NR_TIMING_OPTION)));
-            routeRequest.TheTime = castStringToCal(cursor.getString(cursor.getColumnIndex(UserData.C_NR_THE_TIME)));
-            routeRequest.TheDate = castStringToDate(cursor.getString(cursor.getColumnIndex(UserData.C_NR_THE_DATE)));
-            routeRequest.SatDatetime = castStringToCal(cursor.getString(cursor.getColumnIndex(UserData.C_NR_SAT)));
-            routeRequest.SunDatetime = castStringToCal(cursor.getString(cursor.getColumnIndex(UserData.C_NR_SUN)));
-            routeRequest.MonDatetime = castStringToCal(cursor.getString(cursor.getColumnIndex(UserData.C_NR_MON)));
-            routeRequest.TueDatetime = castStringToCal(cursor.getString(cursor.getColumnIndex(UserData.C_NR_TUE)));
-            routeRequest.WedDatetime = castStringToCal(cursor.getString(cursor.getColumnIndex(UserData.C_NR_WED)));
-            routeRequest.ThuDatetime = castStringToCal(cursor.getString(cursor.getColumnIndex(UserData.C_NR_THU)));
-            routeRequest.FriDatetime = castStringToCal(cursor.getString(cursor.getColumnIndex(UserData.C_NR_FRI)));
-            routeRequest.IsDrive = cursor.getInt(cursor.getColumnIndex(UserData.C_NR_DRIVE))>0;
-            routeRequest.CostMinMax = Float.parseFloat(cursor.getString(cursor.getColumnIndex(UserData.C_NR_PRICE)));
-            routeRequest.RecommendPathId = cursor.getLong(cursor.getColumnIndex(UserData.C_NR_RECOMMEND_ID));
-            routeRequestList.add(routeRequest);
-        }
-        db.close();
-        return routeRequestList;
-    }
-
-
-    private Calendar castStringToCal(String dateString) {
-        Calendar cal = Calendar.getInstance();
-        if (dateString == null || dateString.equals("")) {
-            return null;
-        }
-        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-        try {
-            Date date = format.parse(dateString);
-            cal.setTime(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return cal;
-    }
-
-    private Date castStringToDate(String dateString) {
-        if (dateString == null || dateString.equals("")) {
-            return null;
-        }
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = new Date();
-        try {
-            date = format.parse(dateString);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return date;
-    }
-
 
     public UserInfoModel userInfoQuery() {
         db = dbHelper.getReadableDatabase();
@@ -659,73 +314,36 @@ public class UserData {
         return userInfoModel;
     }
 
-    public UserInfoModel tempUserInfoQuery() {
-        db = dbHelper.getReadableDatabase();
-        UserInfoModel userInfoModel = new UserInfoModel();
-        Cursor cursor = db.query(USER_INFO_TEMP_TABLE, null, null, null, null, null, null);
-        while (cursor.moveToNext()) {
-            userInfoModel.Gender = cursor.getString(cursor.getColumnIndex(UserData.C_USER_GENDER));
-            userInfoModel.Name = cursor.getString(cursor.getColumnIndex(UserData.C_USER_NAME));
-            userInfoModel.Family = cursor.getString(cursor.getColumnIndex(UserData.C_USER_FAMILY));
-            //userInfoModel.Mobile = cursor.getString(cursor.getColumnIndex(UserData.C_USER_MOBILE));
-            userInfoModel.Email = cursor.getString(cursor.getColumnIndex(UserData.C_USER_EMAIL));
-            userInfoModel.Code = cursor.getString(cursor.getColumnIndex(UserData.C_USER_CODE));
-            userInfoModel.CompanyName = cursor.getString(cursor.getColumnIndex(UserData.C_COMPANY_NAME));
-            userInfoModel.NationalCode = cursor.getString(cursor.getColumnIndex(UserData.C_USER_NATIONAL_CODE));
+
+    private Calendar castStringToCal(String dateString) {
+        Calendar cal = Calendar.getInstance();
+        if (dateString == null || dateString.equals("")) {
+            return null;
         }
-        db.close();
-        return userInfoModel;
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+        try {
+            Date date = format.parse(dateString);
+            cal.setTime(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return cal;
     }
 
-    public UserInfoModel tempCarInfoQuery() {
-        db = dbHelper.getReadableDatabase();
-        UserInfoModel userInfoModel = new UserInfoModel();
-        Cursor cursor = db.query(CAR_TEMP_TABLE, null, null, null, null, null, null);
-        while (cursor.moveToNext()) {
-            userInfoModel.CarType = cursor.getString(cursor.getColumnIndex(UserData.C_CAR_TYPE));
-            userInfoModel.CarColor = cursor.getString(cursor.getColumnIndex(UserData.C_CAR_COLOR));
-            userInfoModel.CarPlateNo = cursor.getString(cursor.getColumnIndex(UserData.C_CAR_PLATE_NO));
+    private Date castStringToDate(String dateString) {
+        if (dateString == null || dateString.equals("")) {
+            return null;
         }
-        db.close();
-        return userInfoModel;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        try {
+            date = format.parse(dateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
     }
 
-    public AboutMeModel aboutMeQuery() {
-        db = dbHelper.getReadableDatabase();
-        AboutMeModel aboutMeModel= new AboutMeModel();
-        Cursor cursor = db.query(ABOUT_ME_TABLE, null, null, null, null, null, null);
-        while (cursor.moveToNext()) {
-            aboutMeModel.Desc=cursor.getString(cursor.getColumnIndex(UserData.C_AM_DESC));
-        }
-        db.close();
-        return aboutMeModel;
-    }
-
-    public InviteModel inviteQuery() {
-        db = dbHelper.getReadableDatabase();
-        InviteModel inviteModel= new InviteModel();
-        Cursor cursor = db.query(INVITE_TABLE, null, null, null, null, null, null);
-        while (cursor.moveToNext()) {
-            inviteModel.InviteCode=cursor.getString(cursor.getColumnIndex(UserData.C_I_INVITE_CODE));
-            inviteModel.InviteLink=cursor.getString(cursor.getColumnIndex(UserData.C_I_INVITE_LINK));
-        }
-        db.close();
-        return inviteModel;
-    }
-
-
-    public UserInfoModel tempBankInfoQuery() {
-        db = dbHelper.getReadableDatabase();
-        UserInfoModel userInfoModel = new UserInfoModel();
-        Cursor cursor = db.query(BANK_TEMP_TABLE, null, null, null, null, null, null);
-        while (cursor.moveToNext()) {
-            userInfoModel.BankName = cursor.getString(cursor.getColumnIndex(UserData.C_BANK_NAME));
-            userInfoModel.BankShaba = cursor.getString(cursor.getColumnIndex(UserData.C_BANK_SHABA));
-            userInfoModel.BankAccountNo = cursor.getString(cursor.getColumnIndex(UserData.C_BANK_ACCOUNT));
-        }
-        db.close();
-        return userInfoModel;
-    }
 
 
     public ImageResponse imageQuery(String imageId) {

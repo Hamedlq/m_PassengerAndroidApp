@@ -1,13 +1,10 @@
 package com.mibarim.main.ui;
 
-import android.app.Activity;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 
-import com.mibarim.main.R;
 import com.mibarim.main.models.ApiResponse;
 import com.mibarim.main.models.MessageResponse;
-import com.mibarim.main.util.Toaster;
 
 /**
  * Created by Hamed on 3/1/2016.

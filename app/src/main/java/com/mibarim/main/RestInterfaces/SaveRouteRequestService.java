@@ -1,23 +1,14 @@
 package com.mibarim.main.RestInterfaces;
 
 import com.mibarim.main.core.Constants;
-import com.mibarim.main.models.Address.Location;
+
 import com.mibarim.main.models.ApiResponse;
 import com.mibarim.main.models.NotificationModel;
 import com.mibarim.main.models.Plus.PaymentDetailModel;
-import com.mibarim.main.models.RouteRequest;
-import com.mibarim.main.models.enums.PricingOptions;
-import com.mibarim.main.models.enums.ServiceTypes;
-import com.mibarim.main.models.enums.TimingOptions;
 //import com.squareup.okhttp.Route;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
-import retrofit.http.HEAD;
 import retrofit.http.Header;
 import retrofit.http.POST;
 
@@ -25,33 +16,6 @@ import retrofit.http.POST;
  * Created by Hamed on 3/10/2016.
  */
 public interface SaveRouteRequestService {
-    @POST(Constants.Http.URL_INSERT_ROUTE)
-    @FormUrlEncoded
-    ApiResponse SubmitNewRoute(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
-                               @Field("SrcGAddress") String SrcGAddress,
-                               @Field("SrcDetailAddress") String SrcDetailAddress,
-                               @Field("SrcLatitude") String SrcLatitude,
-                               @Field("SrcLongitude") String SrcLongitude,
-                               @Field("DstGAddress") String DstGAddress,
-                               @Field("DstDetailAddress") String DstDetailAddress,
-                               @Field("DstLatitude") String DstLatitude,
-                               @Field("DstLongitude") String DstLongitude,
-                               @Field("AccompanyCount") int AccompanyCount,
-                               @Field("TimingOption") TimingOptions TimingOption,
-                               @Field("PriceOption") PricingOptions PricingOption,
-                               @Field("TheDate") String TheDate,
-                               @Field("TheTime") String TheTime,
-                               @Field("SatDatetime") String SatDatetime,
-                               @Field("SunDatetime") String SunDatetime,
-                               @Field("MonDatetime") String MonDatetime,
-                               @Field("TueDatetime") String TueDatetime,
-                               @Field("WedDatetime") String WedDatetime,
-                               @Field("ThuDatetime") String ThuDatetime,
-                               @Field("FriDatetime") String FriDatetime,
-                               @Field("CostMinMax") float CostMinMax,
-                               @Field("IsDrive") boolean IsDrive,
-                               @Field("RecommendPathId") long RecommendPathId
-    );
 
     @POST(Constants.Http.URL_INSERT_EVENT_ROUTE)
     @FormUrlEncoded
@@ -176,32 +140,4 @@ public interface SaveRouteRequestService {
     ApiResponse getRouteInfo(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
                              @Field("RouteUId") String routeGId);
 
-    @POST(Constants.Http.URL_INSERT_RIDE_REQUEST)
-    @FormUrlEncoded
-    ApiResponse SubmitRideRequest(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
-                               @Field("SrcGAddress") String SrcGAddress,
-                               @Field("SrcDetailAddress") String SrcDetailAddress,
-                               @Field("SrcLatitude") String SrcLatitude,
-                               @Field("SrcLongitude") String SrcLongitude,
-                               @Field("DstGAddress") String DstGAddress,
-                               @Field("DstDetailAddress") String DstDetailAddress,
-                               @Field("DstLatitude") String DstLatitude,
-                               @Field("DstLongitude") String DstLongitude,
-                               @Field("AccompanyCount") int AccompanyCount,
-                               @Field("TimingOption") TimingOptions TimingOption,
-                               @Field("PriceOption") PricingOptions PricingOption,
-                               @Field("TheDate") String TheDate,
-                               @Field("TheTime") String TheTime,
-                               @Field("SatDatetime") String SatDatetime,
-                               @Field("SunDatetime") String SunDatetime,
-                               @Field("MonDatetime") String MonDatetime,
-                               @Field("TueDatetime") String TueDatetime,
-                               @Field("WedDatetime") String WedDatetime,
-                               @Field("ThuDatetime") String ThuDatetime,
-                               @Field("FriDatetime") String FriDatetime,
-                               @Field("CostMinMax") float CostMinMax,
-                               @Field("IsDrive") boolean IsDrive,
-                               @Field("ServiceType") ServiceTypes ServiceType,
-                               @Field("RouteUId") String RouteUId
-    );
 }

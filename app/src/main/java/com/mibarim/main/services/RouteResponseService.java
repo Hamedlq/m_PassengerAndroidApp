@@ -2,8 +2,6 @@ package com.mibarim.main.services;
 
 import com.mibarim.main.RestInterfaces.GetRouteResponseService;
 import com.mibarim.main.models.ApiResponse;
-import com.mibarim.main.models.PersonalInfoModel;
-import com.mibarim.main.models.UserInfo.UserRouteModel;
 
 import retrofit.RestAdapter;
 
@@ -31,10 +29,6 @@ public class RouteResponseService {
         return res;
     }
 
-    public PersonalInfoModel GetRouteImage(String authToken, long routeId) {
-        PersonalInfoModel res = getService().GetRouteUserImage("Bearer " + authToken, routeId);
-        return res;
-    }
     public ApiResponse GetRouteSuggests(String authToken, long routeId) {
         ApiResponse res = getService().GetRouteSuggest("Bearer " + authToken, routeId);
         return res;
@@ -51,8 +45,8 @@ public class RouteResponseService {
         return res;
     }
 
-    public UserRouteModel GetTripProfileInfo(String authToken, long routeId) {
-        UserRouteModel res = getService().GetTripProfileInfo("Bearer " + authToken, routeId);
+    public ApiResponse setTripPoint(String authToken, String lat, String lng, long tripId, int tripState) {
+        ApiResponse res = getService().SetTripPoint("Bearer " + authToken, lat, lng, tripId, tripState);
         return res;
     }
 }
