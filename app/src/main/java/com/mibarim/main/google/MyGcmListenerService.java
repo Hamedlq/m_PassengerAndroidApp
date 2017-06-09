@@ -28,6 +28,8 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
 import com.mibarim.main.R;
+import com.mibarim.main.core.Constants;
+import com.mibarim.main.ui.activities.SplashActivity;
 
 public class
         MyGcmListenerService extends GcmListenerService {
@@ -65,12 +67,33 @@ public class
         Log.d(TAG, "From: " + from);
         Log.d(TAG, "Message: " + message);
         Log.d(TAG, "body: " + body);
+        showNotification(title,body,action,tabNum,requestCodeNum,notificationIdNum,link);
 /*        if (message != null && !message.equals("")) {
             sendNotification(message);
         } else {
             showNotification(title,body,action,tabNum,requestCodeNum,notificationIdNum,link);
         }*/
 
+    }
+
+
+    private void showNotification(String title, String body, String action, int tab, int requestCode, int notificationId, String link) {
+        Intent intent = new Intent(this, SplashActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra(Constants.GlobalConstants.URL, link);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, requestCode, intent,
+                PendingIntent.FLAG_ONE_SHOT);
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.mipmap.ic_circle_logo)
+                .setContentTitle(title)
+                .setContentText(body)
+                .setAutoCancel(true)
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent);
+        NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(notificationId, notificationBuilder.build());
     }
     // [END receive_message]
 
@@ -254,24 +277,5 @@ public class
         }
 
     }
-
-    private void showNotification(String title, String body, String action, int tab, int requestCode, int notificationId, String link) {
-
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra("selectedTab", tab);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, requestCode, intent,
-                PendingIntent.FLAG_ONE_SHOT);
-        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.mipmap.ic_notification)
-                .setContentTitle(title)
-                .setContentText(body)
-                .setAutoCancel(true)
-                .setSound(defaultSoundUri)
-                .setContentIntent(pendingIntent);
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(notificationId, notificationBuilder.build());
-    }*/
+*/
 }

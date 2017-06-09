@@ -131,12 +131,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
 
     public void setStation(String stLat, String stLng, String driverLat, String driverLng) {
-        setMinMaxValues(Double.parseDouble(stLat), Double.parseDouble(stLng));
         setMinMaxValues(Double.parseDouble(driverLat), Double.parseDouble(driverLng));
         if (stMarker != null) {
             stMarker.remove();
         }
         if(stLat!=null && stLng!=null) {
+            setMinMaxValues(Double.parseDouble(stLat), Double.parseDouble(stLng));
             stMarker = mMap.addMarker(new MarkerOptions()
                     .position(new LatLng(Double.parseDouble(stLat), Double.parseDouble(stLng)))
                     .icon(BitmapDescriptorFactory

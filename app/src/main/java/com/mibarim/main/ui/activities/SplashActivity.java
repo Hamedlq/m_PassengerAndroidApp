@@ -82,6 +82,7 @@ public class SplashActivity extends ActionBarAccountAuthenticatorActivity {
     private final int SPLASH_DISPLAY_LENGTH = 2000;
     private Tracker mTracker;
     private String authToken;
+    private String url;
     private UserInitialModel userInitialModel;
     private AccountManager accountManager;
     private Account theAccount;
@@ -112,6 +113,10 @@ public class SplashActivity extends ActionBarAccountAuthenticatorActivity {
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         mTracker.send(new HitBuilders.EventBuilder().setCategory("Activity").setAction("SplashActivity").build());
         setContentView(R.layout.initial_splash);
+
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            url = getIntent().getExtras().getString(Constants.GlobalConstants.URL);
+        }
 
         ButterKnife.bind(this);
 
@@ -181,6 +186,9 @@ public class SplashActivity extends ActionBarAccountAuthenticatorActivity {
     private void gotoMainActivity() {
         Intent intent = new Intent(SplashActivity.this, MainCardActivity.class);
         //Intent intent = new Intent(MainActivity.this, HomeWorkStepActivity.class);
+        if(url!=null){
+            intent.putExtra(Constants.GlobalConstants.URL,url);
+        }
         this.startActivity(intent);
         finishIt();
     }

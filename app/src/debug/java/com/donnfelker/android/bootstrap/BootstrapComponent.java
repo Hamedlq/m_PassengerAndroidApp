@@ -4,6 +4,7 @@ import com.mibarim.main.ui.activities.MainCardActivity;
 import com.mibarim.main.ui.activities.MobileActivity;
 import com.mibarim.main.ui.activities.RegisterActivity;
 import com.mibarim.main.ui.activities.MobileValidationActivity;
+import com.mibarim.main.ui.activities.RidingActivity;
 import com.mibarim.main.ui.activities.SplashActivity;
 import com.mibarim.main.ui.activities.SmsValidationActivity;
 import com.mibarim.main.authenticator.AuthenticatorActivity;
@@ -34,6 +35,8 @@ public interface BootstrapComponent {
     void inject(TokenRefreshActivity target);
 
     void inject(MobileActivity target);
+
+    void inject(RidingActivity target);
 
     void inject(PassengerCardFragment target);
 

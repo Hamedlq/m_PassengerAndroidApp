@@ -92,6 +92,7 @@ public class MainCardActivity extends BootstrapActivity {
     private Toolbar toolbar;
 
     private String authToken;
+    private String url;
     private ApiResponse response;
     private int appVersion = 0;
     private ApiResponse theSuggestRoute;
@@ -129,6 +130,10 @@ public class MainCardActivity extends BootstrapActivity {
         mTracker.send(new HitBuilders.EventBuilder().setCategory("Activity").setAction("MainCardActivity").build());
 
         setContentView(R.layout.main_activity);
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            url = getIntent().getExtras().getString(Constants.GlobalConstants.URL);
+        }
+
         parentLayout = findViewById(R.id.main_activity_root);
         // View injection with Butterknife
         ButterKnife.bind(this);
@@ -151,7 +156,9 @@ public class MainCardActivity extends BootstrapActivity {
         fragmentManager.beginTransaction()
                 .add(R.id.main_container, new PassengerCardFragment())
                 .commit();
-
+        if(url!=null){
+            gotoWebView(url);
+        }
     }
 
     private void checkAuth() {
