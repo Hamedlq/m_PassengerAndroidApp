@@ -66,11 +66,15 @@ public class MobileActivity extends ActionBarAccountAuthenticatorActivity {
     protected AutoCompleteTextView loginMobile;
     @Bind(id.b_signin)
     protected AppCompatButton signInButton;
+    @Bind(R.id.b_register_ent)
+    protected AppCompatButton entRegisterButton;
+
     private ApiResponse response;
 
     private SafeAsyncTask<Boolean> registerTask;
     private String regMobile;
     private int NUMBER_AGAIN = 5577;
+    private int FINISH_REGISTER_SERVICE = 4561;
     private Tracker mTracker;
 
     @Override
@@ -107,10 +111,37 @@ public class MobileActivity extends ActionBarAccountAuthenticatorActivity {
                 return false;
             }
         });
+
+        entRegisterButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    Intent i = new Intent(MobileActivity.this, WebViewActivity.class);
+                    i.putExtra("URL", "http://mibarimapp.com/coreapi/FanapLogin");
+                    startActivityForResult(i, FINISH_REGISTER_SERVICE);
+                    return true;
+                }
+                return false;
+            }
+        });
+
+
+
         final Intent i = new Intent(this, HelpActivity.class);
         startActivity(i);
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == FINISH_REGISTER_SERVICE && resultCode == RESULT_OK) {
+            /*Intent i=getIntent();
+            setResult(RESULT_OK,i);
+            finish();*/
+            //relogin();
+        }
+    }
+
 
     private void registerUser() {
         if (registerTask != null) {

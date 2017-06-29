@@ -11,7 +11,7 @@
         android:layout_width="fill_parent"
         android:layout_height="80dp"
         android:layout_alignParentTop="true"
-        android:background="@color/colorPrimary" />
+        android:background="@color/primary" />
 
     <LinearLayout
         android:id="@+id/user_image_layout"

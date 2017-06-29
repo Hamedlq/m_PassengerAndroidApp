@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.beardedhen.androidbootstrap.BootstrapCircleThumbnail;
@@ -18,6 +19,7 @@ import com.mibarim.main.models.enums.TripStates;
 import com.mibarim.main.ui.activities.MainCardActivity;
 import com.mibarim.main.ui.fragments.PlusFragments.PassengerCardFragment;
 
+import java.util.Calendar;
 import java.util.List;
 
 import cn.nekocode.badge.BadgeDrawable;
@@ -31,6 +33,8 @@ public class PassengerRouteRecyclerAdapter extends RecyclerView.Adapter<Passenge
     private List<PassRouteModel> items;
     private Activity _activity;
     private PassengerCardFragment.ItemTouchListener onItemTouchListener;
+    private static final int MAX_CLICK_DURATION = 200;
+    private long startClickTime;
     //private RelativeLayout lastLayout;
 
     // Provide a reference to the views for each data item
@@ -43,7 +47,9 @@ public class PassengerRouteRecyclerAdapter extends RecyclerView.Adapter<Passenge
         public TextView timing;
         public TextView seats;
         public TextView src_address;
+        public ImageView src_img;
         public TextView dst_address;
+        public ImageView dst_img;
         public TextView carString;
         /*public TextView src_distance;
         public TextView dst_distance;*/
@@ -58,7 +64,9 @@ public class PassengerRouteRecyclerAdapter extends RecyclerView.Adapter<Passenge
             timing = (TextView) v.findViewById(R.id.timing);
             seats = (TextView) v.findViewById(R.id.seats);
             src_address = (TextView) v.findViewById(R.id.src_address);
+            src_img = (ImageView) v.findViewById(R.id.src_img);
             dst_address = (TextView) v.findViewById(R.id.dst_address);
+            dst_img = (ImageView) v.findViewById(R.id.dst_img);
             carString = (TextView) v.findViewById(R.id.carString);
             /*src_distance = (TextView) v.findViewById(R.id.src_distance);
             dst_distance = (TextView) v.findViewById(R.id.dst_distance);*/
@@ -67,14 +75,46 @@ public class PassengerRouteRecyclerAdapter extends RecyclerView.Adapter<Passenge
             book_trip.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                        onItemTouchListener.onBookBtnClick(v, getPosition());
-                        return true;
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN: {
+                            startClickTime = Calendar.getInstance().getTimeInMillis();
+                            break;
+                        }
+                        case MotionEvent.ACTION_UP: {
+                            long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
+                            if(clickDuration < MAX_CLICK_DURATION) {
+                                onItemTouchListener.onBookBtnClick(v, getPosition());
+                            }
+                            break;
+                        }
+                        default:
+                            break;
                     }
-                    return false;
+                    return true;
                 }
             });
             src_address.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN: {
+                            startClickTime = Calendar.getInstance().getTimeInMillis();
+                            break;
+                        }
+                        case MotionEvent.ACTION_UP: {
+                            long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
+                            if(clickDuration < MAX_CLICK_DURATION) {
+                                onItemTouchListener.onSrcLinkClick(v, getPosition());
+                            }
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+                    return true;
+                }
+            });
+            src_img.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -84,7 +124,7 @@ public class PassengerRouteRecyclerAdapter extends RecyclerView.Adapter<Passenge
                     return false;
                 }
             });
-            dst_address.setOnTouchListener(new View.OnTouchListener() {
+            dst_img.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -94,7 +134,27 @@ public class PassengerRouteRecyclerAdapter extends RecyclerView.Adapter<Passenge
                     return false;
                 }
             });
-
+            dst_address.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN: {
+                            startClickTime = Calendar.getInstance().getTimeInMillis();
+                            break;
+                        }
+                        case MotionEvent.ACTION_UP: {
+                            long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
+                            if(clickDuration < MAX_CLICK_DURATION) {
+                                onItemTouchListener.onDstLinkClick(v, getPosition());
+                            }
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+                    return true;
+                }
+            });
             /*v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

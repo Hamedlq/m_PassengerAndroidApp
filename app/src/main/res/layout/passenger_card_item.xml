@@ -23,8 +23,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingEnd="16dp"
             android:paddingBottom="8dp"
+            android:paddingEnd="16dp"
             android:paddingStart="16dp"
             android:paddingTop="24dp">
 
@@ -69,18 +69,25 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="8dp"
-                    android:orientation="horizontal">
+                    android:paddingTop="8dp">
+
+                    <ImageView
+                        android:id="@+id/src_img"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:src="@drawable/ic_person_pin_circle_black" />
 
                     <TextView
                         android:id="@+id/src_station"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingStart="8dp"
+                        android:layout_alignParentStart="true"
                         android:paddingEnd="8dp"
+                        android:paddingStart="8dp"
                         android:text="@string/text_station"
                         android:textColor="@color/table_text_selector"
                         android:textSize="10sp" />
@@ -89,24 +96,26 @@
                         android:id="@+id/src_address"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingStart="8dp"
+                        android:layout_marginEnd="50dp"
+                        android:layout_toEndOf="@id/src_station"
                         android:paddingEnd="8dp"
+                        android:paddingStart="8dp"
                         android:textColor="@color/table_text_selector"
                         android:textSize="14sp" />
-                </LinearLayout>
+                </RelativeLayout>
 
-                <LinearLayout
+                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="8dp"
-                    android:orientation="horizontal">
+                    android:paddingTop="8dp">
 
                     <TextView
                         android:id="@+id/text_destination"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingStart="8dp"
+                        android:layout_alignParentStart="true"
                         android:paddingEnd="8dp"
+                        android:paddingStart="8dp"
                         android:text="@string/destination"
                         android:textColor="@color/table_text_selector"
                         android:textSize="10sp" />
@@ -115,11 +124,22 @@
                         android:id="@+id/dst_address"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingStart="8dp"
+                        android:layout_marginEnd="50dp"
+                        android:layout_toEndOf="@id/text_destination"
                         android:paddingEnd="8dp"
+                        android:paddingStart="8dp"
                         android:textColor="@color/table_text_selector"
                         android:textSize="14sp" />
-                </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/dst_img"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentTop="true"
+                        android:src="@drawable/ic_pin_drop_black" />
+
+                </RelativeLayout>
             </LinearLayout>
 
             <View

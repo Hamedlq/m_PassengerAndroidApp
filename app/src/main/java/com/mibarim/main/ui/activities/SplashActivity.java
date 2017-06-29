@@ -9,10 +9,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,6 +23,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
+import com.google.gson.internal.bind.ReflectiveTypeAdapterFactory;
 import com.mibarim.main.BootstrapApplication;
 import com.mibarim.main.BootstrapServiceProvider;
 import com.mibarim.main.R;
@@ -44,6 +47,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.fabric.sdk.android.Fabric;
 import retrofit.RetrofitError;
+import retrofit.client.Response;
+import retrofit.mime.TypedByteArray;
 
 import static android.accounts.AccountManager.KEY_ACCOUNT_NAME;
 import static android.accounts.AccountManager.KEY_ACCOUNT_TYPE;
@@ -55,8 +60,9 @@ import static com.mibarim.main.core.Constants.Auth.BOOTSTRAP_ACCOUNT_TYPE;
  * Created by Hamed on 3/30/2016.
  */
 public class SplashActivity extends ActionBarAccountAuthenticatorActivity {
-
-    @Inject protected Bus bus;
+    private static final String TAG = "SplashActivity";
+    @Inject
+    protected Bus bus;
     @Inject
     BootstrapServiceProvider serviceProvider;
     @Inject
@@ -171,14 +177,14 @@ public class SplashActivity extends ActionBarAccountAuthenticatorActivity {
     }
 
 
-    public void nextStep(){
+    public void nextStep() {
         SharedPreferences prefs = this.getSharedPreferences(
                 "com.mibarim.main", Context.MODE_PRIVATE);
         if (prefs.getInt("FirstLaunch", 0) != 1) {
             gotoMainActivity();
             //finishIt();
             return;
-        }else{
+        } else {
             checkAuth();
         }
     }
@@ -186,8 +192,8 @@ public class SplashActivity extends ActionBarAccountAuthenticatorActivity {
     private void gotoMainActivity() {
         Intent intent = new Intent(SplashActivity.this, MainCardActivity.class);
         //Intent intent = new Intent(MainActivity.this, HomeWorkStepActivity.class);
-        if(url!=null){
-            intent.putExtra(Constants.GlobalConstants.URL,url);
+        if (url != null) {
+            intent.putExtra(Constants.GlobalConstants.URL, url);
         }
         this.startActivity(intent);
         finishIt();
@@ -307,6 +313,7 @@ public class SplashActivity extends ActionBarAccountAuthenticatorActivity {
 
             @Override
             protected void onException(final Exception e) throws RuntimeException {
+                Log.w(TAG,"omad1");
                 // Retrofit Errors are handled inside of the {
                 if (!(e instanceof RetrofitError)) {
                     final Throwable cause = e.getCause() != null ? e.getCause() : e;
@@ -315,6 +322,11 @@ public class SplashActivity extends ActionBarAccountAuthenticatorActivity {
                         //Toaster.showLong(SplashActivity.this, cause.getMessage());
                     }
                 } else {
+                        Response res = ((RetrofitError) e).getResponse();
+                        String body = new String(((TypedByteArray)res.getBody()).getBytes());
+                        if (res.getStatus() == 400 && body.toLowerCase().contains("error")) {
+                            logout();
+                        }
                     retry();
                 }
             }
@@ -392,7 +404,7 @@ public class SplashActivity extends ActionBarAccountAuthenticatorActivity {
 
     private void finishIt() {
         Intent intent = getIntent();
-        setResult(RESULT_OK,intent);
+        setResult(RESULT_OK, intent);
         finish();
     }
 

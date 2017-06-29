@@ -180,17 +180,6 @@
                 android:textColor="@color/text"
                 android:textStyle="bold" />
 
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/b_register_ent"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/button_background_states"
-                android:elevation="5dp"
-                android:padding="12dp"
-                android:text="@string/ent_login"
-                android:textColor="@color/text"
-                android:textStyle="bold" />
 
         </LinearLayout>
     </ScrollView>

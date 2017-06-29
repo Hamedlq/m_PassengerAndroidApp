@@ -56,6 +56,7 @@ import com.mibarim.main.services.UserInfoService;
 import com.mibarim.main.ui.BootstrapActivity;
 import com.mibarim.main.ui.HandleApiMessages;
 
+import com.mibarim.main.ui.HandleApiMessagesBySnackbar;
 import com.mibarim.main.ui.fragments.PlusFragments.PassengerCardFragment;
 import com.mibarim.main.util.SafeAsyncTask;
 import com.squareup.otto.Subscribe;
@@ -492,7 +493,7 @@ public class MainCardActivity extends BootstrapActivity {
                 if (succees) {
                     gotoBankPayPage(paymentDetailModel);
                 }
-                new HandleApiMessages(MainCardActivity.this, response).showMessages();
+                new HandleApiMessagesBySnackbar(parentLayout, response).showMessages();
                 //finishIt();
             }
         }.execute();
@@ -560,7 +561,7 @@ public class MainCardActivity extends BootstrapActivity {
         public void onClick(DialogInterface dialog, int which) {
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE:
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://mibarimapp.com/androidapp/download"));
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.update_link)));
                     startActivity(browserIntent);
                     break;
                 case DialogInterface.BUTTON_NEGATIVE:

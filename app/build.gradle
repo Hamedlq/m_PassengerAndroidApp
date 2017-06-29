@@ -116,7 +116,7 @@ android {
     }
     productFlavors {
         mibarim {
-            resValue "string", "update_link", "http://mibarim.ir/androidapp/download/"
+            resValue "string", "update_link", "http://mibarimapp.com/androidapp/download/"
         }
         cafeBazar {
             resValue "string", "update_link", "https://cafebazaar.ir/app/com.mibarim.main/?l=fa"

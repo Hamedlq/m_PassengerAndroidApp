@@ -86,8 +86,6 @@ public class RegisterActivity extends AccountAuthenticatorActivity {
 
     @Bind(R.id.b_register)
     protected AppCompatButton registerButton;
-    @Bind(R.id.b_register_ent)
-    protected AppCompatButton entRegisterButton;
 
     private final TextWatcher watcher = validationTextWatcher();
 
@@ -96,8 +94,6 @@ public class RegisterActivity extends AccountAuthenticatorActivity {
     private String authToken;
 
     private ApiResponse response;
-
-    private int FINISH_REGISTER_SERVICE = 4561;
 
     private String user_mobile ;
 
@@ -147,18 +143,6 @@ public class RegisterActivity extends AccountAuthenticatorActivity {
                 return false;
             }
         });
-        entRegisterButton.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    Intent i = new Intent(RegisterActivity.this, WebViewActivity.class);
-                    i.putExtra("URL", "http://mibarimapp.com/coreapi/FanapLogin?mobileNo="+user_mobile);
-                    startActivityForResult(i, FINISH_REGISTER_SERVICE);
-                    return true;
-                }
-                return false;
-            }
-        });
 
         et_name.addTextChangedListener(watcher);
         et_family.addTextChangedListener(watcher);
@@ -178,14 +162,6 @@ public class RegisterActivity extends AccountAuthenticatorActivity {
         bus.unregister(this);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == FINISH_REGISTER_SERVICE && resultCode == RESULT_OK) {
-            Intent i=getIntent();
-            setResult(RESULT_OK,i);
-            finish();
-        }
-    }
 
 
     @Override
