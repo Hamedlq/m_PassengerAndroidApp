@@ -3,6 +3,8 @@ package com.mibarim.main.services;
 import com.mibarim.main.RestInterfaces.GetUserInfoService;
 import com.mibarim.main.models.ApiResponse;
 import com.mibarim.main.models.ImageResponse;
+import com.mibarim.main.models.InviteModel;
+import com.mibarim.main.models.ScoreModel;
 import com.mibarim.main.models.UserInfoModel;
 import com.mibarim.main.models.UserInitialModel;
 
@@ -67,9 +69,25 @@ public class UserInfoService {
         return res;
     }
 
+    public InviteModel getInvite(String authToken) {
+        InviteModel res = getService().getInvite("Bearer " + authToken, "7");
+        return res;
+    }
 
     public ApiResponse sendFeedback(String mobile,String txt) {
         ApiResponse res = getService().sendFeedback(mobile,"mobile@mibarim.com", txt);
         return res;
     }
+
+    public ScoreModel getUserScores(String authToken, long price, int tripId) {
+        ScoreModel res = getService().getUserScores("Bearer " + authToken, price,tripId);
+        return res;
+
+    }
+
+    public ApiResponse submitDiscount(String authToken, String discountCode,long chargeAmount, long seatPrice) {
+        ApiResponse res=getService().submitDiscount("Bearer " + authToken, discountCode, chargeAmount,seatPrice);
+        return res;
+    }
+
 }

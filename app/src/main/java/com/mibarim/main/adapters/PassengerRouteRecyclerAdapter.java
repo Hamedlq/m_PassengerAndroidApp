@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,8 +25,6 @@ import java.util.Calendar;
 import java.util.List;
 
 import cn.nekocode.badge.BadgeDrawable;
-
-import static com.mibarim.main.R.string.event;
 
 /**
  * Created by Hamed on 10/16/2016.
@@ -47,9 +47,11 @@ public class PassengerRouteRecyclerAdapter extends RecyclerView.Adapter<Passenge
         public TextView timing;
         public TextView seats;
         public TextView src_address;
-        public ImageView src_img;
+        //public ImageView src_img;
         public TextView dst_address;
-        public ImageView dst_img;
+        public Button station_dest;
+        public Button src_station;
+        //public ImageButton dst_img;
         public TextView carString;
         /*public TextView src_distance;
         public TextView dst_distance;*/
@@ -64,9 +66,11 @@ public class PassengerRouteRecyclerAdapter extends RecyclerView.Adapter<Passenge
             timing = (TextView) v.findViewById(R.id.timing);
             seats = (TextView) v.findViewById(R.id.seats);
             src_address = (TextView) v.findViewById(R.id.src_address);
-            src_img = (ImageView) v.findViewById(R.id.src_img);
+            //src_img = (ImageView) v.findViewById(R.id.src_img);
             dst_address = (TextView) v.findViewById(R.id.dst_address);
-            dst_img = (ImageView) v.findViewById(R.id.dst_img);
+            station_dest = (Button) v.findViewById(R.id.station_dest);
+            src_station = (Button) v.findViewById(R.id.src_station);
+            //dst_img = (ImageButton) v.findViewById(R.id.dst_img);
             carString = (TextView) v.findViewById(R.id.carString);
             /*src_distance = (TextView) v.findViewById(R.id.src_distance);
             dst_distance = (TextView) v.findViewById(R.id.dst_distance);*/
@@ -93,7 +97,7 @@ public class PassengerRouteRecyclerAdapter extends RecyclerView.Adapter<Passenge
                     return true;
                 }
             });
-            src_address.setOnTouchListener(new View.OnTouchListener() {
+            /*src_address.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     switch (event.getAction()) {
@@ -113,28 +117,37 @@ public class PassengerRouteRecyclerAdapter extends RecyclerView.Adapter<Passenge
                     }
                     return true;
                 }
-            });
-            src_img.setOnTouchListener(new View.OnTouchListener() {
+            });*/
+            src_station.setOnTouchListener(new View.OnTouchListener() {
                 @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN: {
+                            startClickTime = Calendar.getInstance().getTimeInMillis();
+                            break;
+                        }
+                        case MotionEvent.ACTION_UP: {
+                            long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
+                            if(clickDuration < MAX_CLICK_DURATION) {
+                                onItemTouchListener.onSrcLinkClick(v, getPosition());
+                            }
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+                    return true;
+                }
+                /*@Override
                 public boolean onTouch(View v, MotionEvent event) {
                     if (event.getAction() == MotionEvent.ACTION_DOWN) {
                         onItemTouchListener.onSrcLinkClick(v, getPosition());
                         return true;
                     }
                     return false;
-                }
+                }*/
             });
-            dst_img.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                        onItemTouchListener.onDstLinkClick(v, getPosition());
-                        return true;
-                    }
-                    return false;
-                }
-            });
-            dst_address.setOnTouchListener(new View.OnTouchListener() {
+            station_dest.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
                     switch (event.getAction()) {
@@ -154,7 +167,36 @@ public class PassengerRouteRecyclerAdapter extends RecyclerView.Adapter<Passenge
                     }
                     return true;
                 }
+                /*@Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                        onItemTouchListener.onDstLinkClick(v, getPosition());
+                        return true;
+                    }
+                    return false;
+                }*/
             });
+            /*dst_address.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+                        case MotionEvent.ACTION_DOWN: {
+                            startClickTime = Calendar.getInstance().getTimeInMillis();
+                            break;
+                        }
+                        case MotionEvent.ACTION_UP: {
+                            long clickDuration = Calendar.getInstance().getTimeInMillis() - startClickTime;
+                            if(clickDuration < MAX_CLICK_DURATION) {
+                                onItemTouchListener.onDstLinkClick(v, getPosition());
+                            }
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+                    return true;
+                }
+            });*/
             /*v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

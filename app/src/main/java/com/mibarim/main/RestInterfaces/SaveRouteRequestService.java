@@ -4,6 +4,7 @@ import com.mibarim.main.core.Constants;
 
 import com.mibarim.main.models.ApiResponse;
 import com.mibarim.main.models.NotificationModel;
+import com.mibarim.main.models.Plus.PasPayModel;
 import com.mibarim.main.models.Plus.PaymentDetailModel;
 //import com.squareup.okhttp.Route;
 
@@ -125,10 +126,25 @@ public interface SaveRouteRequestService {
                                  @Field("RouteId") String routeId,
                                  @Field("SelfRouteId") String selRouteId);
 
-    @POST(Constants.Http.URL_BOOK_REQUEST)
+    @POST(Constants.Http.URL_PAY_BOOK_REQUEST)
     @FormUrlEncoded
     PaymentDetailModel bookRequest(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
-                                   @Field("TripId") int tripId);
+                                   @Field("TripId") long tripId,
+                                   @Field("DiscountCode") String discountCode,
+                                   @Field("ChargeAmount") long chargeAmount,
+                                   @Field("SeatPrice") long seatPrice,
+                                   @Field("Credit") long credit
+                                   );
+
+    @POST(Constants.Http.URL_PAY_BOOK_REQUEST)
+    @FormUrlEncoded
+    PasPayModel bookPayRequest(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
+                               @Field("TripId") long tripId,
+                               @Field("DiscountCode") String discountCode,
+                               @Field("ChargeAmount") long chargeAmount,
+                               @Field("SeatPrice") long seatPrice,
+                               @Field("Credit") long credit
+    );
 
     @POST(Constants.Http.URL_ACCEPT_RIDE_SHARE)
     @FormUrlEncoded

@@ -3,6 +3,8 @@ package com.mibarim.main.RestInterfaces;
 import com.mibarim.main.core.Constants;
 import com.mibarim.main.models.ApiResponse;
 import com.mibarim.main.models.ImageResponse;
+import com.mibarim.main.models.InviteModel;
+import com.mibarim.main.models.ScoreModel;
 import com.mibarim.main.models.UserInfoModel;
 import com.mibarim.main.models.UserInitialModel;
 
@@ -108,7 +110,9 @@ public interface GetUserInfoService {
     @POST(Constants.Http.URL_SET_DISCOUNT)
     @FormUrlEncoded
     ApiResponse submitDiscount(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
-                                  @Field("DiscountCode") String discountCode);
+                               @Field("DiscountCode") String discountCode,
+                               @Field("ChargeAmount") long chargeAmount,
+                               @Field("SeatPrice") long seatPrice);
 
     @POST(Constants.Http.URL_GET_DISCOUNT)
     @FormUrlEncoded
@@ -137,13 +141,10 @@ public interface GetUserInfoService {
                                          @Field("State") boolean state
     );
 
-    @POST(Constants.Http.URL_SET_SCORE)
+    @POST(Constants.Http.URL_GET_INVITE)
     @FormUrlEncoded
-    ApiResponse SetUserScore(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
-                                   @Field("ContactId") long contactId,
-                                   @Field("ContactScore") Float rating
-    );
-
+    InviteModel getInvite(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
+                          @Field("UserId") String userId);
 
     @POST(Constants.Http.URL_SEND_FEEDBACK)
     @FormUrlEncoded
@@ -155,5 +156,11 @@ public interface GetUserInfoService {
     @FormUrlEncoded
     UserInitialModel getUserInitialInfo(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
                                         @Field("UserId") String userId);
+
+    @POST(Constants.Http.URL_GET_SCORE)
+    @FormUrlEncoded
+    ScoreModel getUserScores(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
+                             @Field("SeatPrice") long price,
+                             @Field("TripId") long tripId);
 
 }

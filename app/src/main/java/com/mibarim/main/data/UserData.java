@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.mibarim.main.models.ImageResponse;
+import com.mibarim.main.models.InviteModel;
 import com.mibarim.main.models.RouteResponse;
 import com.mibarim.main.models.UserInfoModel;
 import com.mibarim.main.models.enums.ImageTypes;
@@ -314,6 +315,17 @@ public class UserData {
         return userInfoModel;
     }
 
+    public long insertInvite(InviteModel model) {
+        db = dbHelper.getWritableDatabase();
+        db.delete(INVITE_TABLE, null, null);
+        ContentValues values = new ContentValues();
+        values.put(C_I_INVITE_CODE, model.InviteCode);
+        values.put(C_I_INVITE_LINK, model.InviteLink);
+        long res = db.insertWithOnConflict(INVITE_TABLE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        Log.d(TAG, "Invite Inserted");
+        db.close();
+        return res;
+    }
 
     private Calendar castStringToCal(String dateString) {
         Calendar cal = Calendar.getInstance();
@@ -344,7 +356,17 @@ public class UserData {
         return date;
     }
 
-
+    public InviteModel inviteQuery() {
+        db = dbHelper.getReadableDatabase();
+        InviteModel inviteModel= new InviteModel();
+        Cursor cursor = db.query(INVITE_TABLE, null, null, null, null, null, null);
+        while (cursor.moveToNext()) {
+            inviteModel.InviteCode=cursor.getString(cursor.getColumnIndex(UserData.C_I_INVITE_CODE));
+            inviteModel.InviteLink=cursor.getString(cursor.getColumnIndex(UserData.C_I_INVITE_LINK));
+        }
+        db.close();
+        return inviteModel;
+    }
 
     public ImageResponse imageQuery(String imageId) {
         db = dbHelper.getReadableDatabase();

@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.os.OperationCanceledException;
 import android.support.v7.app.AlertDialog;
@@ -23,8 +24,10 @@ import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.view.KeyEvent;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -45,6 +48,7 @@ import com.mibarim.main.events.RestAdapterErrorEvent;
 import com.mibarim.main.events.UnAuthorizedErrorEvent;
 import com.mibarim.main.models.ApiResponse;
 import com.mibarim.main.models.ImageResponse;
+import com.mibarim.main.models.InviteModel;
 import com.mibarim.main.models.Plus.PassRouteModel;
 import com.mibarim.main.models.Plus.PaymentDetailModel;
 import com.mibarim.main.models.RouteResponse;
@@ -78,8 +82,6 @@ public class MainCardActivity extends BootstrapActivity {
     @Inject
     protected BootstrapServiceProvider serviceProvider;
     @Inject
-    RouteRequestService routeRequestService;
-    @Inject
     LogoutService getLogoutService;
     @Inject
     RouteResponseService routeResponseService;
@@ -91,6 +93,7 @@ public class MainCardActivity extends BootstrapActivity {
 
     private CharSequence title;
     private Toolbar toolbar;
+    ImageView invite_btn;
 
     private String authToken;
     private String url;
@@ -98,7 +101,7 @@ public class MainCardActivity extends BootstrapActivity {
     private int appVersion = 0;
     private ApiResponse theSuggestRoute;
     //private RouteResponse selfRoute;
-    private PaymentDetailModel paymentDetailModel;
+
     private Tracker mTracker;
     protected Bitmap result;//concurrency must be considered
     private int REFRESH_TOKEN_REQUEST = 3456;
@@ -106,10 +109,12 @@ public class MainCardActivity extends BootstrapActivity {
     String googletoken = "";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private int FINISH_USER_INFO = 5649;
+    private int FINISH_PAYMENT = 5659;
     private View parentLayout;
     private boolean netErrorMsg = false;
     boolean doubleBackToExitPressedOnce = false;
     private UserInfoModel userInfoModel;
+    private InviteModel inviteModel;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -143,9 +148,9 @@ public class MainCardActivity extends BootstrapActivity {
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         }
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
-
+        invite_btn = (ImageView) toolbar.findViewById(R.id.invite_btn);
         checkAuth();
         //initScreen();
     }
@@ -153,6 +158,7 @@ public class MainCardActivity extends BootstrapActivity {
     private void initScreen() {
         checkVersion();
         getUserInfoFromServer();
+        getInviteFromServer();
         final FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .add(R.id.main_container, new PassengerCardFragment())
@@ -160,6 +166,17 @@ public class MainCardActivity extends BootstrapActivity {
         if(url!=null){
             gotoWebView(url);
         }
+        invite_btn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    gotoInviteActivity();
+                    return true;
+                }
+                return false;
+            }
+        });
+
     }
 
     private void checkAuth() {
@@ -285,8 +302,21 @@ public class MainCardActivity extends BootstrapActivity {
         if (requestCode ==FINISH_USER_INFO  && resultCode == RESULT_OK) {
             getUserInfoFromServer();
         }
+        if (requestCode ==FINISH_PAYMENT  && resultCode == RESULT_OK) {
+            refresh();
+        }
 
     }
+
+
+    private void refresh() {
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment fragment = fragmentManager.findFragmentById(R.id.main_container);
+        if (fragment != null) {
+            ((PassengerCardFragment)fragment).refresh();
+        }
+    }
+
 
     @Override
     public void onBackPressed() {
@@ -332,6 +362,12 @@ public class MainCardActivity extends BootstrapActivity {
 //            }
 //        });
         return dialog;
+    }
+
+    private void gotoInviteActivity() {
+        Intent intent = new Intent(this, InviteActivity.class);
+        intent.putExtra(Constants.Auth.AUTH_TOKEN, authToken);
+        this.startActivity(intent);
     }
 
 
@@ -464,49 +500,16 @@ public class MainCardActivity extends BootstrapActivity {
     }
 
 
-    public void BookSeat(final PassRouteModel selectedItem) {
-        showProgress();
-        new SafeAsyncTask<Boolean>() {
-            @Override
-            public Boolean call() throws Exception {
-                if (authToken == null) {
-                    authToken = serviceProvider.getAuthToken(MainCardActivity.this);
-                }
-                paymentDetailModel = routeRequestService.bookRequest(authToken, selectedItem.TripId);
-                return true;
-            }
 
-            @Override
-            protected void onException(final Exception e) throws RuntimeException {
-                super.onException(e);
-                if (e instanceof android.os.OperationCanceledException) {
-                    // User cancelled the authentication process (back button, etc).
-                    // Since auth could not take place, lets finish this activity.
-//                    finish();
-                }
-                hideProgress();
-            }
-
-            @Override
-            protected void onSuccess(final Boolean succees) throws Exception {
-                hideProgress();
-                if (succees) {
-                    gotoBankPayPage(paymentDetailModel);
-                }
-                new HandleApiMessagesBySnackbar(parentLayout, response).showMessages();
-                //finishIt();
-            }
-        }.execute();
+    public void gotoPayActivity(final PassRouteModel selectedItem) {
+        Intent intent = new Intent(this, PayActivity.class);
+        intent.putExtra(Constants.GlobalConstants.PASS_ROUTE_MODEL, selectedItem);
+        intent.putExtra(Constants.Auth.AUTH_TOKEN, authToken);
+        this.startActivityForResult(intent,FINISH_PAYMENT);
     }
 
-    private void gotoBankPayPage(PaymentDetailModel paymentDetailModel) {
-        if (paymentDetailModel.State == 100) {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(paymentDetailModel.BankLink));
-            startActivity(browserIntent);
-        } else {
-            Snackbar.make(parentLayout, R.string.payment_error, Snackbar.LENGTH_LONG).show();
-        }
-    }
+
+
 
     public int getVersion() {
         int v = 1000;
@@ -603,5 +606,30 @@ public class MainCardActivity extends BootstrapActivity {
         Intent i = new Intent(MainCardActivity.this, WebViewActivity.class);
         i.putExtra("URL", link);
         startActivity(i);
+    }
+
+    public void getInviteFromServer() {
+        new SafeAsyncTask<Boolean>() {
+            @Override
+            public Boolean call() throws Exception {
+                if (authToken == null) {
+                    serviceProvider.invalidateAuthToken();
+                    authToken = serviceProvider.getAuthToken(MainCardActivity.this);
+                }
+                inviteModel = userInfoService.getInvite(authToken);
+                return true;
+            }
+
+            @Override
+            protected void onException(final Exception e) throws RuntimeException {
+                super.onException(e);
+            }
+
+            @Override
+            protected void onSuccess(final Boolean state) throws Exception {
+                super.onSuccess(state);
+                userData.insertInvite(inviteModel);
+            }
+        }.execute();
     }
 }

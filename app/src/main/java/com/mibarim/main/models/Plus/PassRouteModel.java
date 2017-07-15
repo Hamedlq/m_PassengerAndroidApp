@@ -15,6 +15,7 @@ public class PassRouteModel implements Serializable {
     public String UserImageId;
     public String  TimingString;
     public String  PricingString;
+    public long  Price;
     public String  CarString;
     public String  CarPlate;
     public String SrcAddress;

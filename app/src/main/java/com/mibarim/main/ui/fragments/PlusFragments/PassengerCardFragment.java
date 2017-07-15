@@ -109,7 +109,7 @@ public class PassengerCardFragment extends Fragment
                             selectedItem.TripState == TripStates.InTripTime.toInt())) {
                         ((MainCardActivity) getActivity()).gotoRidingActivity(selectedItem);
                     }else {
-                        ((MainCardActivity) getActivity()).BookSeat(selectedItem);
+                        ((MainCardActivity) getActivity()).gotoPayActivity(selectedItem);
                     }
 
                 }

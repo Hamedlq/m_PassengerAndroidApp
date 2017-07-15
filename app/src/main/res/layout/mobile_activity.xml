@@ -87,7 +87,7 @@
             android:textColor="@color/text"
             android:textStyle="bold" />
 
-        <android.support.v7.widget.AppCompatButton
+        <!--<android.support.v7.widget.AppCompatButton
             android:id="@+id/b_register_ent"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -98,7 +98,7 @@
             android:text="@string/ent_login"
             android:textColor="@color/text"
             android:textStyle="bold" />
-        
+        -->
     </LinearLayout>
 
 </RelativeLayout>

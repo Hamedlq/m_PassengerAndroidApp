@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.mibarim.main.RestInterfaces.SaveRouteRequestService;
 import com.mibarim.main.models.ApiResponse;
 import com.mibarim.main.models.NotificationModel;
+import com.mibarim.main.models.Plus.PasPayModel;
 import com.mibarim.main.models.Plus.PaymentDetailModel;
 
 import java.util.List;
@@ -120,8 +121,13 @@ public class RouteRequestService {
         return res;
     }
 
-    public PaymentDetailModel bookRequest(String authToken, int tripId) {
-        PaymentDetailModel res = getService().bookRequest("Bearer " + authToken,tripId);
+    public PaymentDetailModel bookRequest(String authToken,long tripId, String discountCode,long chargeAmount, long seatPrice, long credit) {
+        PaymentDetailModel res = getService().bookRequest("Bearer " + authToken,tripId, discountCode, chargeAmount,seatPrice,credit);
+        return res;
+    }
+
+    public PasPayModel bookPayRequest(String authToken, long tripId, String discountCode, long chargeAmount, long seatPrice, long credit) {
+        PasPayModel res = getService().bookPayRequest("Bearer " + authToken,tripId, discountCode, chargeAmount,seatPrice,credit);
         return res;
     }
 

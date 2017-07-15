@@ -1,6 +1,7 @@
 package com.mibarim.main.ui.activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
@@ -15,6 +16,7 @@ import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -38,6 +40,8 @@ public class WebViewActivity extends BootstrapActivity {
 
     @Bind(R.id.webView)
     protected WebView webView;
+    @Bind(R.id.progressBar)
+    protected ProgressBar progressBar;
     private Tracker mTracker;
     private Toolbar toolbar;
     private String url;
@@ -73,9 +77,18 @@ public class WebViewActivity extends BootstrapActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeButtonEnabled(true);
         }
-
         webView.loadUrl(url);
         webView.setWebViewClient(new WebViewClient() {
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                progressBar.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                progressBar.setVisibility(View.GONE);
+            }
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String requestUrl) {
                 if (requestUrl.contains("http://exitthisactivity")) {

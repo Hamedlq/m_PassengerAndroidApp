@@ -42,7 +42,7 @@
     <string name="no_news">No News</string>
     <string name="avatar">Avatar</string>
     <string name="choose">Choose</string>
-    <string name="version">3</string>
+    <string name="version">3.1</string>
     <string name="testVersion">نسخه آزمایشی</string>
 
     <!-- AuthenticatorActivity -->
@@ -82,6 +82,7 @@
     <string name="manage_route">مدیریت مسیر</string>
     <string name="source">مبدا</string>
     <string name="destination">مقصد</string>
+    <string name="dest_station">ایستگاه مقصد</string>
     <string name="new_route">مسیر</string>
     <string name="src_address_detail">جزییات آدرس مبدا</string>
     <string name="dst_address_detail">جزییات آدرس مقصد</string>
@@ -385,4 +386,6 @@
     <string name="ent_login">ورود با حساب سازمانی</string>
     <string name="driver_place">محل توقف راننده</string>
     <string name="call_driver">تماس با راننده</string>
+    <string name="have_discount">تخفیف دارم</string>
+    <string name="payandreserve">پرداخت و رزرو</string>
 </resources>

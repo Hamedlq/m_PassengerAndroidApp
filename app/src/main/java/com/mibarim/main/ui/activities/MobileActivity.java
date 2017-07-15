@@ -66,9 +66,9 @@ public class MobileActivity extends ActionBarAccountAuthenticatorActivity {
     protected AutoCompleteTextView loginMobile;
     @Bind(id.b_signin)
     protected AppCompatButton signInButton;
-    @Bind(R.id.b_register_ent)
+    /*@Bind(R.id.b_register_ent)
     protected AppCompatButton entRegisterButton;
-
+*/
     private ApiResponse response;
 
     private SafeAsyncTask<Boolean> registerTask;
@@ -112,6 +112,7 @@ public class MobileActivity extends ActionBarAccountAuthenticatorActivity {
             }
         });
 
+/*
         entRegisterButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -124,6 +125,7 @@ public class MobileActivity extends ActionBarAccountAuthenticatorActivity {
                 return false;
             }
         });
+*/
 
 
 

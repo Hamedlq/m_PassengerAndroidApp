@@ -12,18 +12,11 @@
         android:background="#fff"
         android:orientation="vertical">
 
-        <include layout="@layout/toolbar"></include>
+        <include layout="@layout/toolbar_main"></include>
         <!-- The tm content view -->
         <FrameLayout
             android:id="@+id/main_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>
-
-    <FrameLayout
-        android:id="@+id/splash_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone" />
-
 </RelativeLayout>

@@ -51,10 +51,10 @@ public final class Constants {
         /**
          * Base URL for all requests
          */
-//        public static final String URL_BASE = "http://localhost:50226";
+        public static final String URL_BASE = "http://localhost:50226";
 //        public static final String URL_BASE = "http://mibarim.ir/CoreApi";
 //        public static final String URL_BASE = "http://mibarimapp.com/testapp";
-        public static final String URL_BASE = "http://mibarimapp.com/CoreApi";
+//        public static final String URL_BASE = "http://mibarimapp.com/CoreApi";
 //          public static final String URL_BASE = "http://CoreApi.mibarim.ir/";
 //        public static final String URL_BASE = "http://mibarim.ir/testApp/CoreApi";
 
@@ -88,6 +88,7 @@ public final class Constants {
         public static final String URL_NOTIFY_EVENT = "/NotifyEvents";
         public static final String URL_REQUEST_RIDE_SHARE = "/RequestRideShare";
         public static final String URL_BOOK_REQUEST = "/RequestBooking";
+        public static final String URL_PAY_BOOK_REQUEST = "/RequestPayBooking";
         public static final String URL_ACCEPT_RIDE_SHARE = "/AcceptRideShare";
         public static final String URL_GET_ROUTE_INFO = "/GetRouteInfo";
         public static final String URL_INSERT_RIDE_REQUEST = "/InsertRideRequest";
@@ -118,13 +119,13 @@ public final class Constants {
         public static final String URL_SET_NATIONAL_CARD_IMAGE = "/InsertNationalCardPic";
         public static final String URL_SET_BANK_CARD_IMAGE = "/InsertBankCardPic";
         public static final String URL_GET_VERSION = "/GetAppVersion";
-        public static final String URL_GET_SCORE = "/GetUserScores";
+        public static final String URL_GET_SCORE = "/GetPassengerScores";
         public static final String URL_GET_SCORE_CONTACT = "/GetUserScoresByContact";
         public static final String URL_GET_SCORE_Route = "/GetUserScoresByRoute";
         public static final String URL_GET_INITIAL_INFO = "/GetUserInitialInfo";
         public static final String URL_SET_GOOGLE_TOKEN = "/SaveGcmToken";
         public static final String URL_GET_IMAGE = "/GetImageById";
-        public static final String URL_SET_DISCOUNT = "/SubmitDiscount";
+        public static final String URL_SET_DISCOUNT = "/SubmitPassDiscount";
         public static final String URL_GET_DISCOUNT = "/GetDiscount";
         public static final String URL_SET_WITHDRAW = "/SubmitWithdraw";
         public static final String URL_GET_WITHDRAW = "/GetWithdraw";
