@@ -32,5 +32,4 @@ public class PassRouteModel implements Serializable {
     public int CarSeats;
     public boolean IsVerified;
     public boolean IsBooked;
-
 }

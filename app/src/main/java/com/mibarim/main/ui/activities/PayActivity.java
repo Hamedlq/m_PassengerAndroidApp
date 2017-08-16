@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 
@@ -81,9 +82,9 @@ public class PayActivity extends BootstrapActivity {
         }
         BootstrapApplication application = (BootstrapApplication) getApplication();
         mTracker = application.getDefaultTracker();
-        mTracker.setScreenName("RidingActivity");
+        mTracker.setScreenName("PayActivity");
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-        mTracker.send(new HitBuilders.EventBuilder().setCategory("Activity").setAction("RidingActivity").build());
+        mTracker.send(new HitBuilders.EventBuilder().setCategory("Activity").setAction("PayActivity").build());
 
         setContentView(R.layout.container_activity);
 
@@ -123,6 +124,28 @@ public class PayActivity extends BootstrapActivity {
         finish();
     }
 
+    @Override
+    public void onBackPressed() {
+        finishIt();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finishIt();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void finishIt() {
+        Intent i= getIntent();
+        setResult(RESULT_OK,i);
+        finish();
+    }
+
     public void BookSeat(final long tripId, final String discountCode, final long chargeAmount, final long seatPrice, final long credit) {
         showProgress();
         new SafeAsyncTask<Boolean>() {
@@ -152,7 +175,7 @@ public class PayActivity extends BootstrapActivity {
                 if (succees) {
                     gotoBankPayPage(paymentDetailModel);
                 }
-                new HandleApiMessagesBySnackbar(parentLayout, response).showMessages();
+                //new HandleApiMessagesBySnackbar(parentLayout, response).showMessages();
                 //finishIt();
             }
         }.execute();
@@ -266,10 +289,7 @@ public class PayActivity extends BootstrapActivity {
                 }
             }
         }.execute();
-
     }
-
-
 
     public void clearCode() {
         final FragmentManager fragmentManager = getSupportFragmentManager();
@@ -278,5 +298,4 @@ public class PayActivity extends BootstrapActivity {
             ((PayFragment)fragment).ClearCode();
         }
     }
-
 }

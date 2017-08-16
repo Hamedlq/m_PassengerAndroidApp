@@ -152,23 +152,14 @@
         android:paddingTop="20dp">
 
         <TextView
+            android:id="@+id/discount_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerInParent="true"
-            android:paddingEnd="30dp"
-            android:paddingStart="30dp"
+            android:paddingEnd="20dp"
+            android:paddingStart="20dp"
             android:text="کد تخفیف"
-            android:textSize="14sp" />
-
-        <EditText
-            android:id="@+id/discount_code"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:hint="کد تخفیف یا کد معرفی"
-            android:layout_marginEnd="30dp"
-            android:layout_marginStart="30dp"
             android:textSize="14sp" />
 
         <android.support.v7.widget.AppCompatButton
@@ -177,10 +168,21 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerInParent="true"
-            android:layout_marginEnd="30dp"
-            android:layout_marginStart="30dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
             android:text="اعمال"
             android:textSize="14sp" />
+
+        <EditText
+            android:id="@+id/discount_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_toEndOf="@+id/discount_label"
+            android:layout_toStartOf="@+id/discount_btn"
+            android:hint="کد تخفیف یا کد معرفی"
+            android:textSize="14sp" />
+
     </RelativeLayout>
 
 

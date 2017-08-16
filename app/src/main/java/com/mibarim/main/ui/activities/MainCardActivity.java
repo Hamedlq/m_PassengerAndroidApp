@@ -35,6 +35,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
+import com.google.gson.Gson;
 import com.mibarim.main.BootstrapApplication;
 import com.mibarim.main.BootstrapServiceProvider;
 import com.mibarim.main.R;
@@ -53,6 +54,7 @@ import com.mibarim.main.models.Plus.PassRouteModel;
 import com.mibarim.main.models.Plus.PaymentDetailModel;
 import com.mibarim.main.models.RouteResponse;
 import com.mibarim.main.models.UserInfoModel;
+import com.mibarim.main.models.enums.TripStates;
 import com.mibarim.main.services.AuthenticateService;
 import com.mibarim.main.services.RouteRequestService;
 import com.mibarim.main.services.RouteResponseService;
@@ -98,6 +100,7 @@ public class MainCardActivity extends BootstrapActivity {
     private String authToken;
     private String url;
     private ApiResponse response;
+    private ApiResponse userTrip;
     private int appVersion = 0;
     private ApiResponse theSuggestRoute;
     //private RouteResponse selfRoute;
@@ -110,6 +113,7 @@ public class MainCardActivity extends BootstrapActivity {
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private int FINISH_USER_INFO = 5649;
     private int FINISH_PAYMENT = 5659;
+    private int FINISH_TRIP = 5669;
     private View parentLayout;
     private boolean netErrorMsg = false;
     boolean doubleBackToExitPressedOnce = false;
@@ -266,14 +270,14 @@ public class MainCardActivity extends BootstrapActivity {
     }
 
 
-    @Override
+/*    @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             finish();
             return true;
         }
         return super.onKeyUp(keyCode, event);
-    }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
@@ -305,7 +309,9 @@ public class MainCardActivity extends BootstrapActivity {
         if (requestCode ==FINISH_PAYMENT  && resultCode == RESULT_OK) {
             refresh();
         }
-
+        if (requestCode ==FINISH_TRIP  && resultCode == RESULT_OK) {
+            refresh();
+        }
     }
 
 
@@ -397,8 +403,8 @@ public class MainCardActivity extends BootstrapActivity {
 
             @Override
             public Boolean call() throws Exception {
-                String token = serviceProvider.getAuthToken(MainCardActivity.this);
-                imageResponse = userInfoService.GetImageById(token, imageId);
+                authToken = serviceProvider.getAuthToken(MainCardActivity.this);
+                imageResponse = userInfoService.GetImageById(authToken, imageId);
                 if (imageResponse != null && imageResponse.Base64ImageFile != null) {
                     return true;
                 }
@@ -547,12 +553,23 @@ public class MainCardActivity extends BootstrapActivity {
         }.execute();
     }
 
+    public void showRidingActivity(PassRouteModel dm) {
+        SharedPreferences prefs = this.getSharedPreferences(
+                "com.mibarim.main", Context.MODE_PRIVATE);
+        Long tripShown=prefs.getLong("FirstRidingShow",0);
+        if(tripShown!=dm.TripId){
+            gotoRidingActivity(dm);
+        }
+    }
+
     public void gotoRidingActivity(PassRouteModel dm) {
         Intent intent = new Intent(this, RidingActivity.class);
         intent.putExtra(Constants.GlobalConstants.PASS_ROUTE_MODEL, dm);
         intent.putExtra(Constants.Auth.AUTH_TOKEN, authToken);
-        this.startActivity(intent);
+        this.startActivityForResult(intent,FINISH_TRIP);
     }
+
+
 
     private void showUpdateDialog(String msg) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

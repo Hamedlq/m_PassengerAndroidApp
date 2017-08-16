@@ -40,4 +40,10 @@ public interface GetRouteResponseService {
                              @Field("TripId") long tripId,
                              @Field("TripState") int tripState
     );
+
+    @POST(Constants.Http.URL_CANCEL_RESERVE)
+    @FormUrlEncoded
+    boolean cancelTrip(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
+                             @Field("TripId") long tripId
+    );
 }

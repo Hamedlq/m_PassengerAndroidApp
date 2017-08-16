@@ -141,6 +141,10 @@ public class SplashActivity extends ActionBarAccountAuthenticatorActivity {
             }
         });
 
+        SharedPreferences prefs = this.getSharedPreferences(
+                "com.mibarim.main", Context.MODE_PRIVATE);
+        prefs.edit().putLong("FirstRidingShow", 0).apply();
+
         /* New Handler to start the Menu-Activity
          * and close this Splash-Screen after some seconds.*/
 

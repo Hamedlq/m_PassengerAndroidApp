@@ -224,7 +224,6 @@ public final class ImageUtils {
         File directory = cw.getDir("images", Context.MODE_PRIVATE);
         // Create imageDir
         File mypath = new File(directory, imageName);
-
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(mypath);

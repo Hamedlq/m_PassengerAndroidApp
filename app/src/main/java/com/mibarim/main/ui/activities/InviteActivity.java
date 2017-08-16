@@ -112,6 +112,29 @@ public class InviteActivity extends BootstrapActivity {
                 .commit();
     }
 
+    @Override
+    public void onBackPressed() {
+        finishIt();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finishIt();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void finishIt() {
+        Intent i= getIntent();
+        setResult(RESULT_OK,i);
+        finish();
+    }
+
+
     public void ShareInvite(String link) {
         Intent shareIntent = new Intent();
         shareIntent.setAction(Intent.ACTION_SEND);
@@ -194,5 +217,6 @@ public class InviteActivity extends BootstrapActivity {
 //        });
         return dialog;
     }
+
 
 }

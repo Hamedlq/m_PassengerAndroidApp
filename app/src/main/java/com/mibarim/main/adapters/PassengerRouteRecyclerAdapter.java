@@ -43,7 +43,7 @@ public class PassengerRouteRecyclerAdapter extends RecyclerView.Adapter<Passenge
     public class ViewHolder extends RecyclerView.ViewHolder {
         // each data item is just a string in this case
         //public RelativeLayout row_layout;
-        public TextView username;
+        //public TextView username;
         public TextView timing;
         public TextView seats;
         public TextView src_address;
@@ -55,14 +55,14 @@ public class PassengerRouteRecyclerAdapter extends RecyclerView.Adapter<Passenge
         public TextView carString;
         /*public TextView src_distance;
         public TextView dst_distance;*/
-        public BootstrapCircleThumbnail userimage;
+//        public BootstrapCircleThumbnail userimage;
         public AppCompatButton book_trip;
 
 
         public ViewHolder(View v) {
             super(v);
             //row_layout = (RelativeLayout) v.findViewById(R.id.row_layout);
-            username = (TextView) v.findViewById(R.id.username);
+            //username = (TextView) v.findViewById(R.id.username);
             timing = (TextView) v.findViewById(R.id.timing);
             seats = (TextView) v.findViewById(R.id.seats);
             src_address = (TextView) v.findViewById(R.id.src_address);
@@ -74,7 +74,7 @@ public class PassengerRouteRecyclerAdapter extends RecyclerView.Adapter<Passenge
             carString = (TextView) v.findViewById(R.id.carString);
             /*src_distance = (TextView) v.findViewById(R.id.src_distance);
             dst_distance = (TextView) v.findViewById(R.id.dst_distance);*/
-            userimage = (BootstrapCircleThumbnail) v.findViewById(R.id.userimage);
+            //userimage = (BootstrapCircleThumbnail) v.findViewById(R.id.userimage);
             book_trip = (AppCompatButton) v.findViewById(R.id.book_trip);
             book_trip.setOnTouchListener(new View.OnTouchListener() {
                 @Override
@@ -256,13 +256,14 @@ public class PassengerRouteRecyclerAdapter extends RecyclerView.Adapter<Passenge
                             drawableBadge.toSpannable()
                     ));
             holder.timing.setText(spannableString);
-            if (items.get(position).TripState == TripStates.InPreTripTime.toInt() ||
+            holder.book_trip.setText("مشاهده سفر");
+            /*if (items.get(position).TripState == TripStates.InPreTripTime.toInt() ||
                     items.get(position).TripState == TripStates.InRiding.toInt() ||
                     items.get(position).TripState == TripStates.InTripTime.toInt()) {
-                holder.book_trip.setText("مشاهده سفر");
+
             } else {
                 holder.book_trip.setVisibility(View.GONE);
-            }
+            }*/
         } else {
             if (items.get(position).EmptySeats == 0) {
                 BadgeDrawable drawableBadge =
@@ -301,11 +302,11 @@ public class PassengerRouteRecyclerAdapter extends RecyclerView.Adapter<Passenge
                             drawableBadge.toSpannable()
                     ));
 
-            holder.username.setText(spannableString);
+            //holder.username.setText(spannableString);
         } else {
-            holder.username.setText(items.get(position).Name + " " + items.get(position).Family);
+            //holder.username.setText(items.get(position).Name + " " + items.get(position).Family);
         }
-        holder.userimage.setImageBitmap(((MainCardActivity) _activity).getImageById(items.get(position).UserImageId, R.mipmap.ic_user_black));
+        //holder.userimage.setImageBitmap(((MainCardActivity) _activity).getImageById(items.get(position).UserImageId, R.mipmap.ic_user_black));
 
         holder.src_address.setText(items.get(position).SrcAddress);
         holder.dst_address.setText(items.get(position).DstAddress);

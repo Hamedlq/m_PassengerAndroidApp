@@ -49,4 +49,9 @@ public class RouteResponseService {
         ApiResponse res = getService().SetTripPoint("Bearer " + authToken, lat, lng, tripId, tripState);
         return res;
     }
+
+    public boolean cancelTrip(String authToken, int tripId) {
+        boolean res = getService().cancelTrip("Bearer " + authToken, tripId);
+        return res;
+    }
 }

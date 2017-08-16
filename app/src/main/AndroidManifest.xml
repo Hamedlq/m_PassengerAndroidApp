@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.mibarim.main"
-    android:versionCode="28"
+    android:versionCode="29"
     android:versionName="@string/version">
 
     <uses-sdk tools:overrideLibrary="android.support.test.uiautomator.v18" />
@@ -16,7 +16,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!--<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />-->
     <!--<uses-permission android:name="android.permission.CAMERA" />-->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <!--<uses-permission android:name="com.mibarim.main.permission.C2D_MESSAGE" />
@@ -77,7 +77,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activities.RidingActivity"
-            android:label="@string/driver_place"
+            android:label=""
             android:screenOrientation="portrait" />
 
         <!--

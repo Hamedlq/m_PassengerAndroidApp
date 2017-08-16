@@ -42,7 +42,7 @@
     <string name="no_news">No News</string>
     <string name="avatar">Avatar</string>
     <string name="choose">Choose</string>
-    <string name="version">3.1</string>
+    <string name="version">3.1.1</string>
     <string name="testVersion">نسخه آزمایشی</string>
 
     <!-- AuthenticatorActivity -->
@@ -381,6 +381,7 @@
     <string name="driver">راننده</string>
     <string name="passenger">مسافر</string>
     <string name="trip_info">اطلاعات سفر</string>
+    <string name="trip">سفر</string>
     <string name="text_station">ایستگاه مبدا</string>
     <string name="book_trip">رزرو صندلی</string>
     <string name="ent_login">ورود با حساب سازمانی</string>
@@ -388,4 +389,7 @@
     <string name="call_driver">تماس با راننده</string>
     <string name="have_discount">تخفیف دارم</string>
     <string name="payandreserve">پرداخت و رزرو</string>
+    <string name="enable_call"> تماس با راننده تنها نیم ساعت قبل از سفر امکانپذیر است</string>
+    <string name="disable_trip">لغو سفر</string>
+    <string name="sure_disable">مطمئن هستید؟</string>
 </resources>

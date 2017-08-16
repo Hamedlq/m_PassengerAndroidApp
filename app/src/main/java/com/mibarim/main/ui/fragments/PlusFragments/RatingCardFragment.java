@@ -19,16 +19,19 @@ import com.google.gson.Gson;
 import com.mibarim.main.BootstrapApplication;
 import com.mibarim.main.BootstrapServiceProvider;
 import com.mibarim.main.R;
-import com.mibarim.main.adapters.PassengerRouteRecyclerAdapter;
+import com.mibarim.main.adapters.RatingRecyclerAdapter;
 import com.mibarim.main.authenticator.LogoutService;
 import com.mibarim.main.data.UserData;
 import com.mibarim.main.models.ApiResponse;
 import com.mibarim.main.models.Plus.PassRouteModel;
+import com.mibarim.main.models.RatingModel;
 import com.mibarim.main.models.RouteResponse;
 import com.mibarim.main.models.enums.TripStates;
 import com.mibarim.main.services.RouteResponseService;
+import com.mibarim.main.services.UserInfoService;
 import com.mibarim.main.ui.ThrowableLoader;
 import com.mibarim.main.ui.activities.MainCardActivity;
+import com.mibarim.main.ui.activities.RatingActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,31 +39,32 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class PassengerCardFragment extends Fragment
-        implements LoaderManager.LoaderCallbacks<List<PassRouteModel>> {
+public class RatingCardFragment extends Fragment
+        implements LoaderManager.LoaderCallbacks<List<RatingModel>> {
 
     @Inject
     UserData userData;
     @Inject
     protected BootstrapServiceProvider serviceProvider;
     @Inject
-    protected RouteResponseService routeResponseService;
+    protected UserInfoService userInfoService;
     @Inject
     protected LogoutService logoutService;
 
     private int RELOAD_REQUEST = 1234;
-    List<PassRouteModel> items;
-    List<PassRouteModel> latest;
+    List<RatingModel> items;
+    List<RatingModel> latest;
     private Tracker mTracker;
     private RouteResponse routeResponse;
-    private ApiResponse suggestRouteResponse;
+    private int tripId;
+    private ApiResponse ratingResponse;
 
     private View mRecycler;
     private RecyclerView mRecyclerView;
     SwipeRefreshLayout mSwipeRefreshLayout;
     private TextView mEmptyView;
     //private ProgressBar mProgressView;
-    private PassengerRouteRecyclerAdapter mAdapter;
+    private RatingRecyclerAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private int selectedRow;
     ItemTouchListener itemTouchListener;
@@ -102,58 +106,31 @@ public class PassengerCardFragment extends Fragment
 
             @Override
             public void onBookBtnClick(View view, int position) {
-                if (getActivity() instanceof MainCardActivity) {
+               /* if (getActivity() instanceof MainCardActivity) {
                     PassRouteModel selectedItem = ((PassRouteModel) items.get(position));
                     if (selectedItem.IsBooked) {
                         ((MainCardActivity) getActivity()).gotoRidingActivity(selectedItem);
                     } else {
                         ((MainCardActivity) getActivity()).gotoPayActivity(selectedItem);
                     }
-                }
+                }*/
             }
 
             @Override
             public void onSrcLinkClick(View view, int position) {
-                if (getActivity() instanceof MainCardActivity) {
+                /*if (getActivity() instanceof MainCardActivity) {
                     PassRouteModel selectedItem = ((PassRouteModel) items.get(position));
                     ((MainCardActivity) getActivity()).gotoWebView(selectedItem.SrcLink);
-                }
+                }*/
             }
 
             @Override
             public void onDstLinkClick(View view, int position) {
-                if (getActivity() instanceof MainCardActivity) {
+                /*if (getActivity() instanceof MainCardActivity) {
                     PassRouteModel selectedItem = ((PassRouteModel) items.get(position));
                     ((MainCardActivity) getActivity()).gotoWebView(selectedItem.DstLink);
-                }
+                }*/
             }
-            /*@Override
-            public void onCardViewTap(View view, int position) {
-                //PassRouteModel selectedItem = ((PassRouteModel) items.get(position));
-                *//*String srcLat = latest.get(position).SrcLatitude;
-                String srcLng = latest.get(position).SrcLongitude;
-                String dstLat = latest.get(position).DstLatitude;
-                String dstLng = latest.get(position).DstLongitude;
-                PathPoint pathRoute= latest.get(position).PathRoute;*//*
-                *//*((SuggestRouteActivity) getActivity()).setSelectedRoute(selectedItem);
-                ((SuggestRouteActivity) getActivity()).setRouteSrcDst(srcLat, srcLng, dstLat, dstLng,pathRoute, position);*//*
-                //((SuggestRouteCardActivity) getActivity()).gotoTripProfile(selectedItem);
-
-            }*/
-
-            /*@Override
-            public void onUserImageClick(View view, int position) {
-                *//*PassRouteModel model = items.get(position);
-                ContactModel contactModel = new ContactModel();
-                //dirty coding-It's temporary Used
-                contactModel.ContactId = model.TripId;
-                contactModel.Name = model.Name;
-                contactModel.Family = model.Family;
-                contactModel.UserImageId = model.UserImageId;*//*
-                //((SuggestRouteActivity) getActivity()).goToContactActivity(contactModel);
-
-            }*/
-
         };
 
 
@@ -163,75 +140,40 @@ public class PassengerCardFragment extends Fragment
     public void refresh() {
         getLoaderManager().restartLoader(0, null, this);
         //showState(1);
-        mAdapter = new PassengerRouteRecyclerAdapter(getActivity(), items, itemTouchListener);
+        mAdapter = new RatingRecyclerAdapter(getActivity(), items, itemTouchListener);
         mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
     public void onActivityCreated(final Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mTracker.setScreenName("PassengerCardFragment");
+        mTracker.setScreenName("RatingCardFragment");
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-        mTracker.send(new HitBuilders.EventBuilder().setCategory("Fragment").setAction("PassengerCardFragment").build());
+        mTracker.send(new HitBuilders.EventBuilder().setCategory("Fragment").setAction("RatingCardFragment").build());
         getLoaderManager().initLoader(0, null, this);
         //setEmptyText(R.string.no_routes);
     }
 
-    /*public void showState(int showState) {
-        mEmptyView.setVisibility(View.GONE);
-        mRecyclerView.setVisibility(View.GONE);
-        mProgressView.setVisibility(View.GONE);
-        //1 progress
-        //2 show result list
-        //3 no result
-        switch (showState) {
-            case 1:
-                mProgressView.setVisibility(View.VISIBLE);
-                break;
-            case 2:
-                mRecyclerView.setVisibility(View.VISIBLE);
-                break;
-            case 3:
-                mEmptyView.setVisibility(View.VISIBLE);
-                break;
-            default:
-                mEmptyView.setVisibility(View.VISIBLE);
-        }
-    }*/
-
     @Override
-    public Loader<List<PassRouteModel>> onCreateLoader(int id, Bundle args) {
-        mEmptyView.setVisibility(View.GONE);
+    public Loader<List<RatingModel>> onCreateLoader(int id, Bundle args) {
 
+        mEmptyView.setVisibility(View.GONE);
         mSwipeRefreshLayout.setRefreshing(true);
-        items = new ArrayList<PassRouteModel>();
-        return new ThrowableLoader<List<PassRouteModel>>(getActivity(), items) {
+        items = new ArrayList<RatingModel>();
+        return new ThrowableLoader<List<RatingModel>>(getActivity(), items) {
             @Override
-            public List<PassRouteModel> loadData() throws Exception {
-                latest = new ArrayList<PassRouteModel>();
-                if (getActivity() instanceof MainCardActivity) {
+            public List<RatingModel> loadData() throws Exception {
+                latest = new ArrayList<RatingModel>();
+                if (getActivity() instanceof RatingActivity) {
                     Gson gson = new Gson();
-                    PassRouteModel bookedTrip = null;
-                    routeResponse = ((MainCardActivity) getActivity()).getRoute();
-                    String authToken = ((MainCardActivity) getActivity()).getAuthToken();
+                    tripId = ((RatingActivity) getActivity()).getTripId();
+                    String authToken = ((RatingActivity) getActivity()).getAuthToken();
                     if (getActivity() != null) {
-                        suggestRouteResponse = routeResponseService.GetPassengerRoutes(authToken, 1);
-                        if (suggestRouteResponse != null) {
-                            for (String routeJson : suggestRouteResponse.Messages) {
-                                PassRouteModel route = gson.fromJson(routeJson, PassRouteModel.class);
-                                if (route.IsBooked) {
-                                    bookedTrip = route;
-                                }
-                                latest.add(route);
-                            }
-                            if (bookedTrip != null) {
-                                if (bookedTrip.TripState == TripStates.InPreTripTime.toInt() ||
-                                        bookedTrip.TripState == TripStates.InRiding.toInt() ||
-                                        bookedTrip.TripState == TripStates.InTripTime.toInt()) {
-                                    ((MainCardActivity) getActivity()).gotoRidingActivity(bookedTrip);
-                                }else{
-                                    ((MainCardActivity) getActivity()).showRidingActivity(bookedTrip);
-                                }
+                        ratingResponse = userInfoService.getRatings(authToken, tripId);
+                        if (ratingResponse != null) {
+                            for (String json :ratingResponse.Messages) {
+                                RatingModel rateModel = gson.fromJson(json, RatingModel.class);
+                                latest.add(rateModel);
                             }
                         }
                     }
@@ -246,13 +188,13 @@ public class PassengerCardFragment extends Fragment
     }
 
     @Override
-    public void onLoadFinished(Loader<List<PassRouteModel>> loader, List<PassRouteModel> data) {
+    public void onLoadFinished(Loader<List<RatingModel>> loader, List<RatingModel> data) {
         items = data;
         if (items.size() == 0) {
             mEmptyView.setVisibility(View.VISIBLE);
         }
         // specify an adapter (see also next example)
-        mAdapter = new PassengerRouteRecyclerAdapter(getActivity(), items, itemTouchListener);
+        mAdapter = new RatingRecyclerAdapter(getActivity(), items, itemTouchListener);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addOnItemTouchListener(new SwipeableRecyclerViewTouchListener(mRecyclerView,
                 new SwipeableRecyclerViewTouchListener.SwipeListener() {
@@ -278,7 +220,7 @@ public class PassengerCardFragment extends Fragment
     }
 
     @Override
-    public void onLoaderReset(Loader<List<PassRouteModel>> loader) {
+    public void onLoaderReset(Loader<List<RatingModel>> loader) {
 
     }
 

@@ -128,12 +128,12 @@
                 </RelativeLayout>
             </LinearLayout>
 
-            <View
+            <!--<View
                 android:id="@+id/divider"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_margin="8dp"
-                android:background="@android:color/darker_gray" />
+                android:background="@android:color/darker_gray" />-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -145,6 +145,8 @@
                     android:id="@+id/car_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:gravity="end"
                     android:orientation="horizontal">
 
                     <LinearLayout
@@ -167,7 +169,7 @@
 
                 </LinearLayout>
 
-                <LinearLayout
+                <!--<LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
@@ -204,7 +206,7 @@
 
                     </LinearLayout>
 
-                </LinearLayout>
+                </LinearLayout>-->
 
             </LinearLayout>
 

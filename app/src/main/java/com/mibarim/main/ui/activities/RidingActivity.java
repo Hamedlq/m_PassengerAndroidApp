@@ -18,6 +18,7 @@ import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -26,11 +27,13 @@ import android.provider.Settings;
 import android.support.annotation.ArrayRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -111,10 +114,20 @@ public class RidingActivity extends BootstrapActivity {
     protected TextView carString;
     @Bind(R.id.username)
     protected TextView username;
+/*
+    @Bind(R.id.enable_text)
+    protected TextView enable_text;
+*/
+    @Bind(R.id.trip_time)
+    protected TextView trip_time;
+    @Bind(R.id.call_driver)
+    protected TextView call_driver;
+    @Bind(R.id.cancel_trip)
+    protected TextView cancel_trip;
     @Bind(R.id.userimage)
     protected BootstrapCircleThumbnail userimage;
-    @Bind(R.id.call_btn)
-    protected AppCompatButton call_btn;
+   /* @Bind(R.id.call_btn)
+    protected AppCompatButton call_btn;*/
     @Bind(R.id.map_container)
     protected FrameLayout map_container;
     @Bind(R.id.map_container_web)
@@ -126,13 +139,17 @@ public class RidingActivity extends BootstrapActivity {
     GoogleLocationService mService;
     boolean mBound = false;
     private Tracker mTracker;
+    //private TextView cancel_btn;
+    private ImageView support;
 
     private String authToken;
     private int RELOAD_REQUEST = 1234;
     private Toolbar toolbar;
     private PassRouteModel passTripModel;
+    private PassRouteModel cancelPassTripModel;
     private int delay = 10000;
     private ApiResponse tripApiResponse;
+    private ApiResponse canceltripApiResponse;
     private ApiResponse endTripApiResponse;
     private PassRouteModel tripResponse;
     private int endTripResult;
@@ -162,6 +179,11 @@ public class RidingActivity extends BootstrapActivity {
         if (getIntent() != null && getIntent().getExtras() != null) {
             authToken = getIntent().getExtras().getString(Constants.Auth.AUTH_TOKEN);
             passTripModel = (PassRouteModel) getIntent().getExtras().getSerializable(Constants.GlobalConstants.PASS_ROUTE_MODEL);
+
+            //if this page is shown for trip. don't show it again before trip
+            SharedPreferences prefs = this.getSharedPreferences(
+                    "com.mibarim.main", Context.MODE_PRIVATE);
+            prefs.edit().putLong("FirstRidingShow", passTripModel.TripId).apply();
         }
 
         BootstrapApplication application = (BootstrapApplication) getApplication();
@@ -181,18 +203,59 @@ public class RidingActivity extends BootstrapActivity {
         }
 
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
+
+        toolbar = (Toolbar) findViewById(R.id.ride_toolbar);
+        setSupportActionBar(toolbar);
+        //cancel_btn = (TextView) toolbar.findViewById(R.id.trip_cancel);
+        support = (ImageView) toolbar.findViewById(R.id.support);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            if (Build.VERSION.SDK_INT >= 17) {
+                actionBar.setHomeAsUpIndicator(R.mipmap.ic_menu_forward);
+            }
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+        }
         serviceIntent = new Intent(this, LocationService.class);
         googleServiceIntent = new Intent(this, GoogleLocationService.class);
         map_container_web.setVisibility(View.GONE);
         map_container.setVisibility(View.GONE);
-        call_btn.setOnTouchListener(new View.OnTouchListener() {
+        call_driver.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    call(passTripModel.MobileNo);
+                    if (passTripModel.TripState == TripStates.InPreTripTime.toInt() ||
+                            passTripModel.TripState == TripStates.InRiding.toInt() ||
+                            passTripModel.TripState == TripStates.InTripTime.toInt()) {
+                        call(passTripModel.MobileNo);
+                    }else{
+                        AlertDialog.Builder builder = new AlertDialog.Builder(RidingActivity.this);
+                        builder.setMessage(getString(R.string.enable_call)).setPositiveButton("باشه", dialogClickListener).show();
+                        //call_driver.setEnabled(false);
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+        cancel_trip.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    cancelPassTripModel=passTripModel;
+                    showDialog(getString(R.string.sure_disable));
+                    return true;
+                }
+                return false;
+            }
+        });
+        support.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    call("02128426784");
                     return true;
                 }
                 return false;
@@ -202,10 +265,12 @@ public class RidingActivity extends BootstrapActivity {
         initScreen();
     }
 
+
     private void initScreen() {
         station_add.setText(passTripModel.SrcAddress);
         carString.setText(passTripModel.CarString + " " + passTripModel.CarPlate);
         username.setText(passTripModel.Name + " " + passTripModel.Family);
+        trip_time.setText(passTripModel.TimingString);
         userimage.setImageBitmap(getImageById(passTripModel.UserImageId, R.mipmap.ic_user_black));
         if (isPlayServicesConfigured()) {
             map_container.setVisibility(View.VISIBLE);
@@ -219,6 +284,13 @@ public class RidingActivity extends BootstrapActivity {
             map_container_web.getSettings().setDomStorageEnabled(true);
             map_container_web.getSettings().setJavaScriptEnabled(true);
         }
+        /*if (passTripModel.TripState == TripStates.InPreTripTime.toInt() ||
+                passTripModel.TripState == TripStates.InRiding.toInt() ||
+                passTripModel.TripState == TripStates.InTripTime.toInt()) {
+            call_driver.setEnabled(true);
+        }else{
+            call_driver.setEnabled(false);
+        }*/
         periodicReLoading();
         locationReloading();
         finishRiding();
@@ -228,6 +300,36 @@ public class RidingActivity extends BootstrapActivity {
     public void onDestroy() {
         mHandler.removeCallbacks(mRunnable);
         super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed() {
+        finishIt();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finishIt();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    /*
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            mHandler.removeCallbacks(mRunnable);
+        }
+        return super.onKeyUp(keyCode, event);
+    }*/
+
+    private void showDialog(String msg) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(msg).setPositiveButton("بله", cancelDialogClickListener).setNegativeButton("نه", cancelDialogClickListener).show();
     }
 
     public void call(String tel) {
@@ -347,6 +449,15 @@ public class RidingActivity extends BootstrapActivity {
         }
     }
 
+    private void showStation() {
+        Location loc = new Location();
+        loc.lat=null;
+        loc.lng=null;
+        driverLocation.lat=passTripModel.SrcLatitude;
+        driverLocation.lng=passTripModel.SrcLongitude;
+        showOnMap(loc);
+    }
+
     private void showOnMap(Location loc) {
         if (isPlayServicesConfigured()) {
             final FragmentManager fragmentManager = getSupportFragmentManager();
@@ -361,15 +472,18 @@ public class RidingActivity extends BootstrapActivity {
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         String msg = "لطفا مکان یاب تلفن همراه را روشن کنید";
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            android.location.Location location = LocationService.getLocationManager(this).getLocation();
-            if (location != null) {
-                if (gpsAlert != null && gpsAlert.isShowing()) {
-                    gpsAlert.dismiss();
+        if (passTripModel.TripState == TripStates.InPreTripTime.toInt() ||
+                passTripModel.TripState == TripStates.InRiding.toInt() ||
+                passTripModel.TripState == TripStates.InTripTime.toInt()) {
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                android.location.Location location = LocationService.getLocationManager(this).getLocation();
+                if (location != null) {
+                    if (gpsAlert != null && gpsAlert.isShowing()) {
+                        gpsAlert.dismiss();
+                    }
+                    showTripInfo();
+                    checkNetwork();
                 }
-                showTripInfo();
-                checkNetwork();
-            }
             /*else {
                 if (gpsAlert == null || !gpsAlert.isShowing()) {
                     builder.setMessage(msg).setPositiveButton("باشه", gpsClickListener);
@@ -378,12 +492,15 @@ public class RidingActivity extends BootstrapActivity {
                 }
             }*/
 
-        } else {
-            if (gpsAlert == null || !gpsAlert.isShowing()) {
-                builder.setMessage(msg).setPositiveButton("باشه", gpsClickListener);
-                gpsAlert = builder.create();
-                gpsAlert.show();
+            } else {
+                if (gpsAlert == null || !gpsAlert.isShowing()) {
+                    builder.setMessage(msg).setPositiveButton("باشه", gpsClickListener);
+                    gpsAlert = builder.create();
+                    gpsAlert.show();
+                }
             }
+        }else{
+            showStation();
         }
     }
 
@@ -406,6 +523,20 @@ public class RidingActivity extends BootstrapActivity {
         public void onClick(DialogInterface dialog, int which) {
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE:
+                    break;
+                case DialogInterface.BUTTON_NEGATIVE:
+                    //finishAffinity();
+                    break;
+            }
+        }
+    };
+
+    DialogInterface.OnClickListener cancelDialogClickListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    cancelTrip(cancelPassTripModel);
                     break;
                 case DialogInterface.BUTTON_NEGATIVE:
                     //finishAffinity();
@@ -591,9 +722,35 @@ public class RidingActivity extends BootstrapActivity {
         }.execute();
     }
 
+
+    private void cancelTrip(final PassRouteModel passTripModel) {
+        showProgress();
+        new SafeAsyncTask<Boolean>() {
+            @Override
+            public Boolean call() throws Exception {
+                return routeResponseService.cancelTrip(authToken, passTripModel.TripId);
+            }
+
+            @Override
+            protected void onException(final Exception e) throws RuntimeException {
+                super.onException(e);
+                hideProgress();
+            }
+
+            @Override
+            protected void onSuccess(final Boolean state) throws Exception {
+                super.onSuccess(state);
+                hideProgress();
+                finishIt();
+            }
+        }.execute();
+    }
+
     private void finishIt() {
         mHandler.removeCallbacks(mRunnable);
         LocationService.destroy(RidingActivity.this);
+        Intent i= getIntent();
+        setResult(RESULT_OK,i);
         finish();
     }
 

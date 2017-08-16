@@ -163,4 +163,9 @@ public interface GetUserInfoService {
                              @Field("SeatPrice") long price,
                              @Field("TripId") long tripId);
 
+    @POST(Constants.Http.URL_GET_RATE)
+    @FormUrlEncoded
+    ApiResponse getRatings(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
+                             @Field("TripId") long tripId);
+
 }

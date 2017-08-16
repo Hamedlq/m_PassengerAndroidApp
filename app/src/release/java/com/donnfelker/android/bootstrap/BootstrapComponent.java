@@ -18,6 +18,7 @@ import com.mibarim.main.ui.fragments.MapFragment;
 import com.mibarim.main.ui.fragments.PlusFragments.InviteFragment;
 import com.mibarim.main.ui.fragments.PlusFragments.PassengerCardFragment;
 import com.mibarim.main.ui.fragments.PlusFragments.PayFragment;
+import com.mibarim.main.ui.fragments.PlusFragments.RatingCardFragment;
 
 import javax.inject.Singleton;
 
@@ -49,6 +50,8 @@ public interface BootstrapComponent {
     void inject(InviteFragment target);
 
     void inject(PayFragment target);
+
+    void inject(RatingCardFragment target);
 
     void inject(PassengerCardFragment target);
 

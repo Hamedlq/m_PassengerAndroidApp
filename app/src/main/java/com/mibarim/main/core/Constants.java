@@ -51,10 +51,10 @@ public final class Constants {
         /**
          * Base URL for all requests
          */
-        public static final String URL_BASE = "http://localhost:50226";
+//        public static final String URL_BASE = "http://localhost:50226";
 //        public static final String URL_BASE = "http://mibarim.ir/CoreApi";
 //        public static final String URL_BASE = "http://mibarimapp.com/testapp";
-//        public static final String URL_BASE = "http://mibarimapp.com/CoreApi";
+        public static final String URL_BASE = "http://mibarimapp.com/CoreApi";
 //          public static final String URL_BASE = "http://CoreApi.mibarim.ir/";
 //        public static final String URL_BASE = "http://mibarim.ir/testApp/CoreApi";
 
@@ -120,6 +120,7 @@ public final class Constants {
         public static final String URL_SET_BANK_CARD_IMAGE = "/InsertBankCardPic";
         public static final String URL_GET_VERSION = "/GetAppVersion";
         public static final String URL_GET_SCORE = "/GetPassengerScores";
+        public static final String URL_GET_RATE = "/GetRatings";
         public static final String URL_GET_SCORE_CONTACT = "/GetUserScoresByContact";
         public static final String URL_GET_SCORE_Route = "/GetUserScoresByRoute";
         public static final String URL_GET_INITIAL_INFO = "/GetUserInitialInfo";
@@ -142,6 +143,7 @@ public final class Constants {
         public static final String URL_USER_TRIP_LOCATION = "/SendUserTripLocation";
         public static final String URL_GET_TRIP_INFO = "/GetTripInfo";
         public static final String URL_END_TRIP = "/EndTripRequest";
+        public static final String URL_GET_TRIP = "/GetUserTrips";
         /**
          * List Users URL
          */
@@ -194,6 +196,7 @@ public final class Constants {
         public static final String SIMILAR_SUGGEST_ROUTE_URL = "/GetSimilarSuggestRoute";
         public static final String TRIP_PROFILE_URL = "/GetTripProfile";
         public static final String URL_SET_TRIP_LOCATION = "/SetPassLocation";
+        public static final String URL_CANCEL_RESERVE = "/CancelBooking";
 
         public static final String URL_GET_EVENT = "/GetAllEvents";
         public static final String URL_GET_CITY_LOCATION = "/GetCityLocations";

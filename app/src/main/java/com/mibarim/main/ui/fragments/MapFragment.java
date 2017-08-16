@@ -130,8 +130,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
 
-    public void setStation(String stLat, String stLng, String driverLat, String driverLng) {
-        setMinMaxValues(Double.parseDouble(driverLat), Double.parseDouble(driverLng));
+    public void setStation(String stLat, String stLng, String passLat, String passLng) {
+
         if (stMarker != null) {
             stMarker.remove();
         }
@@ -145,10 +145,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         if (driverMarker != null) {
             driverMarker.remove();
         }
-        driverMarker = mMap.addMarker(new MarkerOptions()
-                .position(new LatLng(Double.parseDouble(driverLat), Double.parseDouble(driverLng)))
-                .icon(BitmapDescriptorFactory
-                        .fromResource(R.mipmap.ic_red)));
+        if(passLat!=null && passLng!=null) {
+            setMinMaxValues(Double.parseDouble(passLat), Double.parseDouble(passLng));
+            driverMarker = mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(Double.parseDouble(passLat), Double.parseDouble(passLng)))
+                    .icon(BitmapDescriptorFactory
+                            .fromResource(R.mipmap.ic_red)));
+        }
         zoomToBoundry();
     }
     private void zoomToBoundry() {
