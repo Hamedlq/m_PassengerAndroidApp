@@ -1,5 +1,8 @@
 package com.mibarim.main.ui.fragments.PlusFragments;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -7,6 +10,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,14 +25,20 @@ import com.mibarim.main.BootstrapServiceProvider;
 import com.mibarim.main.R;
 import com.mibarim.main.adapters.PassengerRouteRecyclerAdapter;
 import com.mibarim.main.authenticator.LogoutService;
+import com.mibarim.main.core.ImageUtils;
 import com.mibarim.main.data.UserData;
 import com.mibarim.main.models.ApiResponse;
+import com.mibarim.main.models.ImageResponse;
 import com.mibarim.main.models.Plus.PassRouteModel;
 import com.mibarim.main.models.RouteResponse;
+import com.mibarim.main.models.UserInfoModel;
 import com.mibarim.main.models.enums.TripStates;
 import com.mibarim.main.services.RouteResponseService;
+import com.mibarim.main.services.UserInfoService;
 import com.mibarim.main.ui.ThrowableLoader;
 import com.mibarim.main.ui.activities.MainCardActivity;
+import com.mibarim.main.ui.activities.UserInfoDetailActivity;
+import com.mibarim.main.util.SafeAsyncTask;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -66,6 +76,13 @@ public class PassengerCardFragment extends Fragment
     ItemTouchListener itemTouchListener;
 
 
+
+    private UserInfoModel userInfoModel;
+    private String authToken;
+    @Inject
+    UserInfoService userInfoService;
+
+
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,6 +115,8 @@ public class PassengerCardFragment extends Fragment
         mRecyclerView.setLayoutManager(mLayoutManager);
         //showState(1);
 
+        getUserInfoFromServer();
+
         itemTouchListener = new ItemTouchListener() {
 
             @Override
@@ -105,7 +124,17 @@ public class PassengerCardFragment extends Fragment
                 if (getActivity() instanceof MainCardActivity) {
                     PassRouteModel selectedItem = ((PassRouteModel) items.get(position));
                     if (selectedItem.IsBooked) {
+
+                        if (userInfoModel.UserImageId == null) {
+//                            if (prefs.getInt("UserPhotoUploadedFirstTry", 2) != 1) {
+                                Intent j = new Intent(getActivity(), UserInfoDetailActivity.class);
+                                startActivity(j);
+//                            }
+                        }
+
+
                         ((MainCardActivity) getActivity()).gotoRidingActivity(selectedItem);
+
                     } else {
                         ((MainCardActivity) getActivity()).gotoPayActivity(selectedItem);
                     }
@@ -292,6 +321,126 @@ public class PassengerCardFragment extends Fragment
         //public void onUserImageClick(View view, int position);
 
     }
+
+    private void getUserInfoFromServer() {
+        new SafeAsyncTask<Boolean>() {
+            @Override
+            public Boolean call() throws Exception {
+                if (authToken == null) {
+                    serviceProvider.invalidateAuthToken();
+                    authToken = serviceProvider.getAuthToken(getActivity());
+                }
+                userInfoModel = userInfoService.getUserInfo(authToken);
+                return true;
+            }
+
+            @Override
+            protected void onException(final Exception e) throws RuntimeException {
+                super.onException(e);
+            }
+
+            @Override
+            protected void onSuccess(final Boolean state) throws Exception {
+                super.onSuccess(state);
+                userData.insertUserInfo(userInfoModel);
+                getImageById(userInfoModel.UserImageId, R.mipmap.ic_camera);
+//                setInfoValues(userInfoModel.IsUserRegistered);
+                //setEmail();
+            }
+        }.execute();
+    }
+
+
+
+    public Bitmap getImageById(String imageId, int defaultDrawableId) {
+        Bitmap icon = BitmapFactory.decodeResource(getResources(), defaultDrawableId);
+        if (imageId == null || imageId.equals("") || imageId.equals("00000000-0000-0000-0000-000000000000")) {
+            return icon;
+        }
+        ImageResponse imageResponse = userData.imageQuery(imageId);
+        if (imageResponse != null) {
+            Bitmap b = ImageUtils.loadImageFromStorage(imageResponse.ImageFilePath, imageResponse.ImageId);
+            if (b != null) {
+                return b;
+            } else {
+                getImageFromServer(imageId);
+            }
+        } else {
+            getImageFromServer(imageId);
+        }
+        return icon;
+    }
+
+
+
+    private void getImageFromServer(final String imageId) {
+        new SafeAsyncTask<Boolean>() {
+            ImageResponse imageResponse = new ImageResponse();
+            Bitmap decodedByte;
+
+            @Override
+            public Boolean call() throws Exception {
+                authToken = serviceProvider.getAuthToken(getActivity());
+                imageResponse = userInfoService.GetImageById(authToken, imageId);
+                if (imageResponse != null && imageResponse.Base64ImageFile != null) {
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            protected void onException(final Exception e) throws RuntimeException {
+                super.onException(e);
+                if (e instanceof android.os.OperationCanceledException) {
+                    // User cancelled the authentication process (back button, etc).
+                    // Since auth could not take place, lets finish this activity.
+//                    finish();
+                }
+            }
+
+            @Override
+            protected void onSuccess(final Boolean imageLoaded) throws Exception {
+                if (imageLoaded) {
+                    byte[] decodedString = Base64.decode(imageResponse.Base64ImageFile, Base64.DEFAULT);
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    String path = ImageUtils.saveImageToInternalStorage(getContext(), decodedByte, imageResponse.ImageId);
+//                    userData.insertImage(imageResponse, path);
+                }
+            }
+        }.execute();
+    }
+
+    /*
+
+    private void setInfoValues(boolean IsUserRegistered) {
+        SharedPreferences prefs = getContext().getSharedPreferences(
+                "com.mibarim.main", Context.MODE_PRIVATE);
+        if (IsUserRegistered) {
+            prefs.edit().putInt("UserInfoRegistered", 1).apply();
+        } else {
+            prefs.edit().putInt("UserInfoRegistered", 0).apply();
+            final Intent i = new Intent(this, RegisterActivity.class);
+            startActivityForResult(i, FINISH_USER_INFO);
+
+
+        }
+
+
+//        prefs.getInt("UserPhotoUploaded",2);
+
+
+        if (userInfoModel.UserImageId == null) {
+            if (prefs.getInt("UserPhotoUploadedFirstTry", 2) != 1) {
+                Intent j = new Intent(this, UserInfoDetailActivity.class);
+                startActivityForResult(j, USER_DETAIL_INFO_REQUEST_CODE);
+            }
+        }
+
+
+    }
+*/
+
+
 
 
 }

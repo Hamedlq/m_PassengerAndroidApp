@@ -10,15 +10,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.beardedhen.androidbootstrap.BootstrapCircleThumbnail;
 import com.mibarim.main.R;
 import com.mibarim.main.models.Plus.PassRouteModel;
-import com.mibarim.main.models.enums.TripStates;
-import com.mibarim.main.ui.activities.MainCardActivity;
 import com.mibarim.main.ui.fragments.PlusFragments.PassengerCardFragment;
 
 import java.util.Calendar;

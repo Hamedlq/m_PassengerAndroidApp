@@ -10,18 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Switch;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.mibarim.main.BootstrapApplication;
 import com.mibarim.main.R;
-import com.mibarim.main.models.InviteModel;
 import com.mibarim.main.models.Plus.PassRouteModel;
 import com.mibarim.main.models.ScoreModel;
-import com.mibarim.main.ui.activities.InviteActivity;
 import com.mibarim.main.ui.activities.PayActivity;
 
 import butterknife.Bind;
@@ -32,10 +28,10 @@ import butterknife.ButterKnife;
  */
 public class PayFragment extends Fragment {
 
-    private LinearLayout layout;
+    private ScrollView layout;
     private PassRouteModel passRouteModel;
     @Bind(R.id.switch_discount)
-    protected Switch switch_discount;
+    protected android.support.v7.widget.SwitchCompat switch_discount;
     @Bind(R.id.discount_layout)
     protected RelativeLayout discount_layout;
     @Bind(R.id.price)
@@ -60,12 +56,18 @@ long creditMoney;
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         BootstrapApplication.component().inject(this);
+
+
+
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        layout = (LinearLayout) inflater.inflate(R.layout.fragment_pay, container, false);
+        layout = (ScrollView) inflater.inflate(R.layout.fragment_pay, container, false);
+
+
+
 
         return layout;
     }
@@ -77,6 +79,23 @@ long creditMoney;
         passRouteModel=((PayActivity)getActivity()).getPassRouteModel();
         //charge_amount.setText(passRouteModel.PricingString);
         price.setText(passRouteModel.PricingString);
+
+/*
+        discount_code.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER){
+                    discount_code.clearFocus();
+                }
+                return false;
+            }
+        });
+*/
+
+
+
+
+
         discount_btn.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {

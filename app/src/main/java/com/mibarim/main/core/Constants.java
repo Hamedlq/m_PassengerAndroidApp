@@ -51,10 +51,11 @@ public final class Constants {
         /**
          * Base URL for all requests
          */
+        public static final String URL_BASE = "http://mibarimapp.com/testapp";
 //        public static final String URL_BASE = "http://localhost:50226";
 //        public static final String URL_BASE = "http://mibarim.ir/CoreApi";
 //        public static final String URL_BASE = "http://mibarimapp.com/testapp";
-        public static final String URL_BASE = "http://mibarimapp.com/CoreApi";
+//        public static final String URL_BASE = "http://mibarimapp.com/CoreApi";
 //          public static final String URL_BASE = "http://CoreApi.mibarim.ir/";
 //        public static final String URL_BASE = "http://mibarim.ir/testApp/CoreApi";
 
@@ -136,6 +137,7 @@ public final class Constants {
         public static final String URL_TOGGLE_CONTACT = "/ToggleContactState";
         public static final String URL_SET_SCORE = "/SubmitUserScore";
         public static final String URL_SEND_FEEDBACK = "/ContactUs";
+        public static final String URL_SEND_IMAGE = "/InsertImage";
         /**
          * Trips
          */

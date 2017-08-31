@@ -22,7 +22,6 @@ import android.support.v4.os.OperationCanceledException;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
-import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -35,7 +34,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
-import com.google.gson.Gson;
 import com.mibarim.main.BootstrapApplication;
 import com.mibarim.main.BootstrapServiceProvider;
 import com.mibarim.main.R;
@@ -51,18 +49,12 @@ import com.mibarim.main.models.ApiResponse;
 import com.mibarim.main.models.ImageResponse;
 import com.mibarim.main.models.InviteModel;
 import com.mibarim.main.models.Plus.PassRouteModel;
-import com.mibarim.main.models.Plus.PaymentDetailModel;
 import com.mibarim.main.models.RouteResponse;
 import com.mibarim.main.models.UserInfoModel;
-import com.mibarim.main.models.enums.TripStates;
 import com.mibarim.main.services.AuthenticateService;
-import com.mibarim.main.services.RouteRequestService;
 import com.mibarim.main.services.RouteResponseService;
 import com.mibarim.main.services.UserInfoService;
 import com.mibarim.main.ui.BootstrapActivity;
-import com.mibarim.main.ui.HandleApiMessages;
-
-import com.mibarim.main.ui.HandleApiMessagesBySnackbar;
 import com.mibarim.main.ui.fragments.PlusFragments.PassengerCardFragment;
 import com.mibarim.main.util.SafeAsyncTask;
 import com.squareup.otto.Subscribe;
@@ -96,6 +88,7 @@ public class MainCardActivity extends BootstrapActivity {
     private CharSequence title;
     private Toolbar toolbar;
     ImageView invite_btn;
+//    ImageView upload_btn;
 
     private String authToken;
     private String url;
@@ -119,6 +112,7 @@ public class MainCardActivity extends BootstrapActivity {
     boolean doubleBackToExitPressedOnce = false;
     private UserInfoModel userInfoModel;
     private InviteModel inviteModel;
+    private int USER_DETAIL_INFO_REQUEST_CODE = 1239;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -157,6 +151,8 @@ public class MainCardActivity extends BootstrapActivity {
         invite_btn = (ImageView) toolbar.findViewById(R.id.invite_btn);
         checkAuth();
         //initScreen();
+
+//        upload_btn = (ImageView) toolbar.findViewById(R.id.upload_btn);
     }
 
     private void initScreen() {
@@ -167,7 +163,7 @@ public class MainCardActivity extends BootstrapActivity {
         fragmentManager.beginTransaction()
                 .add(R.id.main_container, new PassengerCardFragment())
                 .commit();
-        if(url!=null){
+        if (url != null) {
             gotoWebView(url);
         }
         invite_btn.setOnTouchListener(new View.OnTouchListener() {
@@ -181,6 +177,16 @@ public class MainCardActivity extends BootstrapActivity {
             }
         });
 
+/*
+        upload_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent upload_intent = new Intent(MainCardActivity.this, UserInfoDetailActivity.class);
+                upload_intent.putExtra(Constants.Auth.AUTH_TOKEN, authToken);
+                startActivity(upload_intent);
+            }
+        });
+*/
     }
 
     private void checkAuth() {
@@ -226,7 +232,22 @@ public class MainCardActivity extends BootstrapActivity {
             prefs.edit().putInt("UserInfoRegistered", 0).apply();
             final Intent i = new Intent(this, RegisterActivity.class);
             startActivityForResult(i, FINISH_USER_INFO);
+
+
         }
+
+
+//        prefs.getInt("UserPhotoUploaded",2);
+
+
+        if (userInfoModel.UserImageId == null) {
+            if (prefs.getInt("UserPhotoUploadedFirstTry", 2) != 1) {
+                Intent j = new Intent(this, UserInfoDetailActivity.class);
+                startActivityForResult(j, USER_DETAIL_INFO_REQUEST_CODE);
+            }
+        }
+
+
     }
 
     public String getAuthToken() {
@@ -303,12 +324,13 @@ public class MainCardActivity extends BootstrapActivity {
                 }
             }, 5000);
         }
-        if (requestCode ==FINISH_USER_INFO  && resultCode == RESULT_OK) {
+        if (requestCode == FINISH_USER_INFO && resultCode == RESULT_OK) {
             getUserInfoFromServer();
         }
-        if (requestCode ==FINISH_PAYMENT  && resultCode == RESULT_OK) {
+        if (requestCode == FINISH_PAYMENT && resultCode == RESULT_OK) {
             refresh();
         }
+
         if (requestCode ==FINISH_TRIP  && resultCode == RESULT_OK) {
             refresh();
         }
@@ -319,7 +341,7 @@ public class MainCardActivity extends BootstrapActivity {
         final FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = fragmentManager.findFragmentById(R.id.main_container);
         if (fragment != null) {
-            ((PassengerCardFragment)fragment).refresh();
+            ((PassengerCardFragment) fragment).refresh();
         }
     }
 
@@ -506,15 +528,12 @@ public class MainCardActivity extends BootstrapActivity {
     }
 
 
-
     public void gotoPayActivity(final PassRouteModel selectedItem) {
         Intent intent = new Intent(this, PayActivity.class);
         intent.putExtra(Constants.GlobalConstants.PASS_ROUTE_MODEL, selectedItem);
         intent.putExtra(Constants.Auth.AUTH_TOKEN, authToken);
-        this.startActivityForResult(intent,FINISH_PAYMENT);
+        this.startActivityForResult(intent, FINISH_PAYMENT);
     }
-
-
 
 
     public int getVersion() {
@@ -558,6 +577,14 @@ public class MainCardActivity extends BootstrapActivity {
                 "com.mibarim.main", Context.MODE_PRIVATE);
         Long tripShown=prefs.getLong("FirstRidingShow",0);
         if(tripShown!=dm.TripId){
+            if (userInfoModel.UserImageId == null) {
+                if (prefs.getInt("UserPhotoUploadedFirstTry", 2) != 1) {
+                    Intent j = new Intent(this, UserInfoDetailActivity.class);
+                    startActivityForResult(j, USER_DETAIL_INFO_REQUEST_CODE);
+                }
+            }
+
+
             gotoRidingActivity(dm);
         }
     }

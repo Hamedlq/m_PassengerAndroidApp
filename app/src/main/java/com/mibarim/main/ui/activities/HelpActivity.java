@@ -69,6 +69,7 @@ public class HelpActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         return;
+
     }
 
 }

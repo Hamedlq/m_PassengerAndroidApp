@@ -1,7 +1,5 @@
 package com.mibarim.main.ui.activities;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -11,33 +9,21 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.AppCompatButton;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.google.gson.Gson;
 import com.mibarim.main.BootstrapApplication;
 import com.mibarim.main.R;
 import com.mibarim.main.R.id;
-import com.mibarim.main.R.layout;
 import com.mibarim.main.R.string;
 import com.mibarim.main.authenticator.ActionBarAccountAuthenticatorActivity;
-import com.mibarim.main.core.Constants;
 import com.mibarim.main.events.NetworkErrorEvent;
-import com.mibarim.main.events.WrongCredentialErrorEvent;
 import com.mibarim.main.models.ApiResponse;
-import com.mibarim.main.models.Password;
-import com.mibarim.main.models.TokenResponse;
-import com.mibarim.main.services.AuthenticateService;
 import com.mibarim.main.services.RegisterService;
 import com.mibarim.main.ui.HandleApiMessagesBySnackbar;
-import com.mibarim.main.ui.TextWatcherAdapter;
 import com.mibarim.main.util.SafeAsyncTask;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -48,9 +34,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import retrofit.RetrofitError;
 import timber.log.Timber;
-
-import static android.accounts.AccountManager.KEY_ACCOUNT_NAME;
-import static android.accounts.AccountManager.KEY_ACCOUNT_TYPE;
 
 /**
  * Activity to register the user against an API
@@ -243,6 +226,9 @@ public class MobileActivity extends ActionBarAccountAuthenticatorActivity {
     }
 
 
+
+/*
+
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -251,6 +237,7 @@ public class MobileActivity extends ActionBarAccountAuthenticatorActivity {
         return super.onKeyUp(keyCode, event);
     }
 
+*/
 
     /**
      * Hide progress dialog
@@ -271,6 +258,7 @@ public class MobileActivity extends ActionBarAccountAuthenticatorActivity {
 
     @Override
     public void onBackPressed() {
+
         return;
     }
 

@@ -14,6 +14,7 @@ import com.mibarim.main.authenticator.TokenRefreshActivity;
 import com.mibarim.main.ui.BootstrapActivity;
 import com.mibarim.main.ui.BootstrapFragmentActivity;
 
+import com.mibarim.main.ui.activities.UserInfoDetailActivity;
 import com.mibarim.main.ui.fragments.MapFragment;
 import com.mibarim.main.ui.fragments.PlusFragments.InviteFragment;
 import com.mibarim.main.ui.fragments.PlusFragments.PassengerCardFragment;
@@ -72,6 +73,8 @@ public interface BootstrapComponent {
 
 
     void inject(BootstrapActivity target);
+
+    void inject(UserInfoDetailActivity target);
 
 
 }

@@ -6,10 +6,11 @@ import com.mibarim.main.core.RestAdapterImageInterceptor;
 import com.mibarim.main.core.RestErrorHandler;
 import com.mibarim.main.models.ApiResponse;
 import com.mibarim.main.util.DynamicJsonConverter;
-//import com.squareup.okhttp.RequestBody;
 
 import retrofit.RestAdapter;
 import retrofit.mime.TypedFile;
+
+//import com.squareup.okhttp.RequestBody;
 
 /**
  * Created by Hamed on 3/10/2016.
@@ -58,6 +59,11 @@ public class UserImageService {
     }
     public ApiResponse SaveBankCardImage(String authToken, TypedFile pic) {
         ApiResponse res = getService().SaveBankCardImage("Bearer " + authToken, pic);
+        return res;
+    }
+
+    public ApiResponse SaveImage(String authToken, String pic) {
+        ApiResponse res = getService().saveImage("Bearer " + authToken, pic, 1);
         return res;
     }
 
