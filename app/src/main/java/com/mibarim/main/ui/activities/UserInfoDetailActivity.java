@@ -1,6 +1,5 @@
 package com.mibarim.main.ui.activities;
 
-import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -13,8 +12,9 @@ import android.provider.MediaStore;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Base64;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.mibarim.main.BootstrapApplication;
@@ -33,8 +33,12 @@ import com.mibarim.main.ui.BootstrapActivity;
 import com.mibarim.main.ui.HandleApiMessages;
 import com.mibarim.main.ui.HandleApiMessagesBySnackbar;
 import com.mibarim.main.util.SafeAsyncTask;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 import javax.inject.Inject;
 
@@ -46,9 +50,9 @@ import butterknife.Bind;
 
 public class UserInfoDetailActivity extends BootstrapActivity implements View.OnClickListener {
 
-
-    Button cameraButton;
-    Button galleryButton;
+    private static final int RESULT_LOAD_IMAGE = 1;
+    ImageButton uploadButton;
+    ImageButton cameraButton;
 
     ImageView imageToUpload;
     ImageView imageTemp;
@@ -58,12 +62,8 @@ public class UserInfoDetailActivity extends BootstrapActivity implements View.On
     private String authToken;
     private UserInfoModel newUserInfoModel;
     private Bitmap image;
-    /*@Bind(R.id.progressBar)
-    protected ProgressBar progressBar;*/
-
-    ProgressDialog progressDialog;
-
-
+    @Bind(R.id.progressBar)
+    protected ProgressBar progressBar;
 
     @Bind(R.id.continue_btn)
     protected AppCompatButton continueButton;
@@ -92,7 +92,6 @@ public class UserInfoDetailActivity extends BootstrapActivity implements View.On
 
     @Inject
     UserData userData;
-    private static final int REQUEST_OPEN_GALLERY = 1;
     private int CROP_PIC_REQUEST_CODE = 2;
     private int REQUEST_TAKE_PICTURE = 3;
 
@@ -103,22 +102,18 @@ public class UserInfoDetailActivity extends BootstrapActivity implements View.On
         setContentView(R.layout.user_info_detail_activity);
 
         BootstrapApplication.component().inject(this);
-//        progressBar.setVisibility(View.GONE);
-
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(getString(R.string.please_wait));
-        progressDialog.setCancelable(false);
+        progressBar.setVisibility(View.GONE);
 
 
         imageToUpload = (ImageView) findViewById(R.id.image_to_upload);
-        cameraButton = (Button) findViewById(R.id.camera_button);
-        galleryButton = (Button) findViewById(R.id.gallery_button);
+        uploadButton = (ImageButton) findViewById(R.id.camera_button);
+        cameraButton = (ImageButton) findViewById(R.id.gallery_button);
 
 
         imageToUpload.setOnClickListener(this);
 
+        uploadButton.setOnClickListener(this);
         cameraButton.setOnClickListener(this);
-        galleryButton.setOnClickListener(this);
         continueButton.setOnClickListener(this);
 
         if (getIntent() != null && getIntent().getExtras() != null) {
@@ -136,7 +131,7 @@ public class UserInfoDetailActivity extends BootstrapActivity implements View.On
         switch (v.getId()) {
             case R.id.gallery_button:
                 Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(galleryIntent, REQUEST_OPEN_GALLERY);
+                startActivityForResult(galleryIntent, RESULT_LOAD_IMAGE);
 
                 break;
 
@@ -193,8 +188,6 @@ public class UserInfoDetailActivity extends BootstrapActivity implements View.On
     }
 
 
-
-
     private Intent getCropIntent(Intent intent) {
         intent.putExtra("crop", "true");
         intent.putExtra("aspectX", 1);
@@ -209,14 +202,12 @@ public class UserInfoDetailActivity extends BootstrapActivity implements View.On
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_OPEN_GALLERY && resultCode == RESULT_OK && data != null) {
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null) {
 
-//            Uri selectedImageURI = data.getData();
+            Uri selectedImageURI = data.getData();
 
             final Uri imageUri = data.getData();
-            doCrop(imageUri);
-
-            /*InputStream imageStream = null;
+            InputStream imageStream = null;
             try {
                 imageStream = getContentResolver().openInputStream(imageUri);
             } catch (FileNotFoundException e) {
@@ -236,14 +227,10 @@ public class UserInfoDetailActivity extends BootstrapActivity implements View.On
             intent.putExtra("outputY", 96);
             intent.putExtra("noFaceDetection", true);
             intent.putExtra("return-data", true);
-*/
 //            startActivityForResult(intent, CROP_PIC_REQUEST_CODE);
 
-
-/*
             CropImage.activity(imageUri).setCropShape(CropImageView.CropShape.OVAL).setFixAspectRatio(true)
                     .start(this);
-*/
 
 //            String encodedImage = encodeImage(selectedImage);
             
@@ -257,24 +244,6 @@ public class UserInfoDetailActivity extends BootstrapActivity implements View.On
         }
 
         if (requestCode == CROP_PIC_REQUEST_CODE) {
-            if(data != null){
-                Bundle extras = data.getExtras();
-                Bitmap bitmap= extras.getParcelable("data");
-                image = bitmap;
-//                progressBar.setVisibility(View.VISIBLE);
-
-
-                progressDialog.show();
-
-                saveProfileImage();
-
-            }
-
-
-//            final Bitmap selectedImage1 = BitmapFactory.decodeStream(imageStream);
-
-
-
 /*
 
             Intent intent = new Intent("com.android.camera.action.CROP");
@@ -285,7 +254,7 @@ public class UserInfoDetailActivity extends BootstrapActivity implements View.On
 */
 
         }
-/*
+
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
@@ -298,7 +267,7 @@ public class UserInfoDetailActivity extends BootstrapActivity implements View.On
                 }
                 final Bitmap selectedImage1 = BitmapFactory.decodeStream(imageStream);
                 image = selectedImage1;
-//                progressBar.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
                 saveProfileImage();
 
 
@@ -308,7 +277,6 @@ public class UserInfoDetailActivity extends BootstrapActivity implements View.On
                 Exception error = result.getError();
             }
         }
-*/
 
 
         if (requestCode == REQUEST_TAKE_PICTURE) {
@@ -316,10 +284,9 @@ public class UserInfoDetailActivity extends BootstrapActivity implements View.On
 //                Uri photo = (Uri) data.getExtras().get("data");
 //                Bitmap photo = (Bitmap) data.getExtras().get("data");
                 Uri uri = data.getData();
-                doCrop(uri);
 
-//                CropImage.activity(uri).setCropShape(CropImageView.CropShape.OVAL).setFixAspectRatio(true)
-//                        .start(this);
+                CropImage.activity(uri).setCropShape(CropImageView.CropShape.OVAL).setFixAspectRatio(true)
+                        .start(this);
 
 
 //                image = photo;
@@ -495,10 +462,7 @@ public class UserInfoDetailActivity extends BootstrapActivity implements View.On
                     userData.insertImage(imageResponse, path);
 //                    imageToUpload.setImageURI();
                     imageToUpload.setImageBitmap(decodedByte);
-//                    progressBar.setVisibility(View.GONE);
-                    progressDialog.hide();
-
-                    Toast.makeText(getBaseContext(),"عکس بارگذاری شد.",Toast.LENGTH_LONG).show();
+                    progressBar.setVisibility(View.GONE);
 
 /*
 

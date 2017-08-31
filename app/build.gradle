@@ -145,6 +145,8 @@ android {
 }
 
 dependencies {
+    compile 'com.theartofdev.edmodo:android-image-cropper:2.4.+'
+
     //google map AND //google cloud messaging
 
     //compile fileTree(dir: 'libs', include: ['*.jar'])

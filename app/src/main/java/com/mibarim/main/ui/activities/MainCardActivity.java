@@ -151,7 +151,6 @@ public class MainCardActivity extends BootstrapActivity {
         invite_btn = (ImageView) toolbar.findViewById(R.id.invite_btn);
         checkAuth();
         //initScreen();
-
 //        upload_btn = (ImageView) toolbar.findViewById(R.id.upload_btn);
     }
 
@@ -183,7 +182,6 @@ public class MainCardActivity extends BootstrapActivity {
             public void onClick(View v) {
                 Intent upload_intent = new Intent(MainCardActivity.this, UserInfoDetailActivity.class);
                 upload_intent.putExtra(Constants.Auth.AUTH_TOKEN, authToken);
-                startActivity(upload_intent);
             }
         });
 */
@@ -337,6 +335,10 @@ public class MainCardActivity extends BootstrapActivity {
         }
         if (requestCode == FINISH_PAYMENT && resultCode == RESULT_OK) {
             refresh();
+        }
+
+        if (requestCode == USER_DETAIL_INFO_REQUEST_CODE && resultCode == RESULT_OK) {
+//            getUserInfoFromServer();
         }
 
         if (requestCode ==FINISH_TRIP  && resultCode == RESULT_OK) {
