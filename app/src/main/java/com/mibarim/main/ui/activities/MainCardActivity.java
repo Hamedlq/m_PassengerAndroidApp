@@ -189,6 +189,12 @@ public class MainCardActivity extends BootstrapActivity {
 */
     }
 
+    /*@Override
+    protected void onResume() {
+        checkAuth();
+        super.onResume();
+    }*/
+
     private void checkAuth() {
         new SafeAsyncTask<Boolean>() {
 
@@ -223,6 +229,8 @@ public class MainCardActivity extends BootstrapActivity {
     }
 
 
+
+
     private void setInfoValues(boolean IsUserRegistered) {
         SharedPreferences prefs = this.getSharedPreferences(
                 "com.mibarim.main", Context.MODE_PRIVATE);
@@ -251,7 +259,7 @@ public class MainCardActivity extends BootstrapActivity {
     }
 
     public String getAuthToken() {
-        return authToken;
+            return authToken;
     }
 
     @Subscribe

@@ -243,7 +243,7 @@ public class PassengerCardFragment extends Fragment
                     PassRouteModel bookedTrip = null;
                     routeResponse = ((MainCardActivity) getActivity()).getRoute();
                     String authToken = ((MainCardActivity) getActivity()).getAuthToken();
-                    if (getActivity() != null) {
+                    if (getActivity() != null && authToken!= null) {
                         suggestRouteResponse = routeResponseService.GetPassengerRoutes(authToken, 1);
                         if (suggestRouteResponse != null) {
                             for (String routeJson : suggestRouteResponse.Messages) {
