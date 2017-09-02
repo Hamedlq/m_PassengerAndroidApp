@@ -108,6 +108,10 @@
         <item name="android:layout_margin">3dp</item>
         <item name="android:textSize">10dp</item>
     </style>
+    <style name="iransans_button" >
+        <item name="fontPath">fonts/IRANSans(FaNum)_Light.ttf</item>
+        <item name="android:background">@drawable/button_background_states</item>
+    </style>
 
     <style name="BootstrapButton">
         <item name="android:background">@drawable/button_background_states</item>

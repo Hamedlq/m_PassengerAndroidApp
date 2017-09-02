@@ -1,6 +1,7 @@
 package com.mibarim.main.adapters;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
@@ -71,6 +72,10 @@ public class PassengerRouteRecyclerAdapter extends RecyclerView.Adapter<Passenge
             dst_distance = (TextView) v.findViewById(R.id.dst_distance);*/
             //userimage = (BootstrapCircleThumbnail) v.findViewById(R.id.userimage);
             book_trip = (AppCompatButton) v.findViewById(R.id.book_trip);
+            Typeface font = Typeface.createFromAsset(_activity.getAssets(), "fonts/IRANSans(FaNum)_Light.ttf");
+            book_trip.setTypeface(font);
+            src_station.setTypeface(font);
+            station_dest.setTypeface(font);
             book_trip.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -228,6 +233,7 @@ public class PassengerRouteRecyclerAdapter extends RecyclerView.Adapter<Passenge
                 .inflate(R.layout.passenger_card_item, parent, false);
         // set the view's size, margins, paddings and layout parameters
         ViewHolder vh = new ViewHolder(v);
+        //changeFont(parent);
         return vh;
     }
 
@@ -317,4 +323,14 @@ public class PassengerRouteRecyclerAdapter extends RecyclerView.Adapter<Passenge
     public int getItemCount() {
         return items.size();
     }
+    /*private void changeFont(ViewGroup layout) {//Where 'layout' is the parent
+        for (int i = 0; i < layout.getChildCount(); i++) {
+            View child = layout.getChildAt(i);
+            if (child instanceof ViewGroup) {
+                changeFont((ViewGroup) child);
+            } else if (child instanceof Button) {
+                ((Button) child).setTypeface(Typeface.DEFAULT);
+            }
+        }
+    }*/
 }

@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.AppCompatButton;
@@ -83,7 +84,8 @@ public class MobileActivity extends ActionBarAccountAuthenticatorActivity {
                 "com.mibarim.main", Context.MODE_PRIVATE);
         regMobile = prefs.getString("UserMobile", "");
         loginMobile.setText(regMobile);
-
+        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/IRANSans(FaNum)_Light.ttf");
+        signInButton.setTypeface(font);
         signInButton.setOnTouchListener( new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {

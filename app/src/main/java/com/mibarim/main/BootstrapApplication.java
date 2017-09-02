@@ -3,6 +3,8 @@
 package com.mibarim.main;
 
 import android.app.Application;
+import android.content.Context;
+import android.support.v7.widget.AppCompatButton;
 import android.os.StrictMode;
 
 import com.beardedhen.androidbootstrap.TypefaceProvider;
@@ -45,6 +47,12 @@ public abstract class BootstrapApplication extends Application {
         FontsOverride.setDefaultFont(this, "MONOSPACE", "fonts/IRANSans(FaNum)_Light.ttf");
         FontsOverride.setDefaultFont(this, "SERIF", "fonts/IRANSans(FaNum)_Light.ttf");
         FontsOverride.setDefaultFont(this, "SANS_SERIF", "fonts/IRANSans(FaNum)_Light.ttf");
+        /*CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                //.addCustomStyle(AppCompatButton.class, R.attr.buttonStyle)
+                .setDefaultFontPath("fonts/IRANSans(FaNum)_Light.ttf")
+                .setFontAttrId(R.attr.fontPath)
+                .build()
+        );*/
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
     }

@@ -1,5 +1,6 @@
 package com.mibarim.main.ui.fragments.PlusFragments;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -111,6 +112,8 @@ long creditMoney;
                 return false;
             }
         });
+        Typeface font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/IRANSans(FaNum)_Light.ttf");
+        reserve_btn.setTypeface(font);
         reserve_btn.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {

@@ -20,7 +20,7 @@
         android:textStyle="bold"
         android:textSize="20sp"
         android:textColor="@color/text_white"
-        android:text="@string/app_name" />
+        android:text="@string/Trip_time" />
 
     <ImageView
         android:id="@+id/support"

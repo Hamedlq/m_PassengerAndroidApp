@@ -7,6 +7,7 @@ import android.view.MenuItem;
 
 import com.mibarim.main.BootstrapApplication;
 import com.mibarim.main.ui.activities.MainCardActivity;
+import com.mibarim.main.util.FontsOverride;
 import com.squareup.otto.Bus;
 
 import javax.inject.Inject;
@@ -30,6 +31,12 @@ public abstract class BootstrapActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         BootstrapApplication.component().inject(this);
+
+        //iransens font
+        FontsOverride.setDefaultFont(this, "DEFAULT", "fonts/IRANSans(FaNum)_Light.ttf");
+        FontsOverride.setDefaultFont(this, "MONOSPACE", "fonts/IRANSans(FaNum)_Light.ttf");
+        FontsOverride.setDefaultFont(this, "SERIF", "fonts/IRANSans(FaNum)_Light.ttf");
+        FontsOverride.setDefaultFont(this, "SANS_SERIF", "fonts/IRANSans(FaNum)_Light.ttf");
 
         // Obtain the shared Tracker instance.
         /*BootstrapApplication application = (BootstrapApplication) getApplication();

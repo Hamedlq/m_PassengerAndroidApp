@@ -308,7 +308,7 @@
     <string name="finishTrip">اتمام سفر</string>
     <string name="wait_state">در حال دریافت اطلاعات...</string>
     <string name="LocationMustBeOn">مکان نما(GPS) تلفن همراه باید در تمام مدت سفر روشن باشد</string>
-    <string name="Trip_time">در زمان سفر</string>
+    <string name="Trip_time">زمان سفر</string>
     <string name="accept_rideshare">موافقم ایشان را با خودروی خود به مقصد برسانم</string>
     <string name="accept">موافقم</string>
     <string name="ride_share_accepted">در زمان سفر به شما اطلاع داده خواهد شد.</string>
