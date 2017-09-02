@@ -1,20 +1,24 @@
 package com.mibarim.main.ui.activities;
 
+import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Base64;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.mibarim.main.BootstrapApplication;
@@ -33,12 +37,10 @@ import com.mibarim.main.ui.BootstrapActivity;
 import com.mibarim.main.ui.HandleApiMessages;
 import com.mibarim.main.ui.HandleApiMessagesBySnackbar;
 import com.mibarim.main.util.SafeAsyncTask;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.File;
+import java.io.IOException;
 
 import javax.inject.Inject;
 
@@ -50,9 +52,10 @@ import butterknife.Bind;
 
 public class UserInfoDetailActivity extends BootstrapActivity implements View.OnClickListener {
 
-    private static final int RESULT_LOAD_IMAGE = 1;
-    ImageButton uploadButton;
-    ImageButton cameraButton;
+
+    private static final int CROP_PIC_REQUEST_CODE_FOR_GALLERY = 2345;
+    Button cameraButton;
+    Button galleryButton;
 
     ImageView imageToUpload;
     ImageView imageTemp;
@@ -62,8 +65,12 @@ public class UserInfoDetailActivity extends BootstrapActivity implements View.On
     private String authToken;
     private UserInfoModel newUserInfoModel;
     private Bitmap image;
-    @Bind(R.id.progressBar)
-    protected ProgressBar progressBar;
+    /*@Bind(R.id.progressBar)
+    protected ProgressBar progressBar;*/
+
+    ProgressDialog progressDialog;
+
+
 
     @Bind(R.id.continue_btn)
     protected AppCompatButton continueButton;
@@ -92,6 +99,7 @@ public class UserInfoDetailActivity extends BootstrapActivity implements View.On
 
     @Inject
     UserData userData;
+    private static final int REQUEST_OPEN_GALLERY = 1;
     private int CROP_PIC_REQUEST_CODE = 2;
     private int REQUEST_TAKE_PICTURE = 3;
 
@@ -102,18 +110,22 @@ public class UserInfoDetailActivity extends BootstrapActivity implements View.On
         setContentView(R.layout.user_info_detail_activity);
 
         BootstrapApplication.component().inject(this);
-        progressBar.setVisibility(View.GONE);
+//        progressBar.setVisibility(View.GONE);
+
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(getString(R.string.please_wait));
+        progressDialog.setCancelable(false);
 
 
         imageToUpload = (ImageView) findViewById(R.id.image_to_upload);
-        uploadButton = (ImageButton) findViewById(R.id.camera_button);
-        cameraButton = (ImageButton) findViewById(R.id.gallery_button);
+        cameraButton = (Button) findViewById(R.id.camera_button);
+        galleryButton = (Button) findViewById(R.id.gallery_button);
 
 
         imageToUpload.setOnClickListener(this);
 
-        uploadButton.setOnClickListener(this);
         cameraButton.setOnClickListener(this);
+        galleryButton.setOnClickListener(this);
         continueButton.setOnClickListener(this);
 
         if (getIntent() != null && getIntent().getExtras() != null) {
@@ -131,13 +143,39 @@ public class UserInfoDetailActivity extends BootstrapActivity implements View.On
         switch (v.getId()) {
             case R.id.gallery_button:
                 Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(galleryIntent, RESULT_LOAD_IMAGE);
+                startActivityForResult(galleryIntent, REQUEST_OPEN_GALLERY);
 
                 break;
 
             case R.id.camera_button:
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(takePictureIntent, REQUEST_TAKE_PICTURE);
+//                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                startActivityForResult(takePictureIntent, REQUEST_TAKE_PICTURE);
+
+
+                if (ActivityCompat.checkSelfPermission(UserInfoDetailActivity.this, Manifest.permission.CAMERA)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    // Check Permissions Now
+                    // Callback onRequestPermissionsResult interceptado na Activity MainActivity0
+                    ActivityCompat.requestPermissions(UserInfoDetailActivity.this,
+                            new String[]{Manifest.permission.CAMERA},
+                            1);
+                } else {
+                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    File f = new File(getExternalCacheDir(), "temp1.jpg");
+                    try {
+                        f.createNewFile();
+                    } catch (IOException e) {
+                    }
+                    Uri uri = Uri.fromFile(f);
+
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+//                    takePictureIntent.putExtra("value", uri);
+                    startActivityForResult(takePictureIntent, REQUEST_TAKE_PICTURE);
+
+                }
+
+
+
 
 
 
@@ -173,19 +211,35 @@ public class UserInfoDetailActivity extends BootstrapActivity implements View.On
             cropIntent.putExtra("crop", "true");
             cropIntent.putExtra("aspectX", 1);
             cropIntent.putExtra("aspectY", 1);
-            cropIntent.putExtra("outputX", 128);
-            cropIntent.putExtra("outputY", 128);
+//            cropIntent.putExtra("spotlightX", 200); // int
+//            cropIntent.putExtra("spotlightY", 200); // int
+
+            cropIntent.putExtra("outputX", 400);
+            cropIntent.putExtra("outputY", 400);
             cropIntent.putExtra("return-data", true);
+
+            File f = new File(getExternalCacheDir(), "temp2.jpg");
+            try {
+                f.createNewFile();
+            } catch (IOException e) {
+            }
+            Uri uri = Uri.fromFile(f);
+
+
+            cropIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
             startActivityForResult(cropIntent, CROP_PIC_REQUEST_CODE);
         }
         // respond to users whose devices do not support the crop action
         catch (ActivityNotFoundException anfe) {
             // display an error message
-            String errorMessage = "Whoops - your device doesn't support the crop action!";
+            String errorMessage = "دستگاه شما از کراپ عکس پشتیبانی نمی کند.";
             Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
             toast.show();
         }
     }
+
+
+
 
 
     private Intent getCropIntent(Intent intent) {
@@ -202,12 +256,14 @@ public class UserInfoDetailActivity extends BootstrapActivity implements View.On
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null) {
+        if (requestCode == REQUEST_OPEN_GALLERY && resultCode == RESULT_OK && data != null) {
 
-            Uri selectedImageURI = data.getData();
+//            Uri selectedImageURI = data.getData();
 
             final Uri imageUri = data.getData();
-            InputStream imageStream = null;
+            doCropForGallery(imageUri);
+
+            /*InputStream imageStream = null;
             try {
                 imageStream = getContentResolver().openInputStream(imageUri);
             } catch (FileNotFoundException e) {
@@ -227,13 +283,17 @@ public class UserInfoDetailActivity extends BootstrapActivity implements View.On
             intent.putExtra("outputY", 96);
             intent.putExtra("noFaceDetection", true);
             intent.putExtra("return-data", true);
+*/
 //            startActivityForResult(intent, CROP_PIC_REQUEST_CODE);
 
+
+/*
             CropImage.activity(imageUri).setCropShape(CropImageView.CropShape.OVAL).setFixAspectRatio(true)
                     .start(this);
+*/
 
 //            String encodedImage = encodeImage(selectedImage);
-            
+
 /*
 
             imageToUpload.setImageURI(selectedImage);
@@ -244,6 +304,24 @@ public class UserInfoDetailActivity extends BootstrapActivity implements View.On
         }
 
         if (requestCode == CROP_PIC_REQUEST_CODE) {
+            if(data != null){
+                Bundle extras = data.getExtras();
+                Bitmap bitmap= extras.getParcelable("data");
+                image = bitmap;
+//                progressBar.setVisibility(View.VISIBLE);
+
+
+//                progressDialog.show();
+
+                saveProfileImage();
+
+            }
+
+
+//            final Bitmap selectedImage1 = BitmapFactory.decodeStream(imageStream);
+
+
+
 /*
 
             Intent intent = new Intent("com.android.camera.action.CROP");
@@ -254,7 +332,7 @@ public class UserInfoDetailActivity extends BootstrapActivity implements View.On
 */
 
         }
-
+/*
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
@@ -267,7 +345,7 @@ public class UserInfoDetailActivity extends BootstrapActivity implements View.On
                 }
                 final Bitmap selectedImage1 = BitmapFactory.decodeStream(imageStream);
                 image = selectedImage1;
-                progressBar.setVisibility(View.VISIBLE);
+//                progressBar.setVisibility(View.VISIBLE);
                 saveProfileImage();
 
 
@@ -277,25 +355,44 @@ public class UserInfoDetailActivity extends BootstrapActivity implements View.On
                 Exception error = result.getError();
             }
         }
+*/
 
 
         if (requestCode == REQUEST_TAKE_PICTURE) {
             if (data != null) {
-//                Uri photo = (Uri) data.getExtras().get("data");
-//                Bitmap photo = (Bitmap) data.getExtras().get("data");
-                Uri uri = data.getData();
 
-                CropImage.activity(uri).setCropShape(CropImageView.CropShape.OVAL).setFixAspectRatio(true)
-                        .start(this);
+//                Uri uri = data.getData();
+//                doCrop(uri);
+
+
+                doCrop(Uri.fromFile(new File(getExternalCacheDir(), "temp1.jpg")));
+
+
+//                CropImage.activity(uri).setCropShape(CropImageView.CropShape.OVAL).setFixAspectRatio(true)
+//                        .start(this);
 
 
 //                image = photo;
 //                saveProfileImage();
 
             }
-
-
         }
+
+        if (requestCode == CROP_PIC_REQUEST_CODE_FOR_GALLERY){
+            //Uri imageUri = data.getData();
+            try {
+                //Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                Bundle extras = data.getExtras();
+                Bitmap bitmap= extras.getParcelable("data");
+                image = bitmap;
+                saveProfileImage();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+
+
     }
 
 /*
@@ -329,9 +426,33 @@ public class UserInfoDetailActivity extends BootstrapActivity implements View.On
 
     }
 */
+private void doCropForGallery(Uri picUri) {
+    try {
+
+        Intent cropIntent = new Intent("com.android.camera.action.CROP");
+
+        cropIntent.setDataAndType(picUri, "image/*");
+        cropIntent.putExtra("crop", "true");
+        cropIntent.putExtra("aspectX", 1);
+        cropIntent.putExtra("aspectY", 1);
+        cropIntent.putExtra("outputX", 400);
+        cropIntent.putExtra("outputY", 400);
+        cropIntent.putExtra("return-data", true);
+        startActivityForResult(cropIntent, CROP_PIC_REQUEST_CODE_FOR_GALLERY);
+    }
+    // respond to users whose devices do not support the crop action
+    catch (ActivityNotFoundException anfe) {
+        // display an error message
+        String errorMessage = "Whoops - your device doesn't support the crop action!";
+        Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
+        toast.show();
+    }
+}
 
 
     private void saveProfileImage() {
+        progressDialog.show();
+
         new SafeAsyncTask<Boolean>() {
             @Override
             public Boolean call() throws Exception {
@@ -367,6 +488,7 @@ public class UserInfoDetailActivity extends BootstrapActivity implements View.On
             @Override
             protected void onSuccess(final Boolean uploadSuccess) throws Exception {
                 super.onSuccess(uploadSuccess);
+                progressDialog.hide();
                 if (!uploadSuccess) {
                     new HandleApiMessages(UserInfoDetailActivity.this, response).showMessages();
                 }
@@ -462,7 +584,10 @@ public class UserInfoDetailActivity extends BootstrapActivity implements View.On
                     userData.insertImage(imageResponse, path);
 //                    imageToUpload.setImageURI();
                     imageToUpload.setImageBitmap(decodedByte);
-                    progressBar.setVisibility(View.GONE);
+//                    progressBar.setVisibility(View.GONE);
+
+
+                    Toast.makeText(getBaseContext(),"عکس بارگذاری شد.",Toast.LENGTH_LONG).show();
 
 /*
 
@@ -477,6 +602,38 @@ public class UserInfoDetailActivity extends BootstrapActivity implements View.On
                 }
             }
         }.execute();
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+
+        switch (requestCode) {
+            case 1: {
+
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(takePictureIntent, REQUEST_TAKE_PICTURE);
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(UserInfoDetailActivity.this, "اجازه دسترسی به دوربین داده نشد.", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+
+
     }
 
 
@@ -610,6 +767,9 @@ public class UserInfoDetailActivity extends BootstrapActivity implements View.On
     }
 
 */
+
+
+
 
 
 }

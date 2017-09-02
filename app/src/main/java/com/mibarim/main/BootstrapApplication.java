@@ -3,15 +3,12 @@
 package com.mibarim.main;
 
 import android.app.Application;
-import android.content.Context;
+import android.os.StrictMode;
 
 import com.beardedhen.androidbootstrap.TypefaceProvider;
-import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.mibarim.main.util.FontsOverride;
-
-import io.fabric.sdk.android.Fabric;
 
 /**
  * Mibarim application
@@ -19,7 +16,7 @@ import io.fabric.sdk.android.Fabric;
 public abstract class BootstrapApplication extends Application {
 
     private static BootstrapApplication instance;
-    private BootstrapComponent component;
+    private com.mibarim.main.BootstrapComponent component;
 
     /**
      * Create main application
@@ -48,8 +45,10 @@ public abstract class BootstrapApplication extends Application {
         FontsOverride.setDefaultFont(this, "MONOSPACE", "fonts/IRANSans(FaNum)_Light.ttf");
         FontsOverride.setDefaultFont(this, "SERIF", "fonts/IRANSans(FaNum)_Light.ttf");
         FontsOverride.setDefaultFont(this, "SANS_SERIF", "fonts/IRANSans(FaNum)_Light.ttf");
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
     }
-    public static BootstrapComponent component() {
+    public static com.mibarim.main.BootstrapComponent component() {
         return instance.component;
     }
 
@@ -61,13 +60,13 @@ public abstract class BootstrapApplication extends Application {
         return instance;
     }
 
-    public BootstrapComponent getComponent() {
+    public com.mibarim.main.BootstrapComponent getComponent() {
         return component;
     }
 
     public final static class DaggerComponentInitializer {
 
-        public static BootstrapComponent init() {
+        public static com.mibarim.main.BootstrapComponent init() {
             return DaggerBootstrapComponent.builder()
                     .androidModule(new AndroidModule())
                     .bootstrapModule(new BootstrapModule())
