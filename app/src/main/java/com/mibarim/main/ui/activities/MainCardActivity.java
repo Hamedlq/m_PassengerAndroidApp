@@ -88,7 +88,7 @@ public class MainCardActivity extends BootstrapActivity {
     private CharSequence title;
     private Toolbar toolbar;
     ImageView invite_btn;
-//    ImageView upload_btn;
+    ImageView upload_btn;
 
     private String authToken;
     private String url;
@@ -151,7 +151,7 @@ public class MainCardActivity extends BootstrapActivity {
         invite_btn = (ImageView) toolbar.findViewById(R.id.invite_btn);
         checkAuth();
         //initScreen();
-//        upload_btn = (ImageView) toolbar.findViewById(R.id.upload_btn);
+        upload_btn = (ImageView) toolbar.findViewById(R.id.upload_btn);
     }
 
     private void initScreen() {
@@ -176,7 +176,6 @@ public class MainCardActivity extends BootstrapActivity {
             }
         });
 
-/*
         upload_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -185,7 +184,6 @@ public class MainCardActivity extends BootstrapActivity {
                 startActivity(upload_intent);
             }
         });
-*/
     }
 
     /*@Override
