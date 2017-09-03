@@ -93,8 +93,8 @@
 
         <com.beardedhen.androidbootstrap.BootstrapCircleThumbnail
             android:id="@+id/image_to_upload"
-            android:layout_width="180dp"
-            android:layout_height="180dp"
+            android:layout_width="170dp"
+            android:layout_height="170dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
             android:layout_weight="4"

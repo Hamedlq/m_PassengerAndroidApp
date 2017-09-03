@@ -176,14 +176,16 @@ public class MainCardActivity extends BootstrapActivity {
             }
         });
 
-        /*upload_btn.setOnClickListener(new View.OnClickListener() {
+/*
+        upload_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent upload_intent = new Intent(MainCardActivity.this, UserInfoDetailActivity.class);
                 upload_intent.putExtra(Constants.Auth.AUTH_TOKEN, authToken);
                 startActivity(upload_intent);
             }
-        });*/
+        });
+*/
     }
 
     /*@Override
@@ -245,12 +247,12 @@ public class MainCardActivity extends BootstrapActivity {
 //        prefs.getInt("UserPhotoUploaded",2);
 
 
-        if (userInfoModel.UserImageId == null) {
+        /*if (userInfoModel.UserImageId == null) {
             if (prefs.getInt("UserPhotoUploadedFirstTry", 2) != 1) {
                 Intent j = new Intent(this, UserInfoDetailActivity.class);
                 startActivityForResult(j, USER_DETAIL_INFO_REQUEST_CODE);
             }
-        }
+        }*/
 
 
     }
@@ -588,8 +590,8 @@ public class MainCardActivity extends BootstrapActivity {
         if(tripShown!=dm.TripId){
             if (userInfoModel.UserImageId == null) {
                 if (prefs.getInt("UserPhotoUploadedFirstTry", 2) != 1) {
-                    Intent j = new Intent(this, UserInfoDetailActivity.class);
-                    startActivityForResult(j, USER_DETAIL_INFO_REQUEST_CODE);
+                    Intent intent = new Intent(this, UserInfoDetailActivity.class);
+                    startActivityForResult(intent, USER_DETAIL_INFO_REQUEST_CODE);
                 }
             }
 

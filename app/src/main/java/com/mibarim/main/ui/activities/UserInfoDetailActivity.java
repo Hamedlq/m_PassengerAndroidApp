@@ -359,7 +359,7 @@ public class UserInfoDetailActivity extends BootstrapActivity implements View.On
 
 
         if (requestCode == REQUEST_TAKE_PICTURE) {
-            if (data != null) {
+
 
 //                Uri uri = data.getData();
 //                doCrop(uri);
@@ -375,7 +375,7 @@ public class UserInfoDetailActivity extends BootstrapActivity implements View.On
 //                image = photo;
 //                saveProfileImage();
 
-            }
+
         }
 
         if (requestCode == CROP_PIC_REQUEST_CODE_FOR_GALLERY){
