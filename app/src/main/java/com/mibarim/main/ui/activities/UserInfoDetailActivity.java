@@ -483,6 +483,7 @@ private void doCropForGallery(Uri picUri) {
             @Override
             protected void onException(final Exception e) throws RuntimeException {
                 super.onException(e);
+                progressDialog.hide();
             }
 
             @Override
