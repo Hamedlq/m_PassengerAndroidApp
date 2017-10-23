@@ -27,6 +27,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -114,6 +115,8 @@ public class MainCardActivity extends BootstrapActivity {
     private InviteModel inviteModel;
     private int USER_DETAIL_INFO_REQUEST_CODE = 1239;
 
+    ApiResponse apiResponse;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
 
@@ -158,6 +161,9 @@ public class MainCardActivity extends BootstrapActivity {
         checkVersion();
         getUserInfoFromServer();
         getInviteFromServer();
+
+        getTheRatingsFromServer();
+
         final FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .add(R.id.main_container, new PassengerCardFragment())
@@ -682,6 +688,57 @@ public class MainCardActivity extends BootstrapActivity {
             protected void onSuccess(final Boolean state) throws Exception {
                 super.onSuccess(state);
                 userData.insertInvite(inviteModel);
+            }
+        }.execute();
+    }
+
+    private void getTheRatingsFromServer() {
+        new SafeAsyncTask<Boolean>() {
+            @Override
+            public Boolean call() throws Exception {
+                /*if (authToken == null) {
+                    serviceProvider.invalidateAuthToken();
+                    authToken = serviceProvider.getAuthToken(UserDocumentsUploadActivity.this);
+                }*/
+
+//                progressDialog.show();
+                apiResponse = userInfoService.getRatings(authToken, "");
+
+//                ratingModelList = new ArrayList<RatingModel>();
+
+//                if (mainStationsApiResponse.Count > 0)
+
+
+//                ApiResponse myResponse = routeResponseService.GetStationRoutes(1);
+                //Gson gson = new Gson();
+                /*Gson gson = new GsonBuilder().create();
+                for (String json : mainStationsApiResponse.Messages) {
+                    ratingModelList.add(gson.fromJson(json, RatingModel.class));
+                }*/
+                return true;
+            }
+
+            @Override
+            protected void onException(final Exception e) throws RuntimeException {
+                super.onException(e);
+//                makeAllProgressBarsInvisible();
+//                progressDialog.hide();
+                Toast.makeText(MainCardActivity.this, R.string.error_message, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            protected void onSuccess(final Boolean state) throws Exception {
+                super.onSuccess(state);
+
+
+                if (apiResponse.Count > 0) {
+                    Intent intent = new Intent(MainCardActivity.this, RatingActivity.class);
+                    intent.putExtra(Constants.Auth.AUTH_TOKEN, authToken);
+
+                    intent.putExtra(Constants.GlobalConstants.RAINTG_LIST_TAG, apiResponse);
+
+                    startActivity(intent);
+                }
             }
         }.execute();
     }

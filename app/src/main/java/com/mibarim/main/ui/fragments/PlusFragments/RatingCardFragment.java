@@ -1,3 +1,4 @@
+/*
 package com.mibarim.main.ui.fragments.PlusFragments;
 
 import android.os.Bundle;
@@ -19,7 +20,6 @@ import com.google.gson.Gson;
 import com.mibarim.main.BootstrapApplication;
 import com.mibarim.main.BootstrapServiceProvider;
 import com.mibarim.main.R;
-import com.mibarim.main.adapters.RatingRecyclerAdapter;
 import com.mibarim.main.authenticator.LogoutService;
 import com.mibarim.main.data.UserData;
 import com.mibarim.main.models.ApiResponse;
@@ -95,7 +95,9 @@ public class RatingCardFragment extends Fragment
 
         mEmptyView = (TextView) mRecycler.findViewById(android.R.id.empty);
         mEmptyView.setVisibility(View.GONE);
-        /*mProgressView = (ProgressBar) mRecycler.findViewById(R.id.pb_loading);*/
+        */
+/*mProgressView = (ProgressBar) mRecycler.findViewById(R.id.pb_loading);*//*
+
 
         // use a linear layout manager
         mLayoutManager = new LinearLayoutManager(getActivity());
@@ -106,30 +108,36 @@ public class RatingCardFragment extends Fragment
 
             @Override
             public void onBookBtnClick(View view, int position) {
-               /* if (getActivity() instanceof MainCardActivity) {
+               */
+/* if (getActivity() instanceof MainCardActivity) {
                     PassRouteModel selectedItem = ((PassRouteModel) items.get(position));
                     if (selectedItem.IsBooked) {
                         ((MainCardActivity) getActivity()).gotoRidingActivity(selectedItem);
                     } else {
                         ((MainCardActivity) getActivity()).gotoPayActivity(selectedItem);
                     }
-                }*/
+                }*//*
+
             }
 
             @Override
             public void onSrcLinkClick(View view, int position) {
-                /*if (getActivity() instanceof MainCardActivity) {
+                */
+/*if (getActivity() instanceof MainCardActivity) {
                     PassRouteModel selectedItem = ((PassRouteModel) items.get(position));
                     ((MainCardActivity) getActivity()).gotoWebView(selectedItem.SrcLink);
-                }*/
+                }*//*
+
             }
 
             @Override
             public void onDstLinkClick(View view, int position) {
-                /*if (getActivity() instanceof MainCardActivity) {
+                */
+/*if (getActivity() instanceof MainCardActivity) {
                     PassRouteModel selectedItem = ((PassRouteModel) items.get(position));
                     ((MainCardActivity) getActivity()).gotoWebView(selectedItem.DstLink);
-                }*/
+                }*//*
+
             }
         };
 
@@ -237,3 +245,4 @@ public class RatingCardFragment extends Fragment
 
 
 }
+*/

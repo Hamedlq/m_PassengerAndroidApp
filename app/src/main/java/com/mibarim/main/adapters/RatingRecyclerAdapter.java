@@ -1,3 +1,4 @@
+/*
 package com.mibarim.main.adapters;
 
 import android.app.Activity;
@@ -25,9 +26,11 @@ import java.util.List;
 
 import cn.nekocode.badge.BadgeDrawable;
 
+*/
 /**
  * Created by Hamed on 10/16/2016.
- */
+ *//*
+
 public class RatingRecyclerAdapter extends RecyclerView.Adapter<RatingRecyclerAdapter.ViewHolder> {
     private List<RatingModel> items;
     private Activity _activity;
@@ -81,11 +84,15 @@ public class RatingRecyclerAdapter extends RecyclerView.Adapter<RatingRecyclerAd
 
         holder.username.setText(items.get(position).UserFamily);
         holder.rating.setRating(items.get(position).LastRate);
-       /* holder.carString.setText(items.get(position).CarString);
+       */
+/* holder.carString.setText(items.get(position).CarString);
         holder.seats.setText("ظرفیت: " + items.get(position).EmptySeats + " از " + items.get(position).CarSeats);
+        *//*
+
         */
-        /*holder.src_distance.setText(items.get(position).SrcDistance);
-        holder.dst_distance.setText(items.get(position).DstDistance);*/
+/*holder.src_distance.setText(items.get(position).SrcDistance);
+        holder.dst_distance.setText(items.get(position).DstDistance);*//*
+
 
     }
 
@@ -95,3 +102,4 @@ public class RatingRecyclerAdapter extends RecyclerView.Adapter<RatingRecyclerAd
         return items.size();
     }
 }
+*/

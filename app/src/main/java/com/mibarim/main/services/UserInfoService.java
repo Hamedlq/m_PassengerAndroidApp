@@ -90,8 +90,19 @@ public class UserInfoService {
         return res;
     }
 
-    public ApiResponse getRatings(String authToken, int tripId) {
+    /*public ApiResponse getRatings(String authToken, int tripId) {
         ApiResponse res=getService().getRatings("Bearer " + authToken, tripId);
         return res;
+    }*/
+
+    public ApiResponse getRatings(String authToken, String name) {
+        ApiResponse res = getService().getRatings("Bearer " + authToken, name);
+        return res;
     }
+
+    public ApiResponse setRatings(String authToken, String list) {
+        ApiResponse res = getService().setRatings("Bearer " + authToken, list);
+        return res;
+    }
+
 }

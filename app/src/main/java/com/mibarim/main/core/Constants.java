@@ -138,6 +138,8 @@ public final class Constants {
         public static final String URL_SET_SCORE = "/SubmitUserScore";
         public static final String URL_SEND_FEEDBACK = "/ContactUs";
         public static final String URL_SEND_IMAGE = "/InsertImage";
+        public static final String URL_GET_RATINGS = "/GetRatings";
+        public static final String URL_SET_RATINGS = "/SetRatings";
         /**
          * Trips
          */
@@ -269,6 +271,7 @@ public final class Constants {
         public static final String PASS_ROUTE_MODEL = "PassRouteModel";
 
         public static final String URL = "URL";
+        public static final String RAINTG_LIST_TAG = "RATINGLIST";
     }
 
 

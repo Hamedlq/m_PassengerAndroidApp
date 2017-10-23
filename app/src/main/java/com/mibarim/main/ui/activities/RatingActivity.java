@@ -1,154 +1,514 @@
-
-
 package com.mibarim.main.ui.activities;
 
-
-import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.os.OperationCanceledException;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.Toolbar;
 import android.util.Base64;
-import android.view.KeyEvent;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
-import android.widget.ImageView;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ListView;
+import android.widget.Toast;
 
-import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.Tracker;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.android.gms.iid.InstanceID;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mibarim.main.BootstrapApplication;
-import com.mibarim.main.BootstrapServiceProvider;
 import com.mibarim.main.R;
-import com.mibarim.main.authenticator.LogoutService;
-import com.mibarim.main.authenticator.TokenRefreshActivity;
+import com.mibarim.main.adapters.RatingAdapter;
 import com.mibarim.main.core.Constants;
 import com.mibarim.main.core.ImageUtils;
 import com.mibarim.main.data.UserData;
-import com.mibarim.main.events.NetworkErrorEvent;
-import com.mibarim.main.events.RestAdapterErrorEvent;
-import com.mibarim.main.events.UnAuthorizedErrorEvent;
 import com.mibarim.main.models.ApiResponse;
 import com.mibarim.main.models.ImageResponse;
-import com.mibarim.main.models.InviteModel;
-import com.mibarim.main.models.Plus.PassRouteModel;
-import com.mibarim.main.models.RouteResponse;
-import com.mibarim.main.models.UserInfoModel;
-import com.mibarim.main.services.AuthenticateService;
-import com.mibarim.main.services.RouteResponseService;
+import com.mibarim.main.models.RatingModel;
 import com.mibarim.main.services.UserInfoService;
 import com.mibarim.main.ui.BootstrapActivity;
-import com.mibarim.main.ui.fragments.PlusFragments.PassengerCardFragment;
 import com.mibarim.main.util.SafeAsyncTask;
-import com.squareup.otto.Subscribe;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
-import butterknife.ButterKnife;
+import butterknife.Bind;
 
-//import org.osmdroid.tileprovider.constants.OpenStreetMapTileProviderConstants;
+import static com.mibarim.main.core.Constants.GlobalConstants.RAINTG_LIST_TAG;
 
 
 /**
- * Initial activity for the application.
- * * <p/>
- * If you need to remove the authentication from the application please see
+ * Created by Alireza on 9/16/2017.
  */
+
+
 public class RatingActivity extends BootstrapActivity {
 
-    @Inject
-    protected BootstrapServiceProvider serviceProvider;
-    @Inject
-    LogoutService getLogoutService;
-    @Inject
-    RouteResponseService routeResponseService;
+    ArrayList<RatingModel> ratingModels;
+    ListView listView;
+    private static RatingAdapter adapter;
+    private String authToken;
+    private ArrayList<RatingModel> ratingModelList = new ArrayList<>();
+
+//    private ArrayList<RatingModel> model = new ArrayList<>();
+
+
+    ApiResponse apiResponse;
     @Inject
     UserInfoService userInfoService;
     @Inject
     UserData userData;
 
+    private ProgressDialog progressDialog;
 
-    private CharSequence title;
-    private Toolbar toolbar;
-    ImageView invite_btn;
-    private PassRouteModel passRouteModel;
-    private String authToken;
-    private String url;
-    private int appVersion = 0;
-    private View parentLayout;
-    private Tracker mTracker;
-    protected Bitmap result;//concurrency must be considered
+    @Bind(R.id.confirm_button)
+    Button confirmButton;
+
+    FrameLayout footerLayout;
+
+    Button confirmButton2;
 
     @Override
-    protected void onCreate(final Bundle savedInstanceState) {
-
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-  /*      if (getCacheDir() != null) {
-            OpenStreetMapTileProviderConstants.setCachePath(getCacheDir().getAbsolutePath());
-        }*/
-        //Fabric.with(this, new Crashlytics());
+        setContentView(R.layout.rating_activity);
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
         BootstrapApplication.component().inject(this);
 
-        BootstrapApplication application = (BootstrapApplication) getApplication();
-        mTracker = application.getDefaultTracker();
-        mTracker.setScreenName("RatingActivity");
-        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
-        mTracker.send(new HitBuilders.EventBuilder().setCategory("Activity").setAction("RatingActivity").build());
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(getString(R.string.please_wait));
+        progressDialog.setCancelable(false);
 
-        setContentView(R.layout.main_activity);
-
-        parentLayout = findViewById(R.id.main_activity_root);
-        // View injection with Butterknife
-        ButterKnife.bind(this);
 
         if (getWindow().getDecorView().getLayoutDirection() == View.LAYOUT_DIRECTION_LTR) {
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         }
 
+
         if (getIntent() != null && getIntent().getExtras() != null) {
             authToken = getIntent().getExtras().getString(Constants.Auth.AUTH_TOKEN);
-            passRouteModel = (PassRouteModel) getIntent().getExtras().getSerializable(Constants.GlobalConstants.PASS_ROUTE_MODEL);
+
+
+            ApiResponse apiResponse = (ApiResponse) getIntent().getExtras().getSerializable(RAINTG_LIST_TAG);
+
+            Gson gson = new GsonBuilder().create();
+            for (String json : apiResponse.Messages) {
+                ratingModelList.add(gson.fromJson(json, RatingModel.class));
+            }
+
+            int numberOfNonNullImages = 0;
+
+            for (int i = 0; i < ratingModelList.size(); i++) {
+                String id = ratingModelList.get(i).getImageId();
+                if (id != null)
+                    getImageById(id, i);
+                    numberOfNonNullImages++;
+            }
+
+            if (numberOfNonNullImages == 0) {
+                listView = (ListView) findViewById(R.id.list);
+                adapter = new RatingAdapter(ratingModelList, RatingActivity.this);
+                listView.setAdapter(adapter);
+                View v = listView.getChildAt(0);
+                progressDialog.hide();
+            }
         }
 
-        toolbar = (Toolbar) findViewById(R.id.main_toolbar);
-        setSupportActionBar(toolbar);
-        invite_btn = (ImageView) toolbar.findViewById(R.id.invite_btn);
-        initScreen();
+
+        listView = (ListView) findViewById(R.id.list);
+
+
+//        getTheRatingsFromServer();
+//        progressDialog.show();
+
+
+
+
+
+
+        /*listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+//                RatingModel ratingModel = ratingModels.get(position);
+
+//                int ratingInt = (int) ratingModelList.get(position).ratingBar.getRating();
+//                ratingModelList.get(position).setRate(ratingInt);
+
+
+//                Snackbar.make(view, ratingModelList.getName() + "\n" + ratingModelList.getRatingBar(), Snackbar.LENGTH_LONG)
+//                        .setAction("No action", null).show();
+            }
+        });*/
+
+//        View v = getLayoutInflater().inflate(R.layout.button_under_rating_layout, null);
+
+
+        footerLayout = (FrameLayout) getLayoutInflater().inflate(R.layout.button_under_rating_layout, null);
+
+        confirmButton2 = (Button) footerLayout.findViewById(R.id.confirm_button1);
+
+
+        listView.addFooterView(footerLayout);
+
+
+        confirmButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                JSONArray jsonArray = new JSONArray();
+
+                for (int i = 0; i < ratingModelList.size(); i++) {
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("Name", ratingModelList.get(i).getName());
+                        jsonObject.put("Family", ratingModelList.get(i).getFamily());
+                        jsonObject.put("UserUId", ratingModelList.get(i).getUserUId());
+                        jsonObject.put("RateDescription", ratingModelList.get(i).getRateDescription());
+                        jsonObject.put("Rate", ratingModelList.get(i).getRate());
+                        jsonObject.put("Presence", ratingModelList.get(i).getPresence());
+                        jsonObject.put("RateId", ratingModelList.get(i).getRateId());
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    jsonArray.put(jsonObject);
+
+                }
+
+                int atLeastOneIsNotEated = 0;
+
+                for (int i = 0; i < ratingModelList.size(); i++) {
+                    if (ratingModelList.get(i).getPresence() == 1 && ratingModelList.get(i).getRate() == 0)
+                        atLeastOneIsNotEated++;
+                }
+
+                if (atLeastOneIsNotEated == 0) {
+
+                    String ratingListString = jsonArray.toString();
+                    sendTheListToServer(ratingListString);
+                } else {
+                    AlertDialog.Builder builder;
+                    builder = new AlertDialog.Builder(RatingActivity.this);
+                    builder.setMessage("لطفا به همسفران رای دهید!");
+                    builder.show();
+
+                }
+
+
+            }
+        });
+
+
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+//                JSONObject jResult = new JSONObject();
+//                jResult.putOpt("last_sync_date", lastSyncDateTime);
+
+                JSONArray jsonArray = new JSONArray();
+
+                for (int i = 0; i < ratingModelList.size(); i++) {
+                    JSONObject jsonObject = new JSONObject();
+                    try {
+                        jsonObject.put("Name", ratingModelList.get(i).getName());
+                        jsonObject.put("Family", ratingModelList.get(i).getFamily());
+                        jsonObject.put("UserUId", ratingModelList.get(i).getUserUId());
+                        jsonObject.put("RateDescription", ratingModelList.get(i).getRateDescription());
+                        jsonObject.put("Rate", ratingModelList.get(i).getRate());
+                        jsonObject.put("Presence", ratingModelList.get(i).getPresence());
+                        jsonObject.put("RateId", ratingModelList.get(i).getRateId());
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    jsonArray.put(jsonObject);
+
+                }
+
+                int atLeastOneIsNotEated = 0;
+
+                for (int i = 0; i < ratingModelList.size(); i++) {
+                    if (ratingModelList.get(i).getPresence() == 1 && ratingModelList.get(i).getRate() == 0)
+                        atLeastOneIsNotEated++;
+                }
+
+                if (atLeastOneIsNotEated == 0) {
+
+                    String ratingListString = jsonArray.toString();
+                    sendTheListToServer(ratingListString);
+                } else {
+                    AlertDialog.Builder builder;
+                    builder = new AlertDialog.Builder(RatingActivity.this);
+                    builder.setMessage("لطفا به همسفران رای دهید!");
+                    builder.show();
+
+                }
+
+
+            }
+        });
+
+
     }
 
-    private void initScreen() {
-        final FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .add(R.id.main_container, new PassengerCardFragment())
-                .commit();
+
+
+/*
+
+    public JSONObject getJSONObject() {
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("Id", _masterId);
+            obj.put("Name", _name);
+            obj.put("Category", _category);
+        } catch (JSONException e) {
+            trace("DefaultListItem.toString JSONException: " + e.getMessage());
+        }
+        return obj;
+    }
+*/
+
+
+    private void getTheRatingsFromServer() {
+        new SafeAsyncTask<Boolean>() {
+            @Override
+            public Boolean call() throws Exception {
+                /*if (authToken == null) {
+                    serviceProvider.invalidateAuthToken();
+                    authToken = serviceProvider.getAuthToken(UserDocumentsUploadActivity.this);
+                }*/
+
+//                progressDialog.show();
+                apiResponse = userInfoService.getRatings(authToken, "");
+
+//                ratingModelList = new ArrayList<RatingModel>();
+
+
+//                ApiResponse myResponse = routeResponseService.GetStationRoutes(1);
+                //Gson gson = new Gson();
+                Gson gson = new GsonBuilder().create();
+                for (String json : apiResponse.Messages) {
+                    ratingModelList.add(gson.fromJson(json, RatingModel.class));
+                }
+                return true;
+            }
+
+            @Override
+            protected void onException(final Exception e) throws RuntimeException {
+                super.onException(e);
+//                makeAllProgressBarsInvisible();
+                progressDialog.hide();
+                Toast.makeText(getBaseContext(), R.string.error_message, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            protected void onSuccess(final Boolean state) throws Exception {
+                super.onSuccess(state);
+//                userData.insertUserInfo(userInfoModel);
+//                getImageById(userInfoModel.UserImageId, R.mipmap.ic_camera);
+//                setInfoValues(userInfoModel.IsUserRegistered);
+                //setEmail();
+
+                //TODO move this to the onSuccess of the getImageFromServer
+//                listView = (ListView) findViewById(R.id.list);
+//                adapter = new RatingAdapter(ratingModelList, RatingActivity.this);
+//
+//                listView.setAdapter(adapter);
+//                Toast.makeText(RatingActivity.this, "پیغام موفقیت آمیز", Toast.LENGTH_LONG).show();
+
+
+                for (int i = 0; i < ratingModelList.size(); i++) {
+                    String id = ratingModelList.get(i).getImageId();
+                    if (id != null)
+                        getImageById(id, i);
+                    else {
+                        listView = (ListView) findViewById(R.id.list);
+                        adapter = new RatingAdapter(ratingModelList, RatingActivity.this);
+                        listView.setAdapter(adapter);
+                        View v = listView.getChildAt(0);
+//                        v.findViewById()
+                    }
+                }
+                progressDialog.hide();
+
+
+//                String i = ratingModelList.get(0).getImageId();
+//                getImageById(i);
+
+            }
+        }.execute();
     }
 
-    public String getAuthToken() {
-        return authToken;
+
+/*
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
     }
 
-    public int getTripId() {
-        return passRouteModel.TripId;
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+
+        return super.onOptionsItemSelected(item);
     }
+
+*/
+
+    public Bitmap getImageById(String imageId, int i) {
+        Bitmap icon = BitmapFactory.decodeResource(getResources(),
+                R.mipmap.ic_camera);
+        if (imageId == null || imageId.equals("") || imageId.equals("00000000-0000-0000-0000-000000000000")) {
+            return icon;
+        }
+        ImageResponse imageResponse = userData.imageQuery(imageId);
+        if (imageResponse != null) {
+            Bitmap b = ImageUtils.loadImageFromStorage(imageResponse.ImageFilePath, imageResponse.ImageId);
+            if (b != null) {
+                return b;
+            } else {
+                getImageFromServer(imageId, i);
+            }
+        } else {
+            getImageFromServer(imageId, i);
+        }
+        return icon;
+    }
+
+
+    private void getImageFromServer(final String imageId, final int i) {
+//        progressDialog.show();
+        new SafeAsyncTask<Boolean>() {
+            ImageResponse imageResponse = new ImageResponse();
+
+            @Override
+            public Boolean call() throws Exception {
+                //String token = serviceProvider.getAuthToken(UserImageUploadActivity.this);
+                imageResponse = userInfoService.GetImageById(authToken, imageId);
+                if (imageResponse != null && imageResponse.Base64ImageFile != null) {
+                    return true;
+                }
+
+                return false;
+
+            }
+
+            @Override
+            protected void onException(final Exception e) throws RuntimeException {
+                super.onException(e);
+//                progressDialog.hide();
+                if (e instanceof android.os.OperationCanceledException) {
+                    // User cancelled the authentication process (back button, etc).
+                    // Since auth could not take place, lets finish this activity.
+//                    finish();
+                }
+                progressDialog.hide();
+                Toast.makeText(RatingActivity.this, R.string.error_message, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            protected void onSuccess(final Boolean imageLoaded) throws Exception {
+                if (imageLoaded) {
+//                    progressDialog.hide();
+                    byte[] decodedString = Base64.decode(imageResponse.Base64ImageFile, Base64.DEFAULT);
+                    Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                    String path = ImageUtils.saveImageToInternalStorage(getApplicationContext(), decodedByte, imageResponse.ImageId);
+//                    userData.insertImage(imageResponse, path);
+//                    imageToUpload.setImageURI();
+//                    imageToUpload.setImageBitmap(decodedByte);
+//                    progressBar.setVisibility(View.GONE);
+
+                    ratingModelList.get(i).setImageBitmap(decodedByte);
+
+
+//                    Toast.makeText(getBaseContext(), "عکس دریافت شد از سرور!", Toast.LENGTH_LONG).show();
+                    listView = (ListView) findViewById(R.id.list);
+                    adapter = new RatingAdapter(ratingModelList, RatingActivity.this);
+
+                    listView.setAdapter(adapter);
+
+                    progressDialog.hide();
+//                    Toast.makeText(RatingActivity.this, "لیست با موفقیت از سرور دریافت شد!", Toast.LENGTH_LONG).show();
+/*
+
+                    hideProgress();
+                    if (imageLoaded) {
+                        gotoBankPayPage(paymentDetailModel);
+                    }
+*/
+
+//                    new HandleApiMessagesBySnackbar(parentLayout, response).showMessages();
+//                    setImage(imageResponse);
+                }
+            }
+        }.execute();
+    }
+
+
+    private void sendTheListToServer(final String ratingList) {
+//        progressDialog.show();
+        new SafeAsyncTask<Boolean>() {
+            ImageResponse imageResponse = new ImageResponse();
+
+            @Override
+            public Boolean call() throws Exception {
+                //String token = serviceProvider.getAuthToken(UserImageUploadActivity.this);
+//                imageResponse = userInfoService.GetImageById(authToken, imageId);
+                userInfoService.setRatings(authToken, ratingList);
+//                if (imageResponse != null && imageResponse.Base64ImageFile != null) {
+//                    return true;
+//                }
+
+                return false;
+
+            }
+
+            @Override
+            protected void onException(final Exception e) throws RuntimeException {
+                super.onException(e);
+//                progressDialog.hide();
+                if (e instanceof android.os.OperationCanceledException) {
+                    // User cancelled the authentication process (back button, etc).
+                    // Since auth could not take place, lets finish this activity.
+//                    finish();
+                }
+                progressDialog.hide();
+                Toast.makeText(getBaseContext(), R.string.error_message, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            protected void onSuccess(final Boolean imageLoaded) throws Exception {
+
+
+//                    Toast.makeText(getBaseContext(), "عکس دریافت شد از سرور!", Toast.LENGTH_LONG).show();
+                progressDialog.hide();
+                Toast.makeText(getBaseContext(), "لیست فرستاده شد به سرور", Toast.LENGTH_LONG).show();
+
+
+            }
+        }.execute();
+    }
+
+
 }
