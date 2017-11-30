@@ -2,6 +2,7 @@ package com.mibarim.main.services;
 
 import com.mibarim.main.RestInterfaces.GetRouteResponseService;
 import com.mibarim.main.models.ApiResponse;
+import com.mibarim.main.util.Strings;
 
 import retrofit.RestAdapter;
 
@@ -54,4 +55,34 @@ public class RouteResponseService {
         boolean res = getService().cancelTrip("Bearer " + authToken, tripId);
         return res;
     }
+
+    public ApiResponse GetMainStations(String authToken) {
+        ApiResponse res = getService().GetMainStations("Bearer " + authToken, 1);
+        return res;
+    }
+
+    public ApiResponse GetAllSubStations(String authToken) {
+        ApiResponse res = getService().GetAllSubStations("Bearer " + authToken, "testtext");
+        return res;
+    }
+
+    public ApiResponse GetSubStations(String authToken, long mainStationId) {
+        ApiResponse res = getService().GetSubStations("Bearer " + authToken, mainStationId);
+        return res;
+    }
+
+
+    public ApiResponse GetFilters(String authToken) {
+        ApiResponse res = getService().GetFilters("Bearer " + authToken, "testtext");
+        return res;
+    }
+
+    public ApiResponse GetTimes(String authToken, long filterId) {
+        ApiResponse res = getService().GetTimes("Bearer " + authToken, filterId);
+        return res;
+    }
+
+
+
+
 }

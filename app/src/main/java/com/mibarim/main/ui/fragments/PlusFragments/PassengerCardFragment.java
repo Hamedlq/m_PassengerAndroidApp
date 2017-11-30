@@ -76,7 +76,6 @@ public class PassengerCardFragment extends Fragment
     ItemTouchListener itemTouchListener;
 
 
-
     private UserInfoModel userInfoModel;
     private String authToken;
     @Inject
@@ -127,8 +126,8 @@ public class PassengerCardFragment extends Fragment
 
                         if (userInfoModel.UserImageId == null) {
 //                            if (prefs.getInt("UserPhotoUploadedFirstTry", 2) != 1) {
-                                Intent j = new Intent(getActivity(), UserInfoDetailActivity.class);
-                                startActivity(j);
+                            Intent j = new Intent(getActivity(), UserInfoDetailActivity.class);
+                            startActivity(j);
 //                            }
                         }
 
@@ -243,7 +242,7 @@ public class PassengerCardFragment extends Fragment
                     PassRouteModel bookedTrip = null;
                     routeResponse = ((MainCardActivity) getActivity()).getRoute();
                     String authToken = ((MainCardActivity) getActivity()).getAuthToken();
-                    if (getActivity() != null && authToken!= null) {
+                    if (getActivity() != null && authToken != null) {
                         suggestRouteResponse = routeResponseService.GetPassengerRoutes(authToken, 1);
                         if (suggestRouteResponse != null) {
                             for (String routeJson : suggestRouteResponse.Messages) {
@@ -258,7 +257,7 @@ public class PassengerCardFragment extends Fragment
                                         bookedTrip.TripState == TripStates.InRiding.toInt() ||
                                         bookedTrip.TripState == TripStates.InTripTime.toInt()) {
                                     ((MainCardActivity) getActivity()).gotoRidingActivity(bookedTrip);
-                                }else{
+                                } else {
                                     ((MainCardActivity) getActivity()).showRidingActivity(bookedTrip);
                                 }
                             }
@@ -351,7 +350,6 @@ public class PassengerCardFragment extends Fragment
     }
 
 
-
     public Bitmap getImageById(String imageId, int defaultDrawableId) {
         Bitmap icon = BitmapFactory.decodeResource(getResources(), defaultDrawableId);
         if (imageId == null || imageId.equals("") || imageId.equals("00000000-0000-0000-0000-000000000000")) {
@@ -370,7 +368,6 @@ public class PassengerCardFragment extends Fragment
         }
         return icon;
     }
-
 
 
     private void getImageFromServer(final String imageId) {
@@ -439,8 +436,6 @@ public class PassengerCardFragment extends Fragment
 
     }
 */
-
-
 
 
 }

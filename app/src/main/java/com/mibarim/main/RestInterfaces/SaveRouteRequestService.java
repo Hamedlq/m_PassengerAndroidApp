@@ -21,18 +21,18 @@ public interface SaveRouteRequestService {
     @POST(Constants.Http.URL_INSERT_EVENT_ROUTE)
     @FormUrlEncoded
     ApiResponse SubmitNewEventRoute(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
-                               @Field("EventId") Long EventId,
-                               @Field("SrcGAddress") String SrcGAddress,
-                               @Field("SrcDetailAddress") String SrcDetailAddress,
-                               @Field("SrcLatitude") String SrcLatitude,
-                               @Field("SrcLongitude") String SrcLongitude,
-                               @Field("DstGAddress") String DstGAddress,
-                               @Field("DstDetailAddress") String DstDetailAddress,
-                               @Field("DstLatitude") String DstLatitude,
-                               @Field("DstLongitude") String DstLongitude,
-                               @Field("CostMinMax") float CostMinMax,
-                               @Field("IsDrive") boolean IsDrive,
-                               @Field("RecommendPathId") long RecommendPathId
+                                    @Field("EventId") Long EventId,
+                                    @Field("SrcGAddress") String SrcGAddress,
+                                    @Field("SrcDetailAddress") String SrcDetailAddress,
+                                    @Field("SrcLatitude") String SrcLatitude,
+                                    @Field("SrcLongitude") String SrcLongitude,
+                                    @Field("DstGAddress") String DstGAddress,
+                                    @Field("DstDetailAddress") String DstDetailAddress,
+                                    @Field("DstLatitude") String DstLatitude,
+                                    @Field("DstLongitude") String DstLongitude,
+                                    @Field("CostMinMax") float CostMinMax,
+                                    @Field("IsDrive") boolean IsDrive,
+                                    @Field("RecommendPathId") long RecommendPathId
     );
 
     @POST(Constants.Http.URL_CONFIRM_ROUTE)
@@ -83,23 +83,25 @@ public interface SaveRouteRequestService {
                                       @Field("SelfRouteId") String selRouteId
     );
 
-    @POST(Constants.Http.URL_DELETE_ROUTE)
+    @POST(Constants.Http.URL_DELETE_FILTER)
     @FormUrlEncoded
     ApiResponse deleteRoute(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
-                                      @Field("RouteRequestId") String routeId
+                            @Field("FilterId") long routeId
     );
+
     @POST(Constants.Http.URL_SHARE_ROUTE)
     @FormUrlEncoded
     ApiResponse shareRoute(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
-                                      @Field("RouteRequestId") String routeId
+                           @Field("RouteRequestId") String routeId
     );
+
     @POST(Constants.Http.URL_NOTIFY_EVENT)
     @FormUrlEncoded
     NotificationModel notify(@Field("Mobile") String mobile);
 
     @POST(Constants.Http.URL_GET_CITY_LOCATION)
     @FormUrlEncoded
-    ApiResponse getCityLocations(@Field("Lat") String lat,@Field("Lng") String lng);
+    ApiResponse getCityLocations(@Field("Lat") String lat, @Field("Lng") String lng);
 
     @POST(Constants.Http.URL_GET_RECOMMEND_ROUTES)
     @FormUrlEncoded
@@ -111,7 +113,7 @@ public interface SaveRouteRequestService {
 
     @POST(Constants.Http.URL_GET_LOCAL_ROUTES)
     @FormUrlEncoded
-    ApiResponse getLocalRoutes(@Field("Lat") String lat,@Field("Lng") String lng);
+    ApiResponse getLocalRoutes(@Field("Lat") String lat, @Field("Lng") String lng);
 
     @POST(Constants.Http.URL_PRICE)
     @FormUrlEncoded
@@ -120,6 +122,7 @@ public interface SaveRouteRequestService {
                              @Field("DstLat") String DstLat,
                              @Field("DstLng") String DstLng
     );
+
     @POST(Constants.Http.URL_REQUEST_RIDE_SHARE)
     @FormUrlEncoded
     ApiResponse requestRideShare(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
@@ -134,7 +137,7 @@ public interface SaveRouteRequestService {
                                    @Field("ChargeAmount") long chargeAmount,
                                    @Field("SeatPrice") long seatPrice,
                                    @Field("Credit") long credit
-                                   );
+    );
 
     @POST(Constants.Http.URL_PAY_BOOK_REQUEST)
     @FormUrlEncoded
@@ -149,11 +152,38 @@ public interface SaveRouteRequestService {
     @POST(Constants.Http.URL_ACCEPT_RIDE_SHARE)
     @FormUrlEncoded
     ApiResponse acceptRideShare(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
-                                 @Field("ContactId") String contactId);
+                                @Field("ContactId") String contactId);
 
     @POST(Constants.Http.URL_GET_ROUTE_INFO)
     @FormUrlEncoded
     ApiResponse getRouteInfo(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
                              @Field("RouteUId") String routeGId);
+
+    @POST(Constants.Http.URL_SET_FILTER)
+    @FormUrlEncoded
+    ApiResponse setFilter(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
+                          @Field("DstStationId") long dstStId,
+                          @Field("SrcStationId") long srcSubStId);
+
+    @POST(Constants.Http.URL_SET_FILTER)
+    @FormUrlEncoded
+    ApiResponse setSuggestedFilter(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
+                                   @Field("FilterId") long filterId,
+                                   @Field("TimeHour") int hour,
+                                   @Field("TimeMinute") int min);
+
+    @POST(Constants.Http.URL_DELETE_FILTER)
+    @FormUrlEncoded
+    ApiResponse deleteFilter(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
+                            @Field("FilterId") long filterId
+    );
+
+
+    @POST(Constants.Http.URL_CANCEL_FILTER)
+    @FormUrlEncoded
+    ApiResponse cancelFilter(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
+                             @Field("FilterId") long filterId
+    );
+
 
 }

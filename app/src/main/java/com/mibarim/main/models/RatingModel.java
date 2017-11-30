@@ -2,11 +2,13 @@ package com.mibarim.main.models;
 
 import android.graphics.Bitmap;
 
+import java.io.Serializable;
+
 /**
  * Created by Alireza on 9/16/2017.
  */
 
-public class RatingModel {
+public class RatingModel implements Serializable {
     public String UserUId;
     public String Name;
     public String Family;

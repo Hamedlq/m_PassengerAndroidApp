@@ -95,4 +95,7 @@
     <color name="my_yellow">#ffff00</color>
     <color name="my_gray">#bcbcbc</color>
 
+    <color name="defining_route_origin_color">#00a421</color>
+    <color name="defining_route_destination_color">#bc001c</color>
+
 </resources>

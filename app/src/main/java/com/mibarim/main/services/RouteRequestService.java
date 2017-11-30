@@ -74,12 +74,13 @@ public class RouteRequestService {
     }
 
 
-    public ApiResponse deleteRoute(String authToken, String routeId) {
+    /*public ApiResponse deleteRoute(String authToken, String routeId) {
         ApiResponse res = getService().deleteRoute("Bearer " + authToken,
                 routeId
         );
         return res;
     }
+    */
     public ApiResponse shareRoute(String authToken, String routeId) {
         ApiResponse res = getService().shareRoute("Bearer " + authToken,
                 routeId
@@ -140,6 +141,32 @@ public class RouteRequestService {
     public ApiResponse getRouteInfo(String authToken, String routeUId) {
         ApiResponse res = getService().getRouteInfo("Bearer " + authToken,
                 routeUId);
+        return res;
+    }
+
+    public ApiResponse setFilter(String authToken, long desStId, long SrcSubStId) {
+        ApiResponse res = getService().setFilter("Bearer " + authToken,
+                desStId, SrcSubStId);
+        return res;
+    }
+
+    public ApiResponse setSuggestedFilter(String authToken, long filterId,int hour, int min ) {
+        ApiResponse res = getService().setSuggestedFilter("Bearer " + authToken,
+                filterId, hour, min);
+        return res;
+    }
+
+    public ApiResponse deleteFilter(String authToken, long filterId) {
+        ApiResponse res = getService().deleteFilter("Bearer " + authToken,
+                filterId
+        );
+        return res;
+    }
+
+    public ApiResponse cancelFilter(String authToken, long filterId) {
+        ApiResponse res = getService().cancelFilter("Bearer " + authToken,
+                filterId
+        );
         return res;
     }
 

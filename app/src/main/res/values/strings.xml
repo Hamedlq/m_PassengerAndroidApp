@@ -399,4 +399,23 @@
     <string name="joined_the_trip">حضور داشت</string>
 
     <string name="error_message">خطا در ارتباط با سرور. لطفا مجددا تلاش کنید.</string>
+
+    <string name="origin_selected">مبدا انتخاب شد</string>
+    <string name="destination_selected">مقصد انتخاب شد</string>
+    <string name="suggest_station">+ پیشنهاد مسیر و ایستگاه جدید</string>
+    <string name="set_station">انتخاب ایستگاه مبدا</string>
+    <string name="no_station">ایستگاهی ثبت نشده است</string>
+
+    <string name="fragment_image_trans">fragment_image_transition</string>
+    <string name="suggest_time">+ پیشنهاد زمان جدید</string>
+
+    <string name="cancel_trip">لغو سفر</string>
+    <string name="request_trip">درخواست سفر</string>
+
+    <string name="afternoon">بعدازظهر</string>
+    <string name="noon">ظهر</string>
+
+    <string name="waiting_text">در حال فرستادن درخواست به سایر راننده ها</string>
+
+
 </resources>
