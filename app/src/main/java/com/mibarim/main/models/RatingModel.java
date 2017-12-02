@@ -106,6 +106,4 @@ public class RatingModel implements Serializable {
         return ImageId;
     }
 
-
-
 }

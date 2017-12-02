@@ -4,6 +4,7 @@ import com.mibarim.main.ui.activities.InviteActivity;
 import com.mibarim.main.ui.activities.MainCardActivity;
 import com.mibarim.main.ui.activities.MobileActivity;
 import com.mibarim.main.ui.activities.PayActivity;
+import com.mibarim.main.ui.activities.RatingActivity;
 import com.mibarim.main.ui.activities.RegisterActivity;
 import com.mibarim.main.ui.activities.MobileValidationActivity;
 import com.mibarim.main.ui.activities.RidingActivity;
@@ -14,11 +15,12 @@ import com.mibarim.main.authenticator.TokenRefreshActivity;
 import com.mibarim.main.ui.BootstrapActivity;
 import com.mibarim.main.ui.BootstrapFragmentActivity;
 
+import com.mibarim.main.ui.activities.UserInfoDetailActivity;
 import com.mibarim.main.ui.fragments.MapFragment;
 import com.mibarim.main.ui.fragments.PlusFragments.InviteFragment;
 import com.mibarim.main.ui.fragments.PlusFragments.PassengerCardFragment;
 import com.mibarim.main.ui.fragments.PlusFragments.PayFragment;
-import com.mibarim.main.ui.fragments.PlusFragments.RatingCardFragment;
+
 
 import javax.inject.Singleton;
 
@@ -51,8 +53,6 @@ public interface BootstrapComponent {
 
     void inject(PayFragment target);
 
-    void inject(RatingCardFragment target);
-
     void inject(PassengerCardFragment target);
 
     void inject(MainCardActivity target);
@@ -72,6 +72,10 @@ public interface BootstrapComponent {
 
 
     void inject(BootstrapActivity target);
+
+    void inject(UserInfoDetailActivity target);
+
+    void inject(RatingActivity target);
 
 
 }
