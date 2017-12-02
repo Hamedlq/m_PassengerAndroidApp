@@ -4,6 +4,9 @@ package com.mibarim.main.models;
 import java.io.Serializable;
 import java.util.List;
 
+
+// for the older version of mibarim, not used anymore here
+
 public class RouteResponse implements Serializable {
 
     public int RouteId;

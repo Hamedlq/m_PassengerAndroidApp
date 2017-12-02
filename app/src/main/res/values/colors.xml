@@ -95,4 +95,13 @@
     <color name="my_yellow">#ffff00</color>
     <color name="my_gray">#bcbcbc</color>
 
+    <color name="defining_route_origin_color">#00a421</color>
+    <color name="defining_route_destination_color">#bc001c</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="main_black">#000000</color>
+
+    <color name="pressed_color">#4d90fe</color>
+    <color name="default_color">#ffffff</color>
+
 </resources>

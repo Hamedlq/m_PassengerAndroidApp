@@ -25,7 +25,7 @@ public interface GetRouteResponseService {
     @POST(Constants.Http.GET_PASSENGER_ROUTE_URL)
     @FormUrlEncoded
     ApiResponse GetPassengerRoutes(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
-                                @Field("FilterId") long Id);
+                                @Field("FilteringId") long Id);
 
     @POST(Constants.Http.SIMILAR_SUGGEST_ROUTE_URL)
     @FormUrlEncoded
@@ -46,4 +46,31 @@ public interface GetRouteResponseService {
     boolean cancelTrip(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
                              @Field("TripId") long tripId
     );
+
+    @POST(Constants.Http.GET_MAIN_STATIONS_URL)
+    @FormUrlEncoded
+    ApiResponse GetMainStations(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
+                                @Field("None") long Id);
+
+    @POST(Constants.Http.GET_ALL_SUB_STATIONS_URL)
+    @FormUrlEncoded
+    ApiResponse GetAllSubStations(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
+                                  @Field("TestText") String Id);
+
+    @POST(Constants.Http.GET_SUB_STATIONS_URL)
+    @FormUrlEncoded
+    ApiResponse GetSubStations(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
+                               @Field("MainStationId") long Id);
+
+    @POST(Constants.Http.GET_FILTERS)
+    @FormUrlEncoded
+    ApiResponse GetFilters(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
+                               @Field("testtext") String testtext);
+
+    @POST(Constants.Http.GET_TIMES)
+    @FormUrlEncoded
+    ApiResponse GetTimes(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
+                           @Field("FilterId") long filterId);
+
+
 }

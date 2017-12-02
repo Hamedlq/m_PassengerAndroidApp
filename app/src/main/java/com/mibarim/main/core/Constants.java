@@ -84,6 +84,8 @@ public final class Constants {
         public static final String URL_ACCEPT_ROUTE = "/AcceptSuggestedRoute";
         public static final String URL_DELETE_ROUTE_SUGGESTION = "/DeleteRouteSuggest";
         public static final String URL_DELETE_ROUTE = "/DeleteRoute";
+        public static final String URL_DELETE_FILTER = "/DeleteFilter";
+        public static final String URL_CANCEL_FILTER = "/CancelFilter";
         public static final String URL_SHARE_ROUTE = "/ShareRoute";
         public static final String URL_GET_ROUTE = "/GetUserWeekRoutes";
         public static final String URL_NOTIFY_EVENT = "/NotifyEvents";
@@ -93,6 +95,7 @@ public final class Constants {
         public static final String URL_ACCEPT_RIDE_SHARE = "/AcceptRideShare";
         public static final String URL_GET_ROUTE_INFO = "/GetRouteInfo";
         public static final String URL_INSERT_RIDE_REQUEST = "/InsertRideRequest";
+        public static final String URL_SET_FILTER = "/SetFilter";
         /**
          * UserInfoService
          */
@@ -201,6 +204,12 @@ public final class Constants {
         public static final String TRIP_PROFILE_URL = "/GetTripProfile";
         public static final String URL_SET_TRIP_LOCATION = "/SetPassLocation";
         public static final String URL_CANCEL_RESERVE = "/CancelBooking";
+        public static final String GET_MAIN_STATIONS_URL = "/GetMainStations";
+        public static final String GET_ALL_SUB_STATIONS_URL = "/GetAllSubStations";
+        public static final String GET_SUB_STATIONS_URL = "/GetSubStations";
+        public static final String GET_FILTERS = "/GetFilters";
+        public static final String GET_TIMES = "/GetTimes";
+
 
         public static final String URL_GET_EVENT = "/GetAllEvents";
         public static final String URL_GET_CITY_LOCATION = "/GetCityLocations";
@@ -272,6 +281,18 @@ public final class Constants {
 
         public static final String URL = "URL";
         public static final String RAINTG_LIST_TAG = "RATINGLIST";
+
+        public static final String ALL_SUBSTATIONS_INTENT_TAG = "AllSubstationsIntentTag";
+        public static final String STATE_OF_WHETHER_CHOOSING_ORIGIN_OR_DESTINATION = "StateOfWhetherChoosingOriginOrDestination";
+        public static final String DESTINATION_MAIN_STATION_ID_INTENT_TAG = "DestinationIdIntentTag";
+        public static final String ORIGIN_MAIN_STATION_ID_INTENT_TAG = "DestinationIdIntentTag";
+        public static final String MAIN_STATIONS_INTENT_TAG = "MainStationsIntentTag";
+
+        public static final String ORIGIN_OR_DESTINATION_ID_INTENT_TAG = "OrigOrDestStId";
+
+        public static final String STATE_OF_ORIGIN_OR_DESTINATION_INTENT_TAG = "StateOfOrigOrDest";
+        public static final String ROUTE_FILTER_FRAGMENT_TAG = "RouteFilterFragment";
+
     }
 
 

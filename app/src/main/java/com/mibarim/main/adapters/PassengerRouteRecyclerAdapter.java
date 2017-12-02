@@ -2,6 +2,7 @@ package com.mibarim.main.adapters;
 
 import android.app.Activity;
 import android.graphics.Typeface;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import com.mibarim.main.R;
 import com.mibarim.main.models.Plus.PassRouteModel;
 import com.mibarim.main.ui.fragments.PlusFragments.PassengerCardFragment;
+import com.mibarim.main.ui.fragments.RouteDetailsFragment;
 
 import java.util.Calendar;
 import java.util.List;
@@ -31,6 +33,8 @@ public class PassengerRouteRecyclerAdapter extends RecyclerView.Adapter<Passenge
     private PassengerCardFragment.ItemTouchListener onItemTouchListener;
     private static final int MAX_CLICK_DURATION = 200;
     private long startClickTime;
+
+
     //private RelativeLayout lastLayout;
 
     // Provide a reference to the views for each data item
@@ -223,6 +227,8 @@ public class PassengerRouteRecyclerAdapter extends RecyclerView.Adapter<Passenge
         items = list;
         this.onItemTouchListener = onItemTouchListener;
     }
+
+
 
     // Create new views (invoked by the layout manager)
     @Override

@@ -56,6 +56,7 @@ import com.mibarim.main.services.AuthenticateService;
 import com.mibarim.main.services.RouteResponseService;
 import com.mibarim.main.services.UserInfoService;
 import com.mibarim.main.ui.BootstrapActivity;
+import com.mibarim.main.ui.fragments.FabFragment;
 import com.mibarim.main.ui.fragments.PlusFragments.PassengerCardFragment;
 import com.mibarim.main.util.SafeAsyncTask;
 import com.squareup.otto.Subscribe;
@@ -90,6 +91,7 @@ public class MainCardActivity extends BootstrapActivity {
     private Toolbar toolbar;
     ImageView invite_btn;
     ImageView upload_btn;
+    ImageView testButton;
 
     private String authToken;
     private String url;
@@ -114,6 +116,7 @@ public class MainCardActivity extends BootstrapActivity {
     private UserInfoModel userInfoModel;
     private InviteModel inviteModel;
     private int USER_DETAIL_INFO_REQUEST_CODE = 1239;
+    private int SEARCH_STATION_REQUEST_CODE =7464;
 
     ApiResponse apiResponse;
 
@@ -136,7 +139,7 @@ public class MainCardActivity extends BootstrapActivity {
         mTracker.send(new HitBuilders.ScreenViewBuilder().build());
         mTracker.send(new HitBuilders.EventBuilder().setCategory("Activity").setAction("MainCardActivity").build());
 
-        setContentView(R.layout.main_activity);
+        setContentView(R.layout.main_card_activity);
         if (getIntent() != null && getIntent().getExtras() != null) {
             url = getIntent().getExtras().getString(Constants.GlobalConstants.URL);
         }
@@ -155,6 +158,10 @@ public class MainCardActivity extends BootstrapActivity {
         checkAuth();
         //initScreen();
         upload_btn = (ImageView) toolbar.findViewById(R.id.upload_btn);
+
+//        testButton = (ImageView) toolbar.findViewById(R.id.test_button);
+
+
     }
 
     private void initScreen() {
@@ -168,6 +175,11 @@ public class MainCardActivity extends BootstrapActivity {
         fragmentManager.beginTransaction()
                 .add(R.id.main_container, new PassengerCardFragment())
                 .commit();
+
+        fragmentManager.beginTransaction()
+                .add(R.id.main_container, new FabFragment(), "FabFragment")
+                .commit();
+
         if (url != null) {
             gotoWebView(url);
         }
@@ -188,6 +200,16 @@ public class MainCardActivity extends BootstrapActivity {
                 Intent upload_intent = new Intent(MainCardActivity.this, UserInfoDetailActivity.class);
                 upload_intent.putExtra(Constants.Auth.AUTH_TOKEN, authToken);
                 startActivity(upload_intent);
+            }
+        });
+
+
+        testButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainCardActivity.this, MainActivity.class);
+//                intent.putExtra(Constants.Auth.AUTH_TOKEN, authToken);
+                startActivity(intent);
             }
         });
     }
@@ -232,8 +254,6 @@ public class MainCardActivity extends BootstrapActivity {
     }
 
 
-
-
     private void setInfoValues(boolean IsUserRegistered) {
         SharedPreferences prefs = this.getSharedPreferences(
                 "com.mibarim.main", Context.MODE_PRIVATE);
@@ -262,7 +282,7 @@ public class MainCardActivity extends BootstrapActivity {
     }
 
     public String getAuthToken() {
-            return authToken;
+        return authToken;
     }
 
     @Subscribe
@@ -346,7 +366,7 @@ public class MainCardActivity extends BootstrapActivity {
 //            getUserInfoFromServer();
         }
 
-        if (requestCode ==FINISH_TRIP  && resultCode == RESULT_OK) {
+        if (requestCode == FINISH_TRIP && resultCode == RESULT_OK) {
             refresh();
         }
     }
@@ -590,8 +610,8 @@ public class MainCardActivity extends BootstrapActivity {
     public void showRidingActivity(PassRouteModel dm) {
         SharedPreferences prefs = this.getSharedPreferences(
                 "com.mibarim.main", Context.MODE_PRIVATE);
-        Long tripShown=prefs.getLong("FirstRidingShow",0);
-        if(tripShown!=dm.TripId){
+        Long tripShown = prefs.getLong("FirstRidingShow", 0);
+        if (tripShown != dm.TripId) {
             if (userInfoModel.UserImageId == null) {
                 if (prefs.getInt("UserPhotoUploadedFirstTry", 2) != 1) {
                     Intent intent = new Intent(this, UserInfoDetailActivity.class);
@@ -608,9 +628,8 @@ public class MainCardActivity extends BootstrapActivity {
         Intent intent = new Intent(this, RidingActivity.class);
         intent.putExtra(Constants.GlobalConstants.PASS_ROUTE_MODEL, dm);
         intent.putExtra(Constants.Auth.AUTH_TOKEN, authToken);
-        this.startActivityForResult(intent,FINISH_TRIP);
+        this.startActivityForResult(intent, FINISH_TRIP);
     }
-
 
 
     private void showUpdateDialog(String msg) {
@@ -741,5 +760,14 @@ public class MainCardActivity extends BootstrapActivity {
                 }
             }
         }.execute();
+    }
+
+    public void gotoRouteLists() {
+//        Intent intent = new Intent(this, StationRouteListActivity.class);
+//        this.startActivityForResult(intent, ROUTESELECTED);
+
+        Intent intent = new Intent(this, SearchStationActivity.class);
+        intent.putExtra(Constants.Auth.AUTH_TOKEN, authToken);
+        startActivityForResult(intent, SEARCH_STATION_REQUEST_CODE);
     }
 }
