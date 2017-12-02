@@ -65,6 +65,11 @@ public class SuggestedTimesFragment extends Fragment {
     Button suggestTimeButton;
     FrameLayout footerView;
     SwipeRefreshLayout swipeRefreshLayout;
+    Button proceedButton;
+
+    int min;
+    int hour;
+    int itemSelected;
 
     NumberPicker hourPicker;
     NumberPicker minutePicker;
@@ -100,7 +105,22 @@ public class SuggestedTimesFragment extends Fragment {
         footerView = (FrameLayout) inflater.inflate(R.layout.button_under_suggested_times_fragment, null);
         suggestTimeButton = (Button) footerView.findViewById(R.id.suggest_time);
 
-        final long filterId = ((MainActivity) getActivity()).getChosenFilter();
+        filterId = ((MainActivity) getActivity()).getChosenFilter();
+
+        proceedButton = (Button) view.findViewById(R.id.proceed_button);
+
+
+        proceedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (itemSelected == 0)
+                    showDialog();
+                else {
+                    sendSuggestedFilterToServer(filterId, hour, min);
+                }
+
+            }
+        });
 
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -118,7 +138,7 @@ public class SuggestedTimesFragment extends Fragment {
             }
         });
 
-        suggestedTimesList.addFooterView(footerView);
+//        suggestedTimesList.addFooterView(footerView);
 
         items = new ArrayList<>();
 
@@ -131,16 +151,19 @@ public class SuggestedTimesFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 FilterTimeModel model = items.get(position);
 
+                view.setSelected(true);
 
-//                long filterId = model.FilterId;
-                int hour = model.TimeHour;
-                int min = model.TimeMinute;
+                itemSelected = 1;
 
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(
-                        "com.mibarim.main", Context.MODE_PRIVATE);
-                sharedPreferences.edit().putInt("AllowBackButton", 1).apply();
 
-                sendSuggestedFilterToServer(filterId, hour, min);
+                hour = model.TimeHour;
+                min = model.TimeMinute;
+
+
+
+//                sendSuggestedFilterToServer(filterId, hour, min);
+
+
 
 
 //                setRes = routeRequestService.setSuggestedFilter(authToken, model.FilterId, model.TimeHour, model.TimeMinute);
@@ -273,6 +296,27 @@ public class SuggestedTimesFragment extends Fragment {
 
     public void allowBackPressed(){
 
+    }
+
+    public void showDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(R.string.suggested_times_dialog)
+                .setPositiveButton(R.string.suggested_times_dialog_positive, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(
+                                "com.mibarim.main", Context.MODE_PRIVATE);
+                        sharedPreferences.edit().putInt("AllowBackButton", 1).apply();
+
+                        ((MainActivity) getActivity()).showSuggestTimeDialog(filterId);
+
+                    }
+                })
+                .setNegativeButton(R.string.suggested_times_dialog_negative, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                }).show();
     }
 
 

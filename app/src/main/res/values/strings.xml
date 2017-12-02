@@ -417,5 +417,15 @@
 
     <string name="waiting_text">در حال فرستادن درخواست به سایر راننده ها</string>
 
+    <string name="observe_trip">مشاهده سفر</string>
+
+    <string name="suggested_times_dialog">زمان را برای سفر مورد نظر باید مشخص کنید</string>
+
+    <string name="suggested_times_dialog_positive">زمان پیشنهادی خودم</string>
+
+    <string name="suggested_times_dialog_negative">انتخاب از لیست</string>
+
+
+
 
 </resources>

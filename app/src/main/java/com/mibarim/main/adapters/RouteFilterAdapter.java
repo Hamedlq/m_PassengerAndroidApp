@@ -12,7 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,7 +48,7 @@ public class RouteFilterAdapter extends ArrayAdapter<FilterModel> {
         View view = convertView;
 
         if (view == null) {
-            view = LayoutInflater.from(getContext()).inflate(R.layout.list_item, null);
+            view = LayoutInflater.from(getContext()).inflate(R.layout.route_filter_fragment_item, null);
         }
 
         final FilterModel listItem = getItem(position);
@@ -55,30 +57,40 @@ public class RouteFilterAdapter extends ArrayAdapter<FilterModel> {
         final TextView sourceText = (TextView) view.findViewById(R.id.source_name);
         final TextView destText = (TextView) view.findViewById(R.id.destination_name);
 
-        TextView suggestTime = (TextView) view.findViewById(R.id.suggest_time);
+//        TextView suggestTime = (TextView) view.findViewById(R.id.suggest_time);
+        Button suggestTime = (Button) view.findViewById(R.id.suggest_time);
 
         TextView hourTime = (TextView) view.findViewById(R.id.hour_time);
         TextView minuteTime = (TextView) view.findViewById(R.id.minute_time);
 
-        TextView observeTrip = (TextView) view.findViewById(R.id.observe_trip);
+        ImageView deleteIcon = (ImageView) view.findViewById(R.id.delete_icon);
 
-        ImageView deleteRoute = (ImageView) view.findViewById(R.id.delete_route);
+//        TextView observeTrip = (TextView) view.findViewById(R.id.observe_trip);
+
+        RelativeLayout deleteRoute = (RelativeLayout) view.findViewById(R.id.delete_route);
+
 
         deleteRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 long filterId = listItem.FilterId;
 
-                ((MainActivity) myContext).deleteTheRoute(filterId);
+                if (!listItem.IsActive) {
+                    ((MainActivity) myContext).deleteTheRoute(filterId);
+                } else {
+                    ((MainActivity) myContext).cancelTrip(listItem.FilterId);
+                }
 
             }
         });
 
+/*
         if (listItem.IsActive) {
-            observeTrip.setVisibility(View.VISIBLE);
-        }
+                observeTrip.setVisibility(View.VISIBLE);
+        }*/
 
-        observeTrip.setOnClickListener(new View.OnClickListener() {
+/*        observeTrip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -105,7 +117,7 @@ public class RouteFilterAdapter extends ArrayAdapter<FilterModel> {
                         .addSharedElement(destText, "whatsoever")
                         .commit();
             }
-        });
+        });*/
 
 
         suggestTime.setOnClickListener(new View.OnClickListener() {
@@ -128,7 +140,31 @@ public class RouteFilterAdapter extends ArrayAdapter<FilterModel> {
 
                     ((MainActivity) myContext).chosenFilter(listItem.FilterId);
                 } else {
-                    ((MainActivity) myContext).cancelTrip(listItem.FilterId);
+//                    ((MainActivity) myContext).cancelTrip(listItem.FilterId);
+
+
+                    ((MainActivity) myContext).hideFloatingActionButton();
+
+                    RouteDetailsFragment routeDetailsFragment = new RouteDetailsFragment();
+
+                    Bundle bundle = new Bundle();
+
+                    bundle.putString("SOURCE_TEXT", sourceText.getText().toString());
+                    bundle.putString("DESTINATION_TEXT", destText.getText().toString());
+
+                    routeDetailsFragment.setArguments(bundle);
+
+
+                    FragmentManager fragmentManager = ((MainActivity) myContext).getSupportFragmentManager();
+                    ((MainActivity) myContext).chosenFilter(listItem.FilterId);
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.main_activity, routeDetailsFragment)
+                            .addToBackStack("Payment")
+//                        .addSharedElement(imageView, imageTransitionName)
+//                        .addSharedElement(textView, textTransitionName)
+                            .addSharedElement(sourceText, "textTransitionNameForDest")
+                            .addSharedElement(destText, "whatsoever")
+                            .commit();
 
                 }
 
@@ -143,8 +179,9 @@ public class RouteFilterAdapter extends ArrayAdapter<FilterModel> {
         if (listItem.IsActive == true) {
             hourTime.setText(Integer.toString(listItem.TimeHour));
             minuteTime.setText(Integer.toString(listItem.TimeMinute));
-            suggestTime.setText(R.string.cancel_trip);
-            suggestTime.setBackgroundColor(myContext.getResources().getColor(R.color.defining_route_destination_color));
+            suggestTime.setText(R.string.observe_trip);
+            suggestTime.setBackgroundColor(myContext.getResources().getColor(R.color.primary));
+            deleteIcon.setImageResource(R.drawable.ic_cancel);
         } else {
             suggestTime.setText(R.string.request_trip);
             suggestTime.setBackgroundColor(myContext.getResources().getColor(R.color.defining_route_origin_color));

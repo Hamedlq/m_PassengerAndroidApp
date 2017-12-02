@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
+
+    <!--<include layout="@layout/toolbar"> </include>-->
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
@@ -11,6 +14,7 @@
 
 
         <ListView
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:id="@+id/suggested_times_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -19,4 +23,15 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-</LinearLayout>
+    <Button
+        android:text="ادامه"
+        android:id="@+id/proceed_button"
+        android:layout_margin="10dp"
+        android:textSize="19sp"
+        android:textColor="@color/white"
+        android:background="@color/primary"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>
