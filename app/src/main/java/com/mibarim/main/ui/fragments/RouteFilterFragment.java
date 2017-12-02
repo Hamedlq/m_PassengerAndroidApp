@@ -1,5 +1,6 @@
 package com.mibarim.main.ui.fragments;
 
+import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -8,8 +9,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.Toolbar;
 import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -25,6 +28,7 @@ import com.mibarim.main.BootstrapApplication;
 import com.mibarim.main.R;
 import com.mibarim.main.adapters.PassengerRouteRecyclerAdapter;
 import com.mibarim.main.adapters.RouteFilterAdapter;
+import com.mibarim.main.core.Constants;
 import com.mibarim.main.models.ApiResponse;
 import com.mibarim.main.models.FilterModel;
 import com.mibarim.main.models.Plus.PassRouteModel;
@@ -33,6 +37,8 @@ import com.mibarim.main.services.RouteRequestService;
 import com.mibarim.main.services.RouteResponseService;
 import com.mibarim.main.ui.ThrowableLoader;
 import com.mibarim.main.ui.activities.MainActivity;
+import com.mibarim.main.ui.activities.MainCardActivity;
+import com.mibarim.main.ui.activities.UserInfoDetailActivity;
 //import com.mibarim.main.ui.activities.MainCardActivity;
 
 
@@ -56,6 +62,9 @@ public class RouteFilterFragment extends Fragment implements AbsListView.OnItemC
     RouteFilterAdapter mAdapter;
     ListView listView;
     TextView mEmptyView;
+    Toolbar toolbar;
+    ImageView invite_btn;
+    ImageView upload_btn;
 
     SwipeRefreshLayout swipeRefreshLayout;
 
@@ -71,6 +80,9 @@ public class RouteFilterFragment extends Fragment implements AbsListView.OnItemC
         BootstrapApplication.component().inject(this);
         // Obtain the shared Tracker instance.
         BootstrapApplication application = (BootstrapApplication) getActivity().getApplication();
+
+
+
     }
 
     @Override
@@ -82,6 +94,31 @@ public class RouteFilterFragment extends Fragment implements AbsListView.OnItemC
         listView = (ListView) view.findViewById(R.id.listView);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
         mEmptyView = (TextView) view.findViewById(R.id.empty);
+
+        toolbar = (Toolbar) view.findViewById(R.id.main_toolbar);
+//        setSupportActionBar(toolbar);
+        invite_btn = (ImageView) toolbar.findViewById(R.id.invite_btn);
+
+        //initScreen();
+        upload_btn = (ImageView) toolbar.findViewById(R.id.upload_btn);
+
+        invite_btn.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    ((MainActivity) getActivity()).gotoInviteActivity();
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        upload_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getActivity()).goToImageUploadActivity();
+            }
+        });
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

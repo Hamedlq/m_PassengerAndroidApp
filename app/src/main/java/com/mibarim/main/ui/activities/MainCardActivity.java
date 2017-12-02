@@ -152,12 +152,7 @@ public class MainCardActivity extends BootstrapActivity {
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         }
 
-        toolbar = (Toolbar) findViewById(R.id.main_toolbar);
-        setSupportActionBar(toolbar);
-        invite_btn = (ImageView) toolbar.findViewById(R.id.invite_btn);
-        checkAuth();
-        //initScreen();
-        upload_btn = (ImageView) toolbar.findViewById(R.id.upload_btn);
+
 
 //        testButton = (ImageView) toolbar.findViewById(R.id.test_button);
 

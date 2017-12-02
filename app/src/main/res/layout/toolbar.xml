@@ -10,4 +10,16 @@
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     app:layout_collapseMode="pin">
 
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingEnd="5dp"
+        android:paddingStart="5dp"
+        android:text="@string/app_name"
+        android:textColor="@color/text_white"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
 </android.support.v7.widget.Toolbar>

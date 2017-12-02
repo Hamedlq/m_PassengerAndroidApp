@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="24dp">
+    >
+
 
     <ImageView
         android:id="@+id/listImage"
@@ -44,13 +45,24 @@
     </LinearLayout>
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/details_list"
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/src_and_dest_textview">
+        android:layout_height="match_parent">
 
-    </android.support.v7.widget.RecyclerView>
+        <include layout="@layout/toolbar"></include>
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/details_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/src_and_dest_textview">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </LinearLayout>
+
 
     <ImageView
         android:id="@+id/otherImage"
@@ -65,21 +77,21 @@
         android:visibility="gone" />
 
     <LinearLayout
-        android:visibility="gone"
         android:id="@+id/empty_layout"
-        android:layout_centerInParent="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:visibility="gone">
 
 
         <com.airbnb.lottie.LottieAnimationView
-            android:layout_gravity="center"
             android:id="@+id/animation_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             app:lottie_autoPlay="true"
-            app:lottie_fileName="waiting_animation.json"
+            app:lottie_fileName="loader.json"
             app:lottie_loop="true" />
 
         <TextView
@@ -88,5 +100,6 @@
             android:text="@string/waiting_text" />
 
     </LinearLayout>
+
 
 </RelativeLayout>

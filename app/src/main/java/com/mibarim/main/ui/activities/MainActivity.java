@@ -242,8 +242,6 @@ public class MainActivity extends BootstrapActivity {
                 .commit();
 
 
-
-
         fragmentManager.beginTransaction()
                 .add(R.id.main_container, new FabFragment(), "FabFragment")
                 .commit();
@@ -541,7 +539,7 @@ public class MainActivity extends BootstrapActivity {
         startActivity(i);
     }
 
-    private void gotoInviteActivity() {
+    public void gotoInviteActivity() {
         Intent intent = new Intent(this, InviteActivity.class);
         intent.putExtra(Constants.Auth.AUTH_TOKEN, authToken);
         this.startActivity(intent);
@@ -986,14 +984,13 @@ public class MainActivity extends BootstrapActivity {
 
         if (allowBackButton == 0) {
 
-        }
-        else {
+        } else {
             super.onBackPressed();
         }
     }
 
 
-    public void hideFloatingActionButton(){
+    public void hideFloatingActionButton() {
         final FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = fragmentManager.findFragmentByTag("FabFragment");
         ((FabFragment) fragment).hideTheFab();
@@ -1007,11 +1004,17 @@ public class MainActivity extends BootstrapActivity {
 
     }
 
-    public void addRouteFilterFragment(){
+    public void addRouteFilterFragment() {
         RouteFilterFragment routeFilterFragment = new RouteFilterFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.main_activity, routeFilterFragment, ROUTE_FILTER_FRAGMENT_TAG)
                 .commit();
+    }
+
+    public void goToImageUploadActivity() {
+        Intent upload_intent = new Intent(MainActivity.this, UserInfoDetailActivity.class);
+        upload_intent.putExtra(Constants.Auth.AUTH_TOKEN, authToken);
+        startActivity(upload_intent);
     }
 }
