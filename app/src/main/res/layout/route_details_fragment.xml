@@ -87,11 +87,11 @@
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/animation_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
             android:layout_gravity="center"
             app:lottie_autoPlay="true"
-            app:lottie_fileName="loader.json"
+            app:lottie_fileName="loading.json"
             app:lottie_loop="true" />
 
         <TextView
@@ -100,6 +100,17 @@
             android:text="@string/waiting_text" />
 
     </LinearLayout>
+
+    <Button
+
+        android:textColor="@color/white"
+        android:id="@+id/cancel_trip_button"
+        android:background="@color/primary"
+        android:layout_margin="5dp"
+        android:layout_alignParentBottom="true"
+        android:text="@string/cancel_trip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 
 </RelativeLayout>

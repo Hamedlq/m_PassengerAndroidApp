@@ -55,6 +55,7 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 
+import static com.mibarim.main.core.Constants.GlobalConstants.ALLOW_BACK_BUTTON;
 import static com.mibarim.main.core.Constants.GlobalConstants.ROUTE_FILTER_FRAGMENT_TAG;
 
 public class MainActivity extends BootstrapActivity {
@@ -855,7 +856,7 @@ public class MainActivity extends BootstrapActivity {
                 case DialogInterface.BUTTON_POSITIVE:
                     SharedPreferences sharedPreferences = MainActivity.this.getSharedPreferences(
                             "com.mibarim.main", Context.MODE_PRIVATE);
-                    sharedPreferences.edit().putInt("AllowBackButton", 1).apply();
+                    sharedPreferences.edit().putInt(ALLOW_BACK_BUTTON, 1).apply();
 //                    int seatPickerVal = hourPicker.getValue();
                     selectedRouteHour = 28 - hourPicker.getValue();
                     int minValue = minutePicker.getValue();
@@ -978,13 +979,13 @@ public class MainActivity extends BootstrapActivity {
         SharedPreferences sharedPreferences = this.getSharedPreferences(
                 "com.mibarim.main", Context.MODE_PRIVATE);
 
-        int allowBackButton = sharedPreferences.getInt("AllowBackButton", -1);
 
-        showFloatingActionButton();
+        int allowBackButton = sharedPreferences.getInt(ALLOW_BACK_BUTTON, -1);
 
         if (allowBackButton == 0) {
 
         } else {
+            showFloatingActionButton();
             super.onBackPressed();
         }
     }
@@ -1016,5 +1017,41 @@ public class MainActivity extends BootstrapActivity {
         Intent upload_intent = new Intent(MainActivity.this, UserInfoDetailActivity.class);
         upload_intent.putExtra(Constants.Auth.AUTH_TOKEN, authToken);
         startActivity(upload_intent);
+    }
+
+
+    public void previewDialog(final long filterId, String message, final boolean cancelOrDelete) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(message)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (cancelOrDelete) {
+                            deleteTheRoute(filterId);
+                        } else {
+                            cancelTrip(filterId);
+                        }
+
+
+                    }
+                })
+                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                }).show();
+    }
+
+    public void removeRouteDetailsFragment() {
+
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_activity);
+        if (fragment != null) {
+//            getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.main_activity, new RouteFilterFragment())
+                    .commit();
+
+            showFloatingActionButton();
+        }
     }
 }

@@ -17,6 +17,8 @@ import com.mibarim.main.models.FilterModel;
 import com.mibarim.main.models.FilterTimeModel;
 import com.mibarim.main.ui.activities.MainActivity;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,9 +66,11 @@ public class SuggestedTimesAdapter extends ArrayAdapter<FilterTimeModel> {
         String pairPass = Integer.toString(items.get(position).PairPassengers);
 
 
+        NumberFormat numberFormat = new DecimalFormat("00");
+        timeHourTextview.setText(numberFormat.format(items.get(position).TimeHour));
+        timeMinuteTextview.setText(numberFormat.format(items.get(position).TimeMinute));
+
         priceStringTextview.setText(items.get(position).PriceString);
-        timeHourTextview.setText(hour);
-        timeMinuteTextview.setText(min);
         pairPassengersTextview.setText(pairPass);
 
 
@@ -91,4 +95,6 @@ public class SuggestedTimesAdapter extends ArrayAdapter<FilterTimeModel> {
         return view;
 
     }
+
+
 }

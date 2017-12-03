@@ -20,6 +20,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.NumberPicker;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +43,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
+
+import static com.mibarim.main.core.Constants.GlobalConstants.ALLOW_BACK_BUTTON;
 
 /**
  * Created by Alireza on 11/22/2017.
@@ -73,6 +76,7 @@ public class SuggestedTimesFragment extends Fragment {
 
     NumberPicker hourPicker;
     NumberPicker minutePicker;
+    boolean isManual;
 
     View alertLayout;
     View titleLayout;
@@ -94,13 +98,14 @@ public class SuggestedTimesFragment extends Fragment {
 
 
         alertLayout = inflater.inflate(R.layout.time_picker_dialog, null);
-        titleLayout = inflater.inflate(R.layout.timepicker_dialog_custom_title,null);
+        titleLayout = inflater.inflate(R.layout.timepicker_dialog_custom_title, null);
 
         authToken = ((MainActivity) getActivity()).getAuthToken();
         filterId = ((MainActivity) getActivity()).getChosenFilter();
 
         suggestedTimesList = (ListView) view.findViewById(R.id.suggested_times_list);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
+
 
         footerView = (FrameLayout) inflater.inflate(R.layout.button_under_suggested_times_fragment, null);
         suggestTimeButton = (Button) footerView.findViewById(R.id.suggest_time);
@@ -110,13 +115,24 @@ public class SuggestedTimesFragment extends Fragment {
         proceedButton = (Button) view.findViewById(R.id.proceed_button);
 
 
+
+
         proceedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                Object selectedItem = suggestedTimesList.getSelectedItem();
+//                suggestedTimesList.clearChoices();
+//                suggestedTimesList.requestLayout();
+
                 if (itemSelected == 0)
                     showDialog();
                 else {
-                    sendSuggestedFilterToServer(filterId, hour, min);
+
+                    if (isManual) {
+                        ((MainActivity) getActivity()).showSuggestTimeDialog(filterId);
+                    } else {
+                        sendSuggestedFilterToServer(filterId, hour, min);
+                    }
                 }
 
             }
@@ -146,24 +162,34 @@ public class SuggestedTimesFragment extends Fragment {
         getTimesFromServer();
 
 
+
+
         suggestedTimesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 FilterTimeModel model = items.get(position);
+
+
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(
+                        "com.mibarim.main", Context.MODE_PRIVATE);
+                sharedPreferences.edit().putInt( ALLOW_BACK_BUTTON , 1).apply();
+
+//                ((MainActivity) getActivity()).showSuggestTimeDialog(filterId);
+
+
 
                 view.setSelected(true);
 
                 itemSelected = 1;
 
 
+                isManual = model.IsManual;
+
                 hour = model.TimeHour;
                 min = model.TimeMinute;
 
 
-
 //                sendSuggestedFilterToServer(filterId, hour, min);
-
-
 
 
 //                setRes = routeRequestService.setSuggestedFilter(authToken, model.FilterId, model.TimeHour, model.TimeMinute);
@@ -197,9 +223,9 @@ public class SuggestedTimesFragment extends Fragment {
                         FilterTimeModel timeModel = gson.fromJson(json, FilterTimeModel.class);
                                 /*if (route.IsBooked) {
                                     bookedTrip = route;
-                                }*/
-                        if (!timeModel.IsManual)
-                            items.add(timeModel);
+                  Status = "BadRequest"              }*/
+//                        if (!timeModel.IsManual)
+                        items.add(timeModel);
                         if (timeModel.IsManual)
                             suggestedTimePrice = timeModel.PriceString;
 
@@ -213,14 +239,13 @@ public class SuggestedTimesFragment extends Fragment {
             @Override
             protected void onException(final Exception e) throws RuntimeException {
                 super.onException(e);
-                if (e instanceof OperationCanceledException) {
 
                     swipeRefreshLayout.setRefreshing(false);
-                    Toast.makeText(getActivity(), R.string.network_error , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.network_error, Toast.LENGTH_SHORT).show();
                     // User cancelled the authentication process (back button, etc).
                     // Since auth could not take place, lets finish this activity.
 //                    finish();
-                }
+
             }
 
             @Override
@@ -239,7 +264,7 @@ public class SuggestedTimesFragment extends Fragment {
         suggestedTimesList.setAdapter(timesAdapter);
 
         String text = (String) suggestTimeButton.getText();
-        suggestTimeButton.setText(text + "(قیمت: " +suggestedTimePrice + ")");
+        suggestTimeButton.setText(text + "(قیمت: " + suggestedTimePrice + ")");
 
         swipeRefreshLayout.setRefreshing(false);
 
@@ -291,14 +316,11 @@ public class SuggestedTimesFragment extends Fragment {
     }
 
 
-
-
-
-    public void allowBackPressed(){
+    public void allowBackPressed() {
 
     }
 
-    public void showDialog(){
+    public void showDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(R.string.suggested_times_dialog)
                 .setPositiveButton(R.string.suggested_times_dialog_positive, new DialogInterface.OnClickListener() {
@@ -306,7 +328,7 @@ public class SuggestedTimesFragment extends Fragment {
 
                         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(
                                 "com.mibarim.main", Context.MODE_PRIVATE);
-                        sharedPreferences.edit().putInt("AllowBackButton", 1).apply();
+                        sharedPreferences.edit().putInt( ALLOW_BACK_BUTTON , 1).apply();
 
                         ((MainActivity) getActivity()).showSuggestTimeDialog(filterId);
 
@@ -318,12 +340,6 @@ public class SuggestedTimesFragment extends Fragment {
                     }
                 }).show();
     }
-
-
-
-
-
-
 
 
 }

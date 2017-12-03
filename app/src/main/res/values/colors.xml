@@ -104,4 +104,6 @@
     <color name="pressed_color">#4d90fe</color>
     <color name="default_color">#ffffff</color>
 
+    <color name="gray_background">#e6e6e6</color>
+
 </resources>

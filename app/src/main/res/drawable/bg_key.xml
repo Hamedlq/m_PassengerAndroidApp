@@ -4,5 +4,5 @@
         android:state_selected="true"
         android:drawable="@color/pressed_color"/>
     <item
-        android:drawable="@color/default_color" />
+        android:drawable="@color/gray_background" />
 </selector>

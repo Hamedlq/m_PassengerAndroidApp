@@ -1,6 +1,9 @@
 package com.mibarim.main.ui.fragments;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -8,11 +11,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -56,11 +61,19 @@ public class RouteDetailsFragment extends Fragment implements LoaderManager.Load
     private UserInfoModel userInfoModel;
     private RecyclerView.LayoutManager mLayoutManager;
     LinearLayout emptyLayout;
+    Button cancelTripButton;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         BootstrapApplication.component().inject(this);
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(
+                                "com.mibarim.main", Context.MODE_PRIVATE);
+                        sharedPreferences.edit().putInt("AllowBackButton", 1).apply();
+
+
+
     }
 
     @Override
@@ -94,9 +107,21 @@ public class RouteDetailsFragment extends Fragment implements LoaderManager.Load
 
         emptyLayout = (LinearLayout) view.findViewById(R.id.empty_layout);
 
+        cancelTripButton = (Button) view.findViewById(R.id.cancel_trip_button);
+
 
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
+
+        cancelTripButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCancelOrNotDialog();
+
+
+
+            }
+        });
 
         itemTouchListener = new RouteDetailsFragment.ItemTouchListener() {
 
@@ -280,6 +305,33 @@ public class RouteDetailsFragment extends Fragment implements LoaderManager.Load
 
         public void onDstLinkClick(View view, int position);
         //public void onUserImageClick(View view, int position);
+
+    }
+
+
+    public void showCancelOrNotDialog(){
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setMessage(R.string.cancel_card)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        /*SharedPreferences sharedPreferences = getActivity().getSharedPreferences(
+                                "com.mibarim.main", Context.MODE_PRIVATE);
+                        sharedPreferences.edit().putInt("AllowBackButton", 1).apply();*/
+
+                        long filterId = ((MainActivity) getActivity()).getChosenFilter();
+                        ((MainActivity) getActivity()).cancelTrip(filterId);
+
+                        ((MainActivity) getActivity()).removeRouteDetailsFragment();
+
+                    }
+                })
+                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                }).show();
 
     }
 

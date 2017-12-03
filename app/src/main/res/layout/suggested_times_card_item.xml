@@ -15,8 +15,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="5dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
         card_view:cardCornerRadius="10dp">
 
@@ -40,7 +40,7 @@
 
                     <TextView
                         android:layout_gravity="center_vertical"
-                        android:textColor="@color/my_gray"
+                        android:textColor="@color/main_black"
                         android:id="@+id/time_minute_textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
 
                     <TextView
                         android:layout_gravity="center_vertical"
-                        android:textColor="@color/my_gray"
+                        android:textColor="@color/main_black"
                         android:id="@+id/time_hour_textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -81,7 +81,15 @@
 
                     <TextView
                         android:layout_marginLeft="5dp"
-                        android:textColor="@color/my_gray"
+                        android:textColor="@color/main_black"
+                        android:textSize="20sp"
+                        android:text="حداکثر"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                    <TextView
+                        android:layout_marginLeft="5dp"
+                        android:textColor="@color/main_black"
                         android:id="@+id/price_string_textview"
                         android:textSize="20sp"
                         android:text="2500"
@@ -89,7 +97,7 @@
                         android:layout_height="wrap_content" />
 
                     <TextView
-                        android:textColor="@color/my_gray"
+                        android:textColor="@color/main_black"
                         android:id="@+id/textView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -106,6 +114,7 @@
 
 
             <LinearLayout
+                android:layout_margin="10dp"
                 android:gravity="center"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
@@ -113,20 +122,20 @@
 
 
                 <TextView
-                    android:textColor="@color/my_gray"
+                    android:textColor="@color/main_black"
                     android:text=" در این سفر با "
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <TextView
-                    android:textColor="@color/my_gray"
+                    android:textColor="@color/main_black"
                     android:id="@+id/pair_passengers"
                     android:text="n"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
                 <TextView
-                    android:textColor="@color/my_gray"
+                    android:textColor="@color/main_black"
                     android:text=" نفر هم مسیر هستید. "
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />

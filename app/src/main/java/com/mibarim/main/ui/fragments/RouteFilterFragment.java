@@ -1,6 +1,9 @@
 package com.mibarim.main.ui.fragments;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -9,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
@@ -313,6 +317,9 @@ public class RouteFilterFragment extends Fragment implements AbsListView.OnItemC
 
         ((MainActivity) getActivity()).showFloatingActionButton();
     }
+
+
+
 
 
 }

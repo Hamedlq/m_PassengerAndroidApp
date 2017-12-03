@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.IntegerRes;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
@@ -11,6 +12,8 @@ import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -25,6 +28,8 @@ import com.mibarim.main.ui.fragments.RouteDetailsFragment;
 import com.mibarim.main.ui.fragments.RouteFilterFragment;
 import com.mibarim.main.ui.fragments.SuggestedTimesFragment;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
 import java.util.Random;
 
@@ -77,9 +82,13 @@ public class RouteFilterAdapter extends ArrayAdapter<FilterModel> {
                 long filterId = listItem.FilterId;
 
                 if (!listItem.IsActive) {
-                    ((MainActivity) myContext).deleteTheRoute(filterId);
+//                    ((MainActivity) myContext).deleteTheRoute(filterId);
+                    String message = myContext.getResources().getString(R.string.delete_card);
+                    ((MainActivity) myContext).previewDialog(filterId, message, true);
                 } else {
-                    ((MainActivity) myContext).cancelTrip(listItem.FilterId);
+//                    ((MainActivity) myContext).cancelTrip(listItem.FilterId);
+                    String message = myContext.getResources().getString(R.string.cancel_card);
+                    ((MainActivity) myContext).previewDialog(filterId, message, false);
                 }
 
             }
@@ -177,14 +186,23 @@ public class RouteFilterAdapter extends ArrayAdapter<FilterModel> {
         destText.setText(listItem.DstStation);
 
         if (listItem.IsActive == true) {
-            hourTime.setText(Integer.toString(listItem.TimeHour));
-            minuteTime.setText(Integer.toString(listItem.TimeMinute));
+            NumberFormat numberFormat = new DecimalFormat("00");
+            hourTime.setText(numberFormat.format(listItem.TimeHour));
+            minuteTime.setText( numberFormat.format(listItem.TimeMinute));
             suggestTime.setText(R.string.observe_trip);
-            suggestTime.setBackgroundColor(myContext.getResources().getColor(R.color.primary));
+            suggestTime.setBackgroundColor(myContext.getResources().getColor(R.color.defining_route_origin_color));
             deleteIcon.setImageResource(R.drawable.ic_cancel);
+
+            Animation anim = new AlphaAnimation(0, 1);
+            anim.setDuration(500); //You can manage the time of the blink with this parameter
+            anim.setStartOffset(1);
+            anim.setRepeatMode(Animation.REVERSE);
+            anim.setRepeatCount(5);
+            suggestTime.startAnimation(anim);
+
         } else {
             suggestTime.setText(R.string.request_trip);
-            suggestTime.setBackgroundColor(myContext.getResources().getColor(R.color.defining_route_origin_color));
+            suggestTime.setBackgroundColor(myContext.getResources().getColor(R.color.primary));
         }
 
 //        ImageView imageView = (ImageView) view.findViewById(R.id.imageView);

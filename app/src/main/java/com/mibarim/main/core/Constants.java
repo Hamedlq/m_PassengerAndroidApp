@@ -293,6 +293,8 @@ public final class Constants {
         public static final String STATE_OF_ORIGIN_OR_DESTINATION_INTENT_TAG = "StateOfOrigOrDest";
         public static final String ROUTE_FILTER_FRAGMENT_TAG = "RouteFilterFragment";
 
+        public static final String ALLOW_BACK_BUTTON = "AllowBackButton";
+
     }
 
 

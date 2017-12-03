@@ -415,7 +415,7 @@
     <string name="afternoon">بعدازظهر</string>
     <string name="noon">ظهر</string>
 
-    <string name="waiting_text">در حال فرستادن درخواست به سایر راننده ها</string>
+    <string name="waiting_text">در حال فرستادن درخواست به سایر راننده ها و مسافران</string>
 
     <string name="observe_trip">مشاهده سفر</string>
 
@@ -424,6 +424,10 @@
     <string name="suggested_times_dialog_positive">زمان پیشنهادی خودم</string>
 
     <string name="suggested_times_dialog_negative">انتخاب از لیست</string>
+
+    <string name="delete_card">آیا مایل به حذف مسیر مورد نظر هستید؟</string>
+
+    <string name="cancel_card">آیا مایل به لغو مسیر مورد نظر هستید؟</string>
 
 
 
