@@ -531,7 +531,7 @@ public class RatingActivity extends BootstrapActivity {
 //                    Toast.makeText(getBaseContext(), "عکس دریافت شد از سرور!", Toast.LENGTH_LONG).show();
                 progressDialog.hide();
                 Toast.makeText(getBaseContext(), "لیست فرستاده شد به سرور", Toast.LENGTH_LONG).show();
-
+                finish();
 
             }
         }.execute();
