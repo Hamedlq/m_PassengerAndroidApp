@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    android:orientation="vertical">
 
 
     <ImageView
@@ -46,20 +45,28 @@
 
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <include layout="@layout/toolbar"></include>
 
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/details_list"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/m_swipe_refresh_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/src_and_dest_textview">
+            android:layout_height="match_parent">
 
-        </android.support.v7.widget.RecyclerView>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/details_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/src_and_dest_textview">
+
+            </android.support.v7.widget.RecyclerView>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+
 
     </LinearLayout>
 
@@ -103,14 +110,14 @@
 
     <Button
 
-        android:textColor="@color/white"
         android:id="@+id/cancel_trip_button"
-        android:background="@color/primary"
-        android:layout_margin="5dp"
-        android:layout_alignParentBottom="true"
-        android:text="@string/cancel_trip"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="5dp"
+        android:background="@color/primary"
+        android:text="@string/cancel_trip"
+        android:textColor="@color/white" />
 
 
 </RelativeLayout>

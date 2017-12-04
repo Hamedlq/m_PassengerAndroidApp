@@ -105,6 +105,8 @@ public class RouteDetailsAdapter extends RecyclerView.Adapter<RouteDetailsAdapte
                     return true;
                 }
             });
+
+
             /*src_address.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
