@@ -29,7 +29,7 @@ public class PassRouteModel implements Serializable {
     public String DstLatitude;
     public String DstLongitude;
     public int EmptySeats;
-    public int CarSeats;
+    public int CarSeats; // number of other passengers
     public boolean IsVerified;
     public boolean IsBooked;
 }

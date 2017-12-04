@@ -40,6 +40,7 @@ import com.mibarim.main.data.UserData;
 import com.mibarim.main.models.ApiResponse;
 import com.mibarim.main.models.ImageResponse;
 import com.mibarim.main.models.InviteModel;
+import com.mibarim.main.models.Plus.PassRouteModel;
 import com.mibarim.main.models.UserInfoModel;
 import com.mibarim.main.services.AuthenticateService;
 import com.mibarim.main.services.RouteRequestService;
@@ -74,9 +75,12 @@ public class MainActivity extends BootstrapActivity {
     int selectedRouteMin;
 
 
+    // constants
     private int FINISH_USER_INFO = 5649;
     private int SEARCH_STATION_REQUEST_CODE = 7464;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    private int FINISH_TRIP = 5669;
+    private int FINISH_PAYMENT = 5659;
 
 
     ImageView invite_btn;
@@ -1053,5 +1057,20 @@ public class MainActivity extends BootstrapActivity {
 
             showFloatingActionButton();
         }
+    }
+
+
+    public void gotoRidingActivity(PassRouteModel dm) {
+        Intent intent = new Intent(this, RidingActivity.class);
+        intent.putExtra(Constants.GlobalConstants.PASS_ROUTE_MODEL, dm);
+        intent.putExtra(Constants.Auth.AUTH_TOKEN, authToken);
+        this.startActivityForResult(intent, FINISH_TRIP);
+    }
+
+    public void gotoPayActivity(final PassRouteModel selectedItem) {
+        Intent intent = new Intent(this, PayActivity.class);
+        intent.putExtra(Constants.GlobalConstants.PASS_ROUTE_MODEL, selectedItem);
+        intent.putExtra(Constants.Auth.AUTH_TOKEN, authToken);
+        this.startActivityForResult(intent, FINISH_PAYMENT);
     }
 }

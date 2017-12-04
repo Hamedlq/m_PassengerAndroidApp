@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -62,6 +63,7 @@ public class RouteDetailsFragment extends Fragment implements LoaderManager.Load
     private RecyclerView.LayoutManager mLayoutManager;
     LinearLayout emptyLayout;
     Button cancelTripButton;
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,6 +111,15 @@ public class RouteDetailsFragment extends Fragment implements LoaderManager.Load
 
         cancelTripButton = (Button) view.findViewById(R.id.cancel_trip_button);
 
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.m_swipe_refresh_layout);
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refresh();
+            }
+        });
+
 
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -127,7 +138,7 @@ public class RouteDetailsFragment extends Fragment implements LoaderManager.Load
 
             @Override
             public void onBookBtnClick(View view, int position) {
-                if (getActivity() instanceof MainCardActivity) {
+                if (getActivity() instanceof MainActivity) {
                     PassRouteModel selectedItem = ((PassRouteModel) items.get(position));
                     if (selectedItem.IsBooked) {
 
@@ -139,10 +150,10 @@ public class RouteDetailsFragment extends Fragment implements LoaderManager.Load
                         }
 
 
-                        ((MainCardActivity) getActivity()).gotoRidingActivity(selectedItem);
+                        ((MainActivity) getActivity()).gotoRidingActivity(selectedItem);
 
                     } else {
-                        ((MainCardActivity) getActivity()).gotoPayActivity(selectedItem);
+                        ((MainActivity) getActivity()).gotoPayActivity(selectedItem);
                     }
                 }
             }
@@ -215,7 +226,7 @@ public class RouteDetailsFragment extends Fragment implements LoaderManager.Load
     public Loader<List<PassRouteModel>> onCreateLoader(int id, Bundle args) {
 //        mEmptyView.setVisibility(View.GONE);
 
-//        mSwipeRefreshLayout.setRefreshing(true);
+        mSwipeRefreshLayout.setRefreshing(true);
         items = new ArrayList<PassRouteModel>();
         return new ThrowableLoader<List<PassRouteModel>>(getActivity(), items) {
             @Override
@@ -288,7 +299,7 @@ public class RouteDetailsFragment extends Fragment implements LoaderManager.Load
                     public void onDismissedBySwipeRight(RecyclerView recyclerView, int[] reverseSortedPositions) {
                     }
                 }));
-//        mSwipeRefreshLayout.setRefreshing(false);
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -333,6 +344,10 @@ public class RouteDetailsFragment extends Fragment implements LoaderManager.Load
                     }
                 }).show();
 
+    }
+
+    public void refresh(){
+        getLoaderManager().restartLoader(0, null, this);
     }
 
 }

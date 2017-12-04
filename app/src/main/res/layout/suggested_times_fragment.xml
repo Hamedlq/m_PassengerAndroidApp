@@ -13,24 +13,8 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/toolbar"></include>
+        <include layout="@layout/suggested_times_toolbar"></include>
 
-        <TextView
-            android:layout_margin="10dp"
-            android:textSize="20sp"
-            android:textColor="@color/main_black"
-            android:gravity="center"
-            android:text="زمان مورد نظر خود را انتخاب کنید"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <View
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_margin="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@android:color/white"/>
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh"

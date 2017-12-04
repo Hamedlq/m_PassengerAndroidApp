@@ -57,6 +57,11 @@ public class SuggestedTimesAdapter extends ArrayAdapter<FilterTimeModel> {
         final TextView timeMinuteTextview = (TextView) view.findViewById(R.id.time_minute_textview);
         final TextView pairPassengersTextview = (TextView) view.findViewById(R.id.pair_passengers);
 
+        LinearLayout timeLayout = (LinearLayout) view.findViewById(R.id.time_linear_layout);
+
+        TextView suggestOrChooseDescriptionText = (TextView) view.findViewById(R.id.suggest_or_choose_description_text);
+        TextView suggestOrChooseDescriptionTextSecond = (TextView) view.findViewById(R.id.suggest_or_choose_description_text_second);
+
 
 
 
@@ -67,11 +72,30 @@ public class SuggestedTimesAdapter extends ArrayAdapter<FilterTimeModel> {
 
 
         NumberFormat numberFormat = new DecimalFormat("00");
-        timeHourTextview.setText(numberFormat.format(items.get(position).TimeHour));
-        timeMinuteTextview.setText(numberFormat.format(items.get(position).TimeMinute));
 
-        priceStringTextview.setText(items.get(position).PriceString);
-        pairPassengersTextview.setText(pairPass);
+        if (!selectedItem.IsManual) {
+
+            timeHourTextview.setText(numberFormat.format(items.get(position).TimeHour));
+            timeMinuteTextview.setText(numberFormat.format(items.get(position).TimeMinute));
+
+            priceStringTextview.setText(items.get(position).PriceString);
+            pairPassengersTextview.setText(pairPass);
+        } else {
+//            timeHourTextview.setText(numberFormat.format(items.get(position).TimeHour));
+//            timeMinuteTextview.setText(numberFormat.format(items.get(position).TimeMinute));
+//            pairPassengersTextview.setText(pairPass);
+
+//            timeHourTextview.setVisibility(View.GONE);
+//            timeMinuteTextview.setVisibility(View.GONE);
+
+            timeLayout.setVisibility(View.GONE);
+
+            suggestOrChooseDescriptionTextSecond.setVisibility(View.GONE);
+
+            priceStringTextview.setText(items.get(position).PriceString);
+            suggestOrChooseDescriptionText.setText("زمان مورد نظر خود را انتخاب کنید");
+            pairPassengersTextview.setVisibility(View.GONE);
+        }
 
 
 //        final View finalView = view;
