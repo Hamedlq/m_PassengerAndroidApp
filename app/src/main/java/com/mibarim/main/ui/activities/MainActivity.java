@@ -1,5 +1,7 @@
 package com.mibarim.main.ui.activities;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -42,6 +44,7 @@ import com.mibarim.main.models.ImageResponse;
 import com.mibarim.main.models.InviteModel;
 import com.mibarim.main.models.UserInfoModel;
 import com.mibarim.main.services.AuthenticateService;
+import com.mibarim.main.services.HelloService;
 import com.mibarim.main.services.RouteRequestService;
 import com.mibarim.main.services.UserInfoService;
 import com.mibarim.main.ui.BootstrapActivity;
@@ -50,6 +53,8 @@ import com.mibarim.main.ui.fragments.PlusFragments.PassengerCardFragment;
 import com.mibarim.main.ui.fragments.RouteFilterFragment;
 import com.mibarim.main.ui.fragments.SuggestedTimesFragment;
 import com.mibarim.main.util.SafeAsyncTask;
+
+import java.util.Calendar;
 
 import javax.inject.Inject;
 
@@ -125,7 +130,23 @@ public class MainActivity extends BootstrapActivity {
 
         checkAuth();
 
+        runningService();
 
+    }
+
+    public void runningService(){
+
+        Calendar cur_cal = Calendar.getInstance();
+        cur_cal.setTimeInMillis(System.currentTimeMillis());
+        cur_cal.add(Calendar.SECOND, 90);
+        Intent intent = new Intent(MainActivity.this, HelloService.class);
+        PendingIntent pi = PendingIntent.getService(MainActivity.this, 0, intent, 0);
+        AlarmManager alarm_manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarm_manager.set(AlarmManager.RTC, cur_cal.getTimeInMillis(), pi);
+        alarm_manager.setRepeating(AlarmManager.RTC, cur_cal.getTimeInMillis(), 30*60*1000,  pi);
+
+//        Intent intent = new Intent(this,HelloService.class);
+//        startService(intent);
     }
 
 
