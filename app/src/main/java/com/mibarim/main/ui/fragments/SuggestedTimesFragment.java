@@ -3,25 +3,19 @@ package com.mibarim.main.ui.fragments;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.os.OperationCanceledException;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.NumberPicker;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -29,14 +23,10 @@ import com.mibarim.main.BootstrapApplication;
 import com.mibarim.main.R;
 import com.mibarim.main.adapters.SuggestedTimesAdapter;
 import com.mibarim.main.models.ApiResponse;
-import com.mibarim.main.models.FilterModel;
 import com.mibarim.main.models.FilterTimeModel;
-import com.mibarim.main.models.Plus.PassRouteModel;
 import com.mibarim.main.services.RouteRequestService;
 import com.mibarim.main.services.RouteResponseService;
-import com.mibarim.main.ui.HandleApiMessagesBySnackbar;
 import com.mibarim.main.ui.activities.MainActivity;
-import com.mibarim.main.ui.activities.SearchStationActivity;
 import com.mibarim.main.util.SafeAsyncTask;
 
 import java.util.ArrayList;
@@ -115,8 +105,6 @@ public class SuggestedTimesFragment extends Fragment {
         proceedButton = (Button) view.findViewById(R.id.proceed_button);
 
 
-
-
         proceedButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -162,8 +150,6 @@ public class SuggestedTimesFragment extends Fragment {
         getTimesFromServer();
 
 
-
-
         suggestedTimesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -172,10 +158,9 @@ public class SuggestedTimesFragment extends Fragment {
 
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences(
                         "com.mibarim.main", Context.MODE_PRIVATE);
-                sharedPreferences.edit().putInt( ALLOW_BACK_BUTTON , 1).apply();
+                sharedPreferences.edit().putInt(ALLOW_BACK_BUTTON, 1).apply();
 
 //                ((MainActivity) getActivity()).showSuggestTimeDialog(filterId);
-
 
 
                 view.setSelected(true);
@@ -214,6 +199,7 @@ public class SuggestedTimesFragment extends Fragment {
             @Override
             public Boolean call() throws Exception {
 
+                items = new ArrayList<>();
 
                 suggestedTimesResponse = routeResponseService.GetTimes(authToken, filterId);
                 Gson gson = new Gson();
@@ -240,10 +226,10 @@ public class SuggestedTimesFragment extends Fragment {
             protected void onException(final Exception e) throws RuntimeException {
                 super.onException(e);
 
-                    swipeRefreshLayout.setRefreshing(false);
-                    Toast.makeText(getActivity(), R.string.network_error, Toast.LENGTH_SHORT).show();
-                    // User cancelled the authentication process (back button, etc).
-                    // Since auth could not take place, lets finish this activity.
+                swipeRefreshLayout.setRefreshing(false);
+                Toast.makeText(getActivity(), R.string.network_error, Toast.LENGTH_SHORT).show();
+                // User cancelled the authentication process (back button, etc).
+                // Since auth could not take place, lets finish this activity.
 //                    finish();
 
             }
@@ -296,7 +282,7 @@ public class SuggestedTimesFragment extends Fragment {
             protected void onSuccess(final Boolean state) throws Exception {
                 super.onSuccess(state);
 //                hideProgress();
-                ((MainActivity) getActivity()).removeSuggestedTimesFragment();
+                ((MainActivity) getActivity()).removeCurrentFragmentAndAddRouteFilterFragment();
 //                new HandleApiMessagesBySnackbar(parentLayout, setRes).showMessages();
 //                Gson gson = new Gson();
 //                FilterModel filterModel = new FilterModel();
@@ -328,7 +314,7 @@ public class SuggestedTimesFragment extends Fragment {
 
                         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(
                                 "com.mibarim.main", Context.MODE_PRIVATE);
-                        sharedPreferences.edit().putInt( ALLOW_BACK_BUTTON , 1).apply();
+                        sharedPreferences.edit().putInt(ALLOW_BACK_BUTTON, 1).apply();
 
                         ((MainActivity) getActivity()).showSuggestTimeDialog(filterId);
 

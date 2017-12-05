@@ -2,6 +2,7 @@ package com.mibarim.main.ui.activities;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,7 +17,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.os.OperationCanceledException;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.view.LayoutInflater;
@@ -33,6 +33,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
+import com.google.gson.Gson;
 import com.mibarim.main.BootstrapApplication;
 import com.mibarim.main.BootstrapServiceProvider;
 import com.mibarim.main.R;
@@ -47,15 +48,18 @@ import com.mibarim.main.models.UserInfoModel;
 import com.mibarim.main.services.AuthenticateService;
 import com.mibarim.main.services.HelloService;
 import com.mibarim.main.services.RouteRequestService;
+import com.mibarim.main.services.RouteResponseService;
 import com.mibarim.main.services.UserInfoService;
 import com.mibarim.main.ui.BootstrapActivity;
 import com.mibarim.main.ui.fragments.FabFragment;
-import com.mibarim.main.ui.fragments.PlusFragments.PassengerCardFragment;
+import com.mibarim.main.ui.fragments.RouteDetailsFragment;
 import com.mibarim.main.ui.fragments.RouteFilterFragment;
 import com.mibarim.main.ui.fragments.SuggestedTimesFragment;
 import com.mibarim.main.util.SafeAsyncTask;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -73,6 +77,9 @@ public class MainActivity extends BootstrapActivity {
     private ApiResponse apiResponse;
     private String url;
     public long filterId;
+    private ApiResponse suggestRouteResponse;
+    List<PassRouteModel> passengerTripModel;
+    ProgressDialog progressDialog;
 
     NumberPicker hourPicker;
     NumberPicker minutePicker;
@@ -84,7 +91,7 @@ public class MainActivity extends BootstrapActivity {
     private int FINISH_USER_INFO = 5649;
     private int SEARCH_STATION_REQUEST_CODE = 7464;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    private int FINISH_TRIP = 5669;
+    private int RIDING_ACTIVITY_REQUEST_CODE = 5669;
     private int FINISH_PAYMENT = 5659;
 
 
@@ -100,6 +107,8 @@ public class MainActivity extends BootstrapActivity {
     protected BootstrapServiceProvider serviceProvider;
     @Inject
     UserData userData;
+    @Inject
+    RouteResponseService routeResponseService;
 
     @Inject
     protected RouteRequestService routeRequestService;
@@ -122,6 +131,10 @@ public class MainActivity extends BootstrapActivity {
             getWindow().getDecorView().setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
         }
 
+        progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog.setMessage(getText(R.string.please_wait));
+
+
 
 //        toolbar = (Toolbar) findViewById(R.id.main_toolbar);
 //        setSupportActionBar(toolbar);
@@ -138,7 +151,7 @@ public class MainActivity extends BootstrapActivity {
 
     }
 
-    public void runningService(){
+    public void runningService() {
 
         Calendar cur_cal = Calendar.getInstance();
         cur_cal.setTimeInMillis(System.currentTimeMillis());
@@ -147,7 +160,7 @@ public class MainActivity extends BootstrapActivity {
         PendingIntent pi = PendingIntent.getService(MainActivity.this, 0, intent, 0);
         AlarmManager alarm_manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarm_manager.set(AlarmManager.RTC, cur_cal.getTimeInMillis(), pi);
-        alarm_manager.setRepeating(AlarmManager.RTC, cur_cal.getTimeInMillis(), 30*60*1000,  pi);
+        alarm_manager.setRepeating(AlarmManager.RTC, cur_cal.getTimeInMillis(), 30 * 60 * 1000, pi);
 
 //        Intent intent = new Intent(this,HelloService.class);
 //        startService(intent);
@@ -589,7 +602,7 @@ public class MainActivity extends BootstrapActivity {
     }
 
 
-    public void removeSuggestedTimesFragment() {
+    public void removeCurrentFragmentAndAddRouteFilterFragment() {
 
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_activity);
         if (fragment != null) {
@@ -994,6 +1007,11 @@ public class MainActivity extends BootstrapActivity {
             }
 
         }
+
+
+        if (requestCode == RIDING_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+            removeCurrentFragmentAndAddRouteFilterFragment();
+        }
     }
 
 
@@ -1006,6 +1024,7 @@ public class MainActivity extends BootstrapActivity {
 
 
         int allowBackButton = sharedPreferences.getInt(ALLOW_BACK_BUTTON, -1);
+        // zero means "back_button_not_allowed" , 1 means "back_button_allowed"
 
         if (allowBackButton == 0) {
 
@@ -1085,7 +1104,7 @@ public class MainActivity extends BootstrapActivity {
         Intent intent = new Intent(this, RidingActivity.class);
         intent.putExtra(Constants.GlobalConstants.PASS_ROUTE_MODEL, dm);
         intent.putExtra(Constants.Auth.AUTH_TOKEN, authToken);
-        this.startActivityForResult(intent, FINISH_TRIP);
+        startActivityForResult(intent, RIDING_ACTIVITY_REQUEST_CODE);
     }
 
     public void gotoPayActivity(final PassRouteModel selectedItem) {
@@ -1094,4 +1113,86 @@ public class MainActivity extends BootstrapActivity {
         intent.putExtra(Constants.Auth.AUTH_TOKEN, authToken);
         this.startActivityForResult(intent, FINISH_PAYMENT);
     }
+
+    public void getPassengetTripFromServer() {
+
+        progressDialog.show();
+
+        new SafeAsyncTask<Boolean>() {
+
+            @Override
+            public Boolean call() throws Exception {
+
+
+                Gson gson = new Gson();
+                PassRouteModel bookedTrip = null;
+//                    routeResponse = ((MainCardActivity) getActivity()).getRoute();
+                passengerTripModel = new ArrayList<>();
+
+                long mFilterId = getChosenFilter();
+                suggestRouteResponse = routeResponseService.GetPassengerTrip(authToken, mFilterId);
+                if (suggestRouteResponse != null) {
+                    for (String routeJson : suggestRouteResponse.Messages) {
+                        PassRouteModel route = gson.fromJson(routeJson, PassRouteModel.class);
+                        passengerTripModel.add(route);
+                    }
+                            /*if (bookedTrip != null) {
+                                if (bookedTrip.TripState == TripStates.InPreTripTime.toInt() ||
+                                        bookedTrip.TripState == TripStates.InRiding.toInt() ||
+                                        bookedTrip.TripState == TripStates.InTripTime.toInt()) {
+                                    ((MainCardActivity) getActivity()).gotoRidingActivity(bookedTrip);
+                                }else{
+                                    ((MainCardActivity) getActivity()).showRidingActivity(bookedTrip);
+                                }
+                            }*/
+                }
+
+
+                return false;
+            }
+
+            @Override
+            protected void onException(final Exception e) throws RuntimeException {
+                super.onException(e);
+
+
+            }
+
+            @Override
+            protected void onSuccess(final Boolean hasAuthenticated) throws Exception {
+
+                progressDialog.hide();
+                if (!passengerTripModel.get(0).IsBooked) {
+                    addRouteDetailsFragment();
+                } else {
+                    PassRouteModel model = passengerTripModel.get(0);
+                    gotoRidingActivity(model);
+                }
+
+//                super.onSuccess(hasAuthenticated);
+//                //userHasAuthenticated = true;
+//                initScreen();
+//                sendRegistrationToServer();
+            }
+        }.execute();
+
+
+    }
+
+
+    public void addRouteDetailsFragment() {
+
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_activity);
+        if (fragment != null) {
+//            getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.main_activity, new RouteDetailsFragment())
+                    .commit();
+
+
+        }
+    }
+
+
 }

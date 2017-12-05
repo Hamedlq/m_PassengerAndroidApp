@@ -431,7 +431,9 @@
 
     <string name="select_suggested_time">انتخاب کنید</string>
 
+    <string name="return_to_route_filters">بازگشت به لیست مسیرها</string>
 
+    <string name="pay">پرداخت</string>
 
 
 </resources>

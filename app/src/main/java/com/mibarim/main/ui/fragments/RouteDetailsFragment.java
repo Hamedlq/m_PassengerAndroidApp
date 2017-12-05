@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,26 +18,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.github.brnunes.swipeablerecyclerview.SwipeableRecyclerViewTouchListener;
 import com.google.gson.Gson;
 import com.mibarim.main.BootstrapApplication;
 import com.mibarim.main.R;
-import com.mibarim.main.adapters.PassengerRouteRecyclerAdapter;
 import com.mibarim.main.adapters.RouteDetailsAdapter;
 import com.mibarim.main.models.ApiResponse;
 import com.mibarim.main.models.Plus.PassRouteModel;
 import com.mibarim.main.models.UserInfoModel;
-import com.mibarim.main.models.enums.TripStates;
 import com.mibarim.main.services.RouteResponseService;
 import com.mibarim.main.ui.ThrowableLoader;
 import com.mibarim.main.ui.activities.MainActivity;
 import com.mibarim.main.ui.activities.MainCardActivity;
 import com.mibarim.main.ui.activities.UserInfoDetailActivity;
-import com.mibarim.main.ui.fragments.PlusFragments.PassengerCardFragment;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -64,6 +58,7 @@ public class RouteDetailsFragment extends Fragment implements LoaderManager.Load
     LinearLayout emptyLayout;
     Button cancelTripButton;
     SwipeRefreshLayout mSwipeRefreshLayout;
+    Button returnToRouteDetailsFragmentButton;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,7 +67,7 @@ public class RouteDetailsFragment extends Fragment implements LoaderManager.Load
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(
                                 "com.mibarim.main", Context.MODE_PRIVATE);
-                        sharedPreferences.edit().putInt("AllowBackButton", 1).apply();
+                        sharedPreferences.edit().putInt("AllowBackButton", 0).apply();
 
 
 
@@ -109,9 +104,12 @@ public class RouteDetailsFragment extends Fragment implements LoaderManager.Load
 
         emptyLayout = (LinearLayout) view.findViewById(R.id.empty_layout);
 
+
         cancelTripButton = (Button) view.findViewById(R.id.cancel_trip_button);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.m_swipe_refresh_layout);
+
+        returnToRouteDetailsFragmentButton = (Button) view.findViewById(R.id.return_to_route_filters_fragment);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -120,9 +118,22 @@ public class RouteDetailsFragment extends Fragment implements LoaderManager.Load
             }
         });
 
+        returnToRouteDetailsFragmentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(
+                        "com.mibarim.main", Context.MODE_PRIVATE);
+                sharedPreferences.edit().putInt("AllowBackButton", 1).apply();
+                ((MainActivity) getActivity()).removeCurrentFragmentAndAddRouteFilterFragment();
+
+            }
+        });
+
 
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
+
+
 
         cancelTripButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -219,7 +230,7 @@ public class RouteDetailsFragment extends Fragment implements LoaderManager.Load
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        getLoaderManager().initLoader(0, null, this);
+//        getLoaderManager().initLoader(0, null, this);
     }
 
     @Override
@@ -240,7 +251,7 @@ public class RouteDetailsFragment extends Fragment implements LoaderManager.Load
                     if (getActivity() != null && authToken != null) {
 
                         long filterId = ((MainActivity) getActivity()).getChosenFilter();
-                        suggestRouteResponse = routeResponseService.GetPassengerRoutes(authToken, filterId);
+                        suggestRouteResponse = routeResponseService.GetPassengerTrip(authToken, filterId);
                         if (suggestRouteResponse != null) {
                             for (String routeJson : suggestRouteResponse.Messages) {
                                 PassRouteModel route = gson.fromJson(routeJson, PassRouteModel.class);
@@ -272,12 +283,19 @@ public class RouteDetailsFragment extends Fragment implements LoaderManager.Load
 
     @Override
     public void onLoadFinished(Loader<List<PassRouteModel>> loader, List<PassRouteModel> data) {
+
+        mSwipeRefreshLayout.setRefreshing(false);
         items = data;
-        if (items.size() == 0) {
+        if (!items.get(0).IsBooked) {
             emptyLayout.setVisibility(View.VISIBLE);
+        } else {
+            PassRouteModel model = items.get(0);
+            ((MainActivity) getActivity()).gotoRidingActivity(model);
         }
-//        // specify an adapter (see also next example)
-        mAdapter = new RouteDetailsAdapter(getActivity(), items, itemTouchListener);
+
+
+
+        /*mAdapter = new RouteDetailsAdapter(getActivity(), items, itemTouchListener);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addOnItemTouchListener(new SwipeableRecyclerViewTouchListener(mRecyclerView,
                 new SwipeableRecyclerViewTouchListener.SwipeListener() {
@@ -299,7 +317,7 @@ public class RouteDetailsFragment extends Fragment implements LoaderManager.Load
                     public void onDismissedBySwipeRight(RecyclerView recyclerView, int[] reverseSortedPositions) {
                     }
                 }));
-        mSwipeRefreshLayout.setRefreshing(false);
+        mSwipeRefreshLayout.setRefreshing(false);*/
     }
 
     @Override

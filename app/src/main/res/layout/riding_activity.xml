@@ -232,6 +232,25 @@
                     android:textAlignment="center"
                     android:textColor="@color/text"
                     android:textStyle="bold" />-->
+
+
+                <TextView
+                    android:id="@+id/pay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:padding="12dp"
+                    android:textSize="14sp"
+                    android:text="@string/pay" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@android:color/darker_gray" />
+
+
                 <TextView
                     android:id="@+id/cancel_trip"
                     android:layout_width="wrap_content"
