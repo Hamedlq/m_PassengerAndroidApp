@@ -324,7 +324,7 @@ public class SearchStationActivity extends AppCompatActivity {
                 if (stat == 0) {
                     originStationId = selectedItem.MainStationId;
                     if (checkToSeeWhatToDo()) {
-                        Toast.makeText(SearchStationActivity.this, R.string.origin_selected , Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SearchStationActivity.this, R.string.origin_selected, Toast.LENGTH_SHORT).show();
                     }
 //                    selectSubstation(selectedItem);
                 }
@@ -605,6 +605,8 @@ public class SearchStationActivity extends AppCompatActivity {
 
     public void setRoute(final long destStId, final long originStId) {
 
+//        progressDialog.show();
+
 //        showProgress();
         new SafeAsyncTask<Boolean>() {
             @Override
@@ -622,13 +624,14 @@ public class SearchStationActivity extends AppCompatActivity {
                 super.onException(e);
                 progressDialog.hide();
                 Toast.makeText(SearchStationActivity.this, "خطا در انتخاب مسیر", Toast.LENGTH_LONG).show();
-//                hideProgress();
+                progressDialog.hide();
             }
 
             @Override
             protected void onSuccess(final Boolean state) throws Exception {
                 super.onSuccess(state);
-//                hideProgress();
+                progressDialog.hide();
+
                 new HandleApiMessagesBySnackbar(parentLayout, setRes).showMessages();
                 Gson gson = new Gson();
 
@@ -651,7 +654,7 @@ public class SearchStationActivity extends AppCompatActivity {
 
     private void finishIt() {
         final Intent intent = getIntent();
-        intent.putExtra("Filter_Id",filterModel.FilterId);
+        intent.putExtra("Filter_Id", filterModel.FilterId);
         setResult(RESULT_OK, intent);
         finish();
     }
@@ -725,7 +728,7 @@ public class SearchStationActivity extends AppCompatActivity {
         if (originStationId >= 0 && destinationStationId >= 0 && originMainStationId != destinationStationId) {
             setRoute(destinationStationId, originStationId);
             progressDialog.show();
-            progressDialog.hide();
+//            progressDialog.hide();
             return false;
         }
 
