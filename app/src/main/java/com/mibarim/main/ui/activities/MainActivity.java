@@ -51,6 +51,8 @@ import com.mibarim.main.services.RouteRequestService;
 import com.mibarim.main.services.RouteResponseService;
 import com.mibarim.main.services.UserInfoService;
 import com.mibarim.main.ui.BootstrapActivity;
+import com.mibarim.main.ui.HandleApiMessages;
+import com.mibarim.main.ui.HandleApiMessagesBySnackbar;
 import com.mibarim.main.ui.fragments.FabFragment;
 import com.mibarim.main.ui.fragments.RouteDetailsFragment;
 import com.mibarim.main.ui.fragments.RouteFilterFragment;
@@ -78,8 +80,11 @@ public class MainActivity extends BootstrapActivity {
     private String url;
     public long filterId;
     private ApiResponse suggestRouteResponse;
+    private ApiResponse cancelFilterapiResponse;
+    private ApiResponse deleteFilterapiResponse;
     List<PassRouteModel> passengerTripModel;
     ProgressDialog progressDialog;
+    private View parentLayout;
 
     NumberPicker hourPicker;
     NumberPicker minutePicker;
@@ -124,7 +129,7 @@ public class MainActivity extends BootstrapActivity {
         BootstrapApplication application = (BootstrapApplication) getApplication();
         setContentView(R.layout.main_activity);
 
-
+        parentLayout = findViewById(R.id.main_activity_parent);
         ButterKnife.bind(this);
 
         if (getWindow().getDecorView().getLayoutDirection() == View.LAYOUT_DIRECTION_LTR) {
@@ -624,7 +629,7 @@ public class MainActivity extends BootstrapActivity {
             public Boolean call() throws Exception {
 
 
-                ApiResponse apiResponse = routeRequestService.deleteFilter(authToken, filterId); // GetFilters in here
+                deleteFilterapiResponse = routeRequestService.deleteFilter(authToken, filterId); // GetFilters in here
                 /*final AuthenticateService svc = serviceProvider.getService(MainActivity.this);
                 if (svc != null) {
                     authToken = serviceProvider.getAuthToken(MainActivity.this);
@@ -648,7 +653,7 @@ public class MainActivity extends BootstrapActivity {
             protected void onSuccess(final Boolean hasAuthenticated) throws Exception {
                 super.onSuccess(hasAuthenticated);
                 //userHasAuthenticated = true;
-
+                new HandleApiMessages(MainActivity.this,deleteFilterapiResponse).showMessages();
                 addRouteFilterFragment();
 //                sendRegistrationToServer();
             }
@@ -664,7 +669,7 @@ public class MainActivity extends BootstrapActivity {
             public Boolean call() throws Exception {
 
 
-                ApiResponse apiResponse = routeRequestService.cancelFilter(authToken, filterId); // GetFilters in here
+                cancelFilterapiResponse = routeRequestService.cancelFilter(authToken, filterId); // GetFilters in here
                 /*final AuthenticateService svc = serviceProvider.getService(MainActivity.this);
                 if (svc != null) {
                     authToken = serviceProvider.getAuthToken(MainActivity.this);
@@ -687,12 +692,15 @@ public class MainActivity extends BootstrapActivity {
             @Override
             protected void onSuccess(final Boolean hasAuthenticated) throws Exception {
                 super.onSuccess(hasAuthenticated);
+                new HandleApiMessages(MainActivity.this,cancelFilterapiResponse).showMessages();
+                //new HandleApiMessagesBySnackbar(parentLayout,cancelFilterapiResponse);
                 //userHasAuthenticated = true;
 //                initScreen();
 //                RouteFilterFragment fragment = (RouteFilterFragment) getSupportFragmentManager().findFragmentByTag(ROUTE_FILTER_FRAGMENT_TAG);
 //                fragment.refresh();
 
                 addRouteFilterFragment();
+
 //                sendRegistrationToServer();
             }
         }.execute();

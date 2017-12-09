@@ -84,7 +84,7 @@
                         android:layout_marginLeft="5dp"
                         android:textColor="@color/main_black"
                         android:textSize="20sp"
-                        android:text="حداکثر"
+                        android:id="@+id/price_title_textview"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 

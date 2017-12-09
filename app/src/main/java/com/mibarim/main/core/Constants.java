@@ -92,6 +92,7 @@ public final class Constants {
         public static final String URL_REQUEST_RIDE_SHARE = "/RequestRideShare";
         public static final String URL_BOOK_REQUEST = "/RequestBooking";
         public static final String URL_PAY_BOOK_REQUEST = "/RequestPayBooking";
+        public static final String URL_PAY_REQUEST = "/PayTrip";
         public static final String URL_ACCEPT_RIDE_SHARE = "/AcceptRideShare";
         public static final String URL_GET_ROUTE_INFO = "/GetRouteInfo";
         public static final String URL_INSERT_RIDE_REQUEST = "/InsertRideRequest";

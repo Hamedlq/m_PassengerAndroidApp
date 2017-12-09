@@ -27,21 +27,21 @@ public class HandleApiMessages {
     protected void showErrors() {
         if (_apiResponse.Errors!=null && _apiResponse.Errors.size() > 0) {
             for (MessageResponse error : _apiResponse.Errors) {
-                Toaster.showLong(_activity, error.Message, R.drawable.toast_error);
+                Toaster.showLong(_activity, error.Message);
             }
         }
     }
     protected void showInfos() {
         if (_apiResponse.Infos!=null && _apiResponse.Infos.size() > 0) {
             for (MessageResponse info : _apiResponse.Infos) {
-                Toaster.showLong(_activity, info.Message,R.drawable.toast_info);
+                Toaster.showLong(_activity, info.Message);
             }
         }
     }
     protected void showWarnings() {
         if (_apiResponse.Warnings!=null &&_apiResponse.Warnings.size() > 0) {
             for (MessageResponse warn : _apiResponse.Warnings) {
-                Toaster.showLong(_activity, warn.Message, R.drawable.toast_warn);
+                Toaster.showLong(_activity, warn.Message);
             }
         }
     }

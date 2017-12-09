@@ -53,6 +53,7 @@ public class SuggestedTimesAdapter extends ArrayAdapter<FilterTimeModel> {
 
 
         final TextView priceStringTextview = (TextView) view.findViewById(R.id.price_string_textview);
+        final TextView priceTitleTextview = (TextView) view.findViewById(R.id.price_title_textview);
         final TextView timeHourTextview = (TextView) view.findViewById(R.id.time_hour_textview);
         final TextView timeMinuteTextview = (TextView) view.findViewById(R.id.time_minute_textview);
         final TextView pairPassengersTextview = (TextView) view.findViewById(R.id.pair_passengers);
@@ -91,7 +92,7 @@ public class SuggestedTimesAdapter extends ArrayAdapter<FilterTimeModel> {
             timeLayout.setVisibility(View.GONE);
 
             suggestOrChooseDescriptionTextSecond.setVisibility(View.GONE);
-
+            priceTitleTextview.setText("حداکثر");
             priceStringTextview.setText(items.get(position).PriceString);
             suggestOrChooseDescriptionText.setText("زمان مورد نظر خود را انتخاب کنید");
             pairPassengersTextview.setVisibility(View.GONE);
