@@ -165,7 +165,7 @@ public class MainActivity extends BootstrapActivity {
         PendingIntent pi = PendingIntent.getService(MainActivity.this, 0, intent, 0);
         AlarmManager alarm_manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarm_manager.set(AlarmManager.RTC, cur_cal.getTimeInMillis(), pi);
-        alarm_manager.setRepeating(AlarmManager.RTC, cur_cal.getTimeInMillis(), 30 * 60 * 1000, pi);
+        alarm_manager.setRepeating(AlarmManager.RTC, cur_cal.getTimeInMillis(), 30 * 60* 1000, pi);
 
 //        Intent intent = new Intent(this,HelloService.class);
 //        startService(intent);
