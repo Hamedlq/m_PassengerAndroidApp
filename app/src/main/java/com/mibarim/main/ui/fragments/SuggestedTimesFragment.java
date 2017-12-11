@@ -23,6 +23,7 @@ import com.mibarim.main.BootstrapApplication;
 import com.mibarim.main.R;
 import com.mibarim.main.adapters.SuggestedTimesAdapter;
 import com.mibarim.main.models.ApiResponse;
+import com.mibarim.main.models.FilterModel;
 import com.mibarim.main.models.FilterTimeModel;
 import com.mibarim.main.services.RouteRequestService;
 import com.mibarim.main.services.RouteResponseService;
@@ -70,6 +71,7 @@ public class SuggestedTimesFragment extends Fragment {
 
     View alertLayout;
     View titleLayout;
+    View temp;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -112,13 +114,21 @@ public class SuggestedTimesFragment extends Fragment {
 //                suggestedTimesList.clearChoices();
 //                suggestedTimesList.requestLayout();
 
+
                 if (itemSelected == 0)
                     showDialog();
                 else {
 
+
+
                     if (isManual) {
                         ((MainActivity) getActivity()).showSuggestTimeDialog(filterId);
                     } else {
+
+                        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(
+                                "com.mibarim.main", Context.MODE_PRIVATE);
+                        sharedPreferences.edit().putInt(ALLOW_BACK_BUTTON, 1).apply();
+
                         sendSuggestedFilterToServer(filterId, hour, min);
                     }
                 }
@@ -156,14 +166,23 @@ public class SuggestedTimesFragment extends Fragment {
                 FilterTimeModel model = items.get(position);
 
 
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences(
+                /*SharedPreferences sharedPreferences = getActivity().getSharedPreferences(
                         "com.mibarim.main", Context.MODE_PRIVATE);
-                sharedPreferences.edit().putInt(ALLOW_BACK_BUTTON, 1).apply();
+                sharedPreferences.edit().putInt(ALLOW_BACK_BUTTON, 1).apply();*/
 
 //                ((MainActivity) getActivity()).showSuggestTimeDialog(filterId);
 
 
                 view.setSelected(true);
+
+                suggestedTimesList.setItemChecked(position, true); //
+
+                view.setBackgroundColor(getResources().getColor(R.color.pressed_color));
+                if (temp != null && temp!= view) {
+                    temp.setBackgroundColor(getResources().getColor(R.color.white));
+                }
+                temp = view;
+
 
                 itemSelected = 1;
 
@@ -249,6 +268,9 @@ public class SuggestedTimesFragment extends Fragment {
         SuggestedTimesAdapter timesAdapter = new SuggestedTimesAdapter(getActivity(), R.layout.suggested_times_list_item, items);
         suggestedTimesList.setAdapter(timesAdapter);
 
+        suggestedTimesList.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
+
         String text = (String) suggestTimeButton.getText();
         suggestTimeButton.setText(text + "(قیمت: " + suggestedTimePrice + ")");
 
@@ -312,9 +334,9 @@ public class SuggestedTimesFragment extends Fragment {
                 .setPositiveButton(R.string.suggested_times_dialog_positive, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
 
-                        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(
+                        /*SharedPreferences sharedPreferences = getActivity().getSharedPreferences(
                                 "com.mibarim.main", Context.MODE_PRIVATE);
-                        sharedPreferences.edit().putInt(ALLOW_BACK_BUTTON, 1).apply();
+                        sharedPreferences.edit().putInt(ALLOW_BACK_BUTTON, 1).apply();*/
 
                         ((MainActivity) getActivity()).showSuggestTimeDialog(filterId);
 
