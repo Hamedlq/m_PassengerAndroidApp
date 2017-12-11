@@ -129,7 +129,7 @@ public interface SaveRouteRequestService {
                                  @Field("RouteId") String routeId,
                                  @Field("SelfRouteId") String selRouteId);
 
-    @POST(Constants.Http.URL_PAY_BOOK_REQUEST)
+    @POST(Constants.Http.URL_PAY_REQUEST)
     @FormUrlEncoded
     PaymentDetailModel bookRequest(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
                                    @Field("TripId") long tripId,

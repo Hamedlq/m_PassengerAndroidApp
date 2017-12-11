@@ -1037,9 +1037,10 @@ public class MainActivity extends BootstrapActivity {
         if (allowBackButton == 0) {
 
         } else {
-            showFloatingActionButton();
+            //showFloatingActionButton();
             super.onBackPressed();
         }
+
     }
 
 
@@ -1053,8 +1054,9 @@ public class MainActivity extends BootstrapActivity {
     public void showFloatingActionButton() {
         final FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = fragmentManager.findFragmentByTag("FabFragment");
-        ((FabFragment) fragment).showTheFab();
-
+        if (fragment != null && !fragment.isVisible()) {
+            ((FabFragment) fragment).showTheFab();
+        }
     }
 
     public void addRouteFilterFragment() {
@@ -1063,6 +1065,7 @@ public class MainActivity extends BootstrapActivity {
         fragmentManager.beginTransaction()
                 .replace(R.id.main_activity, routeFilterFragment, ROUTE_FILTER_FRAGMENT_TAG)
                 .commit();
+        showFloatingActionButton();
     }
 
     public void goToImageUploadActivity() {
