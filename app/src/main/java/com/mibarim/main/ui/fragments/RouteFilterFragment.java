@@ -48,6 +48,7 @@ import com.mibarim.main.ui.activities.UserInfoDetailActivity;
 
 import org.w3c.dom.Text;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -80,6 +81,7 @@ public class RouteFilterFragment extends Fragment implements AbsListView.OnItemC
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
 
         BootstrapApplication.component().inject(this);
         // Obtain the shared Tracker instance.

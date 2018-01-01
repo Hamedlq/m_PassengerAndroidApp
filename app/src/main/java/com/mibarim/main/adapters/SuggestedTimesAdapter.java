@@ -94,7 +94,7 @@ public class SuggestedTimesAdapter extends ArrayAdapter<FilterTimeModel> {
             suggestOrChooseDescriptionTextSecond.setVisibility(View.GONE);
             priceTitleTextview.setText("حداکثر");
             priceStringTextview.setText(items.get(position).PriceString);
-            suggestOrChooseDescriptionText.setText("زمان مورد نظر خود را انتخاب کنید");
+            suggestOrChooseDescriptionText.setText("زمان سفر خود را انتخاب کنید");
             pairPassengersTextview.setVisibility(View.GONE);
         }
 
