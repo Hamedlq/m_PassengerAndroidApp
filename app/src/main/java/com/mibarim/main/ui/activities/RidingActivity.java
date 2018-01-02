@@ -234,13 +234,12 @@ public class RidingActivity extends BootstrapActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    if (passTripModel.TripState == TripStates.InPreTripTime.toInt() ||
-                            passTripModel.TripState == TripStates.InRiding.toInt() ||
-                            passTripModel.TripState == TripStates.InTripTime.toInt()) {
-                        call(passTripModel.MobileNo);
-                    } else {
+
+                    if (passTripModel.TripState == TripStates.Scheduled.toInt()) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(RidingActivity.this);
                         builder.setMessage(getString(R.string.enable_call)).setPositiveButton("باشه", dialogClickListener).show();
+                    } else {
+                        call(passTripModel.MobileNo);
                         //call_driver.setEnabled(false);
                     }
                     return true;
