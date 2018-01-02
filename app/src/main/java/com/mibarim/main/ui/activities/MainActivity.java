@@ -140,7 +140,6 @@ public class MainActivity extends BootstrapActivity {
         progressDialog.setMessage(getText(R.string.please_wait));
 
 
-
 //        toolbar = (Toolbar) findViewById(R.id.main_toolbar);
 //        setSupportActionBar(toolbar);
 //        invite_btn = (ImageView) toolbar.findViewById(R.id.invite_btn);
@@ -165,7 +164,7 @@ public class MainActivity extends BootstrapActivity {
         PendingIntent pi = PendingIntent.getService(MainActivity.this, 0, intent, 0);
         AlarmManager alarm_manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarm_manager.set(AlarmManager.RTC, cur_cal.getTimeInMillis(), pi);
-        alarm_manager.setRepeating(AlarmManager.RTC, cur_cal.getTimeInMillis(), 30 * 60* 1000, pi);
+        alarm_manager.setRepeating(AlarmManager.RTC, cur_cal.getTimeInMillis(), 30 * 60 * 1000, pi);
 
 //        Intent intent = new Intent(this,HelloService.class);
 //        startService(intent);
@@ -612,12 +611,13 @@ public class MainActivity extends BootstrapActivity {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.main_activity);
         if (fragment != null) {
 //            getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+            showFloatingActionButton();
+
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.main_activity, new RouteFilterFragment())
                     .commit();
 
-            showFloatingActionButton();
         }
     }
 
@@ -653,7 +653,7 @@ public class MainActivity extends BootstrapActivity {
             protected void onSuccess(final Boolean hasAuthenticated) throws Exception {
                 super.onSuccess(hasAuthenticated);
                 //userHasAuthenticated = true;
-                new HandleApiMessages(MainActivity.this,deleteFilterapiResponse).showMessages();
+                new HandleApiMessages(MainActivity.this, deleteFilterapiResponse).showMessages();
                 addRouteFilterFragment();
 //                sendRegistrationToServer();
             }
@@ -692,7 +692,7 @@ public class MainActivity extends BootstrapActivity {
             @Override
             protected void onSuccess(final Boolean hasAuthenticated) throws Exception {
                 super.onSuccess(hasAuthenticated);
-                new HandleApiMessages(MainActivity.this,cancelFilterapiResponse).showMessages();
+                new HandleApiMessages(MainActivity.this, cancelFilterapiResponse).showMessages();
                 //new HandleApiMessagesBySnackbar(parentLayout,cancelFilterapiResponse);
                 //userHasAuthenticated = true;
 //                initScreen();
@@ -1037,7 +1037,7 @@ public class MainActivity extends BootstrapActivity {
         if (allowBackButton == 0) {
 
         } else {
-            //showFloatingActionButton();
+            showFloatingActionButton();
             super.onBackPressed();
         }
 
@@ -1054,9 +1054,9 @@ public class MainActivity extends BootstrapActivity {
     public void showFloatingActionButton() {
         final FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = fragmentManager.findFragmentByTag("FabFragment");
-        if (fragment != null && !fragment.isVisible()) {
-            ((FabFragment) fragment).showTheFab();
-        }
+
+        ((FabFragment) fragment).showTheFab();
+
     }
 
     public void addRouteFilterFragment() {

@@ -65,8 +65,6 @@ public class FabFragment extends Fragment {
         });
 
 
-
-
 //        displayUserGuide();
 
 
@@ -84,7 +82,8 @@ public class FabFragment extends Fragment {
     }
 
     public void showTheFab() {
-        fab.show();
+        if (!fab.isShown())
+            fab.show();
 //        fab.animate().translationY(0).setInterpolator(new LinearInterpolator()).start();
     }
 

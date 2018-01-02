@@ -121,10 +121,16 @@ public class RouteDetailsFragment extends Fragment implements LoaderManager.Load
         returnToRouteDetailsFragmentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+
+
                 SharedPreferences sharedPreferences = getActivity().getSharedPreferences(
                         "com.mibarim.main", Context.MODE_PRIVATE);
                 sharedPreferences.edit().putInt("AllowBackButton", 1).apply();
                 ((MainActivity) getActivity()).removeCurrentFragmentAndAddRouteFilterFragment();
+
+//                ((MainActivity) getActivity()).showFloatingActionButton();
 
             }
         });

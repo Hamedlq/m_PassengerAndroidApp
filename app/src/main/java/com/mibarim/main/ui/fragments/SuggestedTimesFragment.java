@@ -106,6 +106,8 @@ public class SuggestedTimesFragment extends Fragment {
 
         proceedButton = (Button) view.findViewById(R.id.proceed_button);
 
+        itemSelected = 0;
+
 
         proceedButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,6 +142,7 @@ public class SuggestedTimesFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                itemSelected = 0;
                 getTimesFromServer();
             }
         });
