@@ -100,7 +100,8 @@ public interface GetUserInfoService {
     @POST(Constants.Http.URL_SET_GOOGLE_TOKEN)
     @FormUrlEncoded
     ApiResponse SaveGoogleToken(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
-                                @Field("Token") String Token);
+                                @Field("Token") String Token,
+                                @Field("OneSignalToken") String OneSignalToken);
 
     @POST(Constants.Http.URL_GET_IMAGE)
     @FormUrlEncoded

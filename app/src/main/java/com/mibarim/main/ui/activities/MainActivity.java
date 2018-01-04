@@ -58,6 +58,8 @@ import com.mibarim.main.ui.fragments.RouteDetailsFragment;
 import com.mibarim.main.ui.fragments.RouteFilterFragment;
 import com.mibarim.main.ui.fragments.SuggestedTimesFragment;
 import com.mibarim.main.util.SafeAsyncTask;
+import com.onesignal.OSPermissionSubscriptionState;
+import com.onesignal.OneSignal;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -105,6 +107,7 @@ public class MainActivity extends BootstrapActivity {
     ImageView testButton;
     private Toolbar toolbar;
     String googletoken = "";
+    String oneSignaltoken = "";
 
     @Inject
     UserInfoService userInfoService;
@@ -212,6 +215,8 @@ public class MainActivity extends BootstrapActivity {
                 public Boolean call() throws Exception {
                     googletoken = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
                             GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+                    OSPermissionSubscriptionState status = OneSignal.getPermissionSubscriptionState();
+                    oneSignaltoken=status.getSubscriptionStatus().getUserId();
                     return true;
                 }
 
@@ -254,7 +259,7 @@ public class MainActivity extends BootstrapActivity {
                     serviceProvider.invalidateAuthToken();
                     authToken = serviceProvider.getAuthToken(MainActivity.this);
                 }
-                userInfoService.SaveGoogleToken(authToken, googletoken);
+                userInfoService.SaveGoogleToken(authToken, googletoken,oneSignaltoken);
                 return true;
             }
 
