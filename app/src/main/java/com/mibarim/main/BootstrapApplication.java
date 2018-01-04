@@ -11,6 +11,7 @@ import com.beardedhen.androidbootstrap.TypefaceProvider;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.mibarim.main.util.FontsOverride;
+import com.onesignal.OneSignal;
 
 /**
  * Mibarim application
@@ -30,8 +31,16 @@ public abstract class BootstrapApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        OneSignal.startInit(this)
+                .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
+                .unsubscribeWhenNotificationsAreDisabled(true)
+                .init();
+        // Call syncHashedEmail anywhere in your app if you have the user's email.
+        // This improves the effectiveness of OneSignal's "best-time" notification scheduling feature.
+        // OneSignal.syncHashedEmail(userEmail);
 
         init();
+
 
         instance = this;
 

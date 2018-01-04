@@ -84,6 +84,7 @@ public class SearchStationActivity extends AppCompatActivity {
     //    ArrayList<DataModel> dataModels1;
     ListView mainStationsListView;
     ListView chooseFromMapListview;
+    Button chooseFromMapButton;
 //    private static CustomAdapter adapter;
 //    private static CustomAdapter adapter1;
 
@@ -203,7 +204,8 @@ public class SearchStationActivity extends AppCompatActivity {
         suggestButton = (Button) footerLayout.findViewById(R.id.suggest_station_button);
         mainStationsListView.addFooterView(footerLayout);
 
-        chooseFromMapListview = (ListView) findViewById(R.id.choose_from_map_listview);
+//        chooseFromMapListview = (ListView) findViewById(R.id.choose_from_map_listview);
+        chooseFromMapButton = (Button) findViewById(R.id.choose_from_map_button);
 
 
         sourceSearchLayout = (LinearLayout) findViewById(R.id.source_search_layout);
@@ -274,6 +276,7 @@ public class SearchStationActivity extends AppCompatActivity {
 
 
 //
+//        chooseFromMapListview.setAdapter(chooseFromMapAdapter);
 //        chooseFromMapListview.setAdapter(chooseFromMapAdapter);
 
 
@@ -358,7 +361,7 @@ public class SearchStationActivity extends AppCompatActivity {
         });
 
 
-        chooseFromMapListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*chooseFromMapListview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
@@ -391,6 +394,37 @@ public class SearchStationActivity extends AppCompatActivity {
                     startActivityForResult(intent, 1432);
                 }
 
+
+            }
+        });*/
+
+        chooseFromMapButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                int stat = getState();
+
+                if (stat == 0) {
+                    Intent intent = new Intent(SearchStationActivity.this, StationsOnMapActivity.class);
+//                intent.putExtra("MainStationsIntentTag", jsonArray.toString());
+                    intent.putExtra(Constants.GlobalConstants.MAIN_STATIONS_INTENT_TAG, mainStationsApiResponse);
+                    intent.putExtra(Constants.GlobalConstants.STATE_OF_WHETHER_CHOOSING_ORIGIN_OR_DESTINATION, stat);
+                    intent.putExtra(Constants.GlobalConstants.ORIGIN_MAIN_STATION_ID_INTENT_TAG, originStationId);
+                    intent.putExtra(Constants.GlobalConstants.DESTINATION_MAIN_STATION_ID_INTENT_TAG, destinationStationId);
+
+                    startActivityForResult(intent, 1432);
+
+                }
+
+                if (stat == 1) {
+                    Intent intent = new Intent(SearchStationActivity.this, StationsOnMapActivity.class);
+//                intent.putExtra("MainStationsIntentTag", jsonArray.toString());
+                    intent.putExtra(Constants.GlobalConstants.MAIN_STATIONS_INTENT_TAG, mainStationsApiResponse);
+                    intent.putExtra(Constants.GlobalConstants.STATE_OF_WHETHER_CHOOSING_ORIGIN_OR_DESTINATION, stat);
+                    intent.putExtra(Constants.GlobalConstants.ORIGIN_MAIN_STATION_ID_INTENT_TAG, originStationId);
+                    intent.putExtra(Constants.GlobalConstants.DESTINATION_MAIN_STATION_ID_INTENT_TAG, destinationStationId);
+                    startActivityForResult(intent, 1432);
+                }
 
             }
         });
@@ -571,7 +605,7 @@ public class SearchStationActivity extends AppCompatActivity {
 
                 setListViewHeightBasedOnChildren(mainStationsListView);
 
-                setListViewHeightBasedOnChildren(chooseFromMapListview);
+//                setListViewHeightBasedOnChildren(chooseFromMapListview);
 
 
 //                progressDialog.hide();
@@ -681,7 +715,9 @@ public class SearchStationActivity extends AppCompatActivity {
             searchEdittext.setHint("جست و جو برای مبدا");
             refreshImageview.animate().rotation(0);
             refreshImageview.setColorFilter(getResources().getColor(R.color.defining_route_origin_color));
-            chooseFromMapListview.setBackgroundColor(getResources().getColor(R.color.defining_route_origin_color));
+//            chooseFromMapListview.setBackgroundColor(getResources().getColor(R.color.defining_route_origin_color));
+            chooseFromMapButton.setBackgroundColor(getResources().getColor(R.color.defining_route_origin_color));
+            chooseFromMapButton.setText("انتخاب مبدا از نقشه");
             if (routeResponseList != null) {
                 mySearchCustomAdapter = new SearchCustomAdapter(SearchStationActivity.this, routeResponseList);
                 mainStationsListView.setAdapter(mySearchCustomAdapter);
@@ -691,14 +727,17 @@ public class SearchStationActivity extends AppCompatActivity {
             String[] chooseFromMapSingleValue = new String[]{"انتخاب مبدا از نقشه"};
             final ArrayAdapter<String> chooseFromMapAdapter = new ArrayAdapter<String>(this,
                     R.layout.choose_from_map_item, R.id.station_name, chooseFromMapSingleValue);
-            chooseFromMapListview.setAdapter(chooseFromMapAdapter);
+//            chooseFromMapListview.setAdapter(chooseFromMapAdapter);
+//            chooseFromMapListview.setAdapter(chooseFromMapAdapter);
         }
 
         if (i == 1) {
             searchEdittext.setHint("جست و جو برای مقصد");
             refreshImageview.animate().rotation(180);
             refreshImageview.setColorFilter(getResources().getColor(R.color.defining_route_destination_color));
-            chooseFromMapListview.setBackgroundColor(getResources().getColor(R.color.defining_route_destination_color));
+//            chooseFromMapListview.setBackgroundColor(getResources().getColor(R.color.defining_route_destination_color));
+            chooseFromMapButton.setBackgroundColor(getResources().getColor(R.color.defining_route_destination_color));
+            chooseFromMapButton.setText("انتخاب مقصد از نقشه");
             if (routeResponseList != null) {
                 mySearchCustomAdapter = new SearchCustomAdapter(SearchStationActivity.this, routeResponseList);
                 mainStationsListView.setAdapter(mySearchCustomAdapter);
@@ -708,7 +747,7 @@ public class SearchStationActivity extends AppCompatActivity {
             String[] chooseFromMapSingleValue = new String[]{"انتخاب مقصد از نقشه"};
             final ArrayAdapter<String> chooseFromMapAdapter = new ArrayAdapter<String>(this,
                     R.layout.choose_from_map_item, R.id.station_name, chooseFromMapSingleValue);
-            chooseFromMapListview.setAdapter(chooseFromMapAdapter);
+//            chooseFromMapListview.setAdapter(chooseFromMapAdapter);
         }
     }
 
