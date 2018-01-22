@@ -91,7 +91,7 @@ public class MainCardActivity extends BootstrapActivity {
     private Toolbar toolbar;
     ImageView invite_btn;
     ImageView upload_btn;
-    ImageView testButton;
+    ImageView user_panel;
 
     private String authToken;
     private String url;
@@ -154,7 +154,7 @@ public class MainCardActivity extends BootstrapActivity {
 
 
 
-//        testButton = (ImageView) toolbar.findViewById(R.id.test_button);
+//        user_panel = (ImageView) toolbar.findViewById(R.id.test_button);
 
 
     }
@@ -195,16 +195,6 @@ public class MainCardActivity extends BootstrapActivity {
                 Intent upload_intent = new Intent(MainCardActivity.this, UserInfoDetailActivity.class);
                 upload_intent.putExtra(Constants.Auth.AUTH_TOKEN, authToken);
                 startActivity(upload_intent);
-            }
-        });
-
-
-        testButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainCardActivity.this, MainActivity.class);
-//                intent.putExtra(Constants.Auth.AUTH_TOKEN, authToken);
-                startActivity(intent);
             }
         });
     }
@@ -541,7 +531,7 @@ public class MainCardActivity extends BootstrapActivity {
                     serviceProvider.invalidateAuthToken();
                     authToken = serviceProvider.getAuthToken(MainCardActivity.this);
                 }
-                userInfoService.SaveGoogleToken(authToken, googletoken);
+                userInfoService.SaveGoogleToken(authToken);
                 return true;
             }
 

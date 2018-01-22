@@ -1,10 +1,5 @@
 package com.mibarim.main.ui.fragments;
 
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,7 +7,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
@@ -24,59 +18,47 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 
 import com.google.gson.Gson;
 import com.mibarim.main.BootstrapApplication;
 import com.mibarim.main.R;
-import com.mibarim.main.adapters.PassengerRouteRecyclerAdapter;
 import com.mibarim.main.adapters.RouteFilterAdapter;
-import com.mibarim.main.core.Constants;
 import com.mibarim.main.models.ApiResponse;
 import com.mibarim.main.models.FilterModel;
 import com.mibarim.main.models.Plus.PassRouteModel;
 import com.mibarim.main.models.RouteResponse;
-import com.mibarim.main.services.RouteRequestService;
 import com.mibarim.main.services.RouteResponseService;
 import com.mibarim.main.ui.ThrowableLoader;
 import com.mibarim.main.ui.activities.MainActivity;
-import com.mibarim.main.ui.activities.MainCardActivity;
-import com.mibarim.main.ui.activities.UserInfoDetailActivity;
-//import com.mibarim.main.ui.activities.MainCardActivity;
 
-
-import org.w3c.dom.Text;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
+
+//import com.mibarim.main.ui.activities.MainCardActivity;
 //import com.mibarim.main.adapters.RouteFilterAdapter;
 
 public class RouteFilterFragment extends Fragment implements AbsListView.OnItemClickListener, LoaderManager.LoaderCallbacks<List<FilterModel>> {
 
     // declarations
 
+    // injections
+    @Inject
+    protected RouteResponseService routeResponseService;
     List<FilterModel> items;
     List<FilterModel> latest;
-    private RouteResponse routeResponse;
-    private ApiResponse suggestRouteResponse;
     RouteFilterAdapter mAdapter;
     ListView listView;
     TextView mEmptyView;
     Toolbar toolbar;
     ImageView invite_btn;
     ImageView upload_btn;
-
+    ImageView user_panel;
     SwipeRefreshLayout swipeRefreshLayout;
-
-    // injections
-    @Inject
-    protected RouteResponseService routeResponseService;
-
+    private RouteResponse routeResponse;
+    private ApiResponse suggestRouteResponse;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,7 +68,6 @@ public class RouteFilterFragment extends Fragment implements AbsListView.OnItemC
         BootstrapApplication.component().inject(this);
         // Obtain the shared Tracker instance.
         BootstrapApplication application = (BootstrapApplication) getActivity().getApplication();
-
 
 
     }
@@ -104,6 +85,8 @@ public class RouteFilterFragment extends Fragment implements AbsListView.OnItemC
         toolbar = (Toolbar) view.findViewById(R.id.main_toolbar);
 //        setSupportActionBar(toolbar);
         invite_btn = (ImageView) toolbar.findViewById(R.id.invite_btn);
+
+        user_panel = (ImageView) toolbar.findViewById(R.id.user_panel);
 
         //initScreen();
         upload_btn = (ImageView) toolbar.findViewById(R.id.upload_btn);
@@ -126,6 +109,12 @@ public class RouteFilterFragment extends Fragment implements AbsListView.OnItemC
             }
         });
 
+        user_panel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getActivity()).goToUserProfileActivity();
+            }
+        });
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             listView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
@@ -319,9 +308,6 @@ public class RouteFilterFragment extends Fragment implements AbsListView.OnItemC
 
         ((MainActivity) getActivity()).showFloatingActionButton();
     }
-
-
-
 
 
 }

@@ -475,7 +475,7 @@ public class SearchStationActivity extends AppCompatActivity {
 
             }
         });
-
+        parentLayout = findViewById(android.R.id.content);
 
     }
 

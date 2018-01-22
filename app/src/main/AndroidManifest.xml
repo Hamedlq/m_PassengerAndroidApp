@@ -58,7 +58,7 @@
         <activity
             android:name=".ui.activities.MainCardActivity"
             android:label=""
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".authenticator.TokenRefreshActivity"
             android:screenOrientation="portrait" />
@@ -86,8 +86,13 @@
             android:name=".ui.activities.RidingActivity"
             android:label=""
             android:screenOrientation="portrait" />
-
-
+        <activity
+            android:name=".ui.activities.UserProfileActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activities.ChargeAccountActivity"
+            android:label="@string/charge_account"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activities.RatingActivity"
             android:label=""
@@ -188,9 +193,9 @@
             android:name="io.fabric.ApiKey"
             android:value="008bf8a4616494c8a4d4458210e653861643203a" />
 
-        <activity android:name=".ui.activities.UserInfoDetailActivity">
-
-        </activity>
+        <activity
+            android:name=".ui.activities.UserInfoDetailActivity"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"

@@ -150,7 +150,7 @@ public class MainActivity extends BootstrapActivity {
         //initScreen();
 //        upload_btn = (ImageView) toolbar.findViewById(R.id.upload_btn);
 
-//        testButton = (ImageView) toolbar.findViewById(R.id.test_button);
+//        user_panel = (ImageView) toolbar.findViewById(R.id.test_button);
 
         checkAuth();
 
@@ -259,7 +259,7 @@ public class MainActivity extends BootstrapActivity {
                     serviceProvider.invalidateAuthToken();
                     authToken = serviceProvider.getAuthToken(MainActivity.this);
                 }
-                userInfoService.SaveGoogleToken(authToken, googletoken,oneSignaltoken);
+                userInfoService.SaveGoogleToken(authToken);
                 return true;
             }
 
@@ -328,7 +328,7 @@ public class MainActivity extends BootstrapActivity {
         });
 
 
-        testButton.setOnClickListener(new View.OnClickListener() {
+        user_panel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                Intent intent = new Intent(MainActivity.this, MainActivity.class);
@@ -1077,6 +1077,12 @@ public class MainActivity extends BootstrapActivity {
         Intent upload_intent = new Intent(MainActivity.this, UserInfoDetailActivity.class);
         upload_intent.putExtra(Constants.Auth.AUTH_TOKEN, authToken);
         startActivity(upload_intent);
+    }
+
+    public void goToUserProfileActivity(){
+        Intent userPanel = new Intent(MainActivity.this, UserProfileActivity.class);
+        userPanel.putExtra(Constants.Auth.AUTH_TOKEN, authToken);
+        startActivity(userPanel);
     }
 
 

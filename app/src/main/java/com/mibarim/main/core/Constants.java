@@ -126,6 +126,7 @@ public final class Constants {
         public static final String URL_SET_BANK_CARD_IMAGE = "/InsertBankCardPic";
         public static final String URL_GET_VERSION = "/GetAppVersion";
         public static final String URL_GET_SCORE = "/GetPassengerScores";
+        public static final String URL_SEND_AMOUNT = "/RequestInvoiceByForm";
         public static final String URL_GET_RATE = "/GetRatings";
         public static final String URL_GET_SCORE_CONTACT = "/GetUserScoresByContact";
         public static final String URL_GET_SCORE_Route = "/GetUserScoresByRoute";

@@ -164,4 +164,10 @@
         <item name="colorControlActivated">@color/my_yellow</item>
     </style>
 
+    <style name="AppTheme.Dark.Dialog" parent="Theme.AppCompat.Dialog">
+        <item name="colorAccent">@color/primary_dark</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:background">@color/primary</item>
+    </style>
+
 </resources>

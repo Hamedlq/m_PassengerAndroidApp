@@ -202,7 +202,7 @@ public class PayActivity extends BootstrapActivity {
         new SafeAsyncTask<Boolean>() {
             @Override
             public Boolean call() throws Exception {
-                scoreModel = userInfoService.getUserScores(authToken,getPassRouteModel().Price,getPassRouteModel().TripId);
+                scoreModel = userInfoService.getUserScores(authToken);
                 return true;
             }
 

@@ -4,6 +4,7 @@ import com.mibarim.main.RestInterfaces.GetUserInfoService;
 import com.mibarim.main.models.ApiResponse;
 import com.mibarim.main.models.ImageResponse;
 import com.mibarim.main.models.InviteModel;
+import com.mibarim.main.models.Plus.PaymentDetailModel;
 import com.mibarim.main.models.ScoreModel;
 import com.mibarim.main.models.UserInfoModel;
 import com.mibarim.main.models.UserInitialModel;
@@ -59,8 +60,8 @@ public class UserInfoService {
     }
 
 
-    public ApiResponse SaveGoogleToken(String authToken,String Token,String oneSignalToken) {
-        ApiResponse res=getService().SaveGoogleToken("Bearer " + authToken, Token,oneSignalToken);
+    public ApiResponse SaveGoogleToken(String authToken) {
+        ApiResponse res = getService().SaveGoogleToken("Bearer " + authToken);
         return res;
     }
 
@@ -74,19 +75,23 @@ public class UserInfoService {
         return res;
     }
 
-    public ApiResponse sendFeedback(String mobile,String txt) {
-        ApiResponse res = getService().sendFeedback(mobile,"mobile@mibarim.com", txt);
+    public ApiResponse sendFeedback(String mobile, String txt) {
+        ApiResponse res = getService().sendFeedback(mobile, "mobile@mibarim.com", txt);
         return res;
     }
 
-    public ScoreModel getUserScores(String authToken, long price, int tripId) {
-        ScoreModel res = getService().getUserScores("Bearer " + authToken, price,tripId);
+    public ScoreModel getUserScores(String authToken) {
+        ScoreModel res = getService().getUserScores("Bearer " + authToken,"1");
         return res;
 
     }
 
-    public ApiResponse submitDiscount(String authToken, String discountCode,long chargeAmount, long seatPrice) {
-        ApiResponse res=getService().submitDiscount("Bearer " + authToken, discountCode, chargeAmount,seatPrice);
+    public PaymentDetailModel sendChargeAmount(String mobileNumber, String amount){
+        return getService().sendChargeAmount(mobileNumber, amount);
+    }
+
+    public ApiResponse submitDiscount(String authToken, String discountCode, long chargeAmount, long seatPrice) {
+        ApiResponse res = getService().submitDiscount("Bearer " + authToken, discountCode, chargeAmount, seatPrice);
         return res;
     }
 

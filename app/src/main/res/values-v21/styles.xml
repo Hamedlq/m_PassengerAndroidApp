@@ -12,4 +12,5 @@
     <style name="CustomTextAppearance">
         <item name="android:typeface">monospace</item>
     </style>
+
 </resources>
