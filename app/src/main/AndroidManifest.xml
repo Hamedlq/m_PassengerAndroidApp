@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.mibarim.main"
-    android:versionCode="37"
+    android:versionCode="38"
     android:versionName="@string/version">
 
     <uses-sdk tools:overrideLibrary="android.support.test.uiautomator.v18" />
@@ -158,7 +158,7 @@
             android:label=""
             android:screenOrientation="portrait" />
 
-        <receiver
+        <!--<receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
             android:permission="com.google.android.c2dm.permission.SEND">
@@ -175,7 +175,7 @@
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
-        </service>
+        </service>-->
         <service android:name=".services.HelloService" />
         <service
             android:name=".google.MyInstanceIDListenerService"

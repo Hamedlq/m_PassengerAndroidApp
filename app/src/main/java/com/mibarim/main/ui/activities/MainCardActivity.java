@@ -59,6 +59,8 @@ import com.mibarim.main.ui.BootstrapActivity;
 import com.mibarim.main.ui.fragments.FabFragment;
 import com.mibarim.main.ui.fragments.PlusFragments.PassengerCardFragment;
 import com.mibarim.main.util.SafeAsyncTask;
+import com.onesignal.OSPermissionSubscriptionState;
+import com.onesignal.OneSignal;
 import com.squareup.otto.Subscribe;
 
 import javax.inject.Inject;
@@ -106,6 +108,7 @@ public class MainCardActivity extends BootstrapActivity {
     private int REFRESH_TOKEN_REQUEST = 3456;
     private boolean refreshingToken = false;
     String googletoken = "";
+    String oneSignaltoken = "";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private int FINISH_USER_INFO = 5649;
     private int FINISH_PAYMENT = 5659;
@@ -490,6 +493,8 @@ public class MainCardActivity extends BootstrapActivity {
                 public Boolean call() throws Exception {
                     googletoken = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
                             GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+                    OSPermissionSubscriptionState status = OneSignal.getPermissionSubscriptionState();
+                    oneSignaltoken=status.getSubscriptionStatus().getUserId();
                     return true;
                 }
 
@@ -531,7 +536,7 @@ public class MainCardActivity extends BootstrapActivity {
                     serviceProvider.invalidateAuthToken();
                     authToken = serviceProvider.getAuthToken(MainCardActivity.this);
                 }
-                userInfoService.SaveGoogleToken(authToken);
+                userInfoService.SaveGoogleToken(authToken, googletoken,oneSignaltoken);
                 return true;
             }
 
