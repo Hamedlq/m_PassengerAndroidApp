@@ -72,5 +72,9 @@ public interface GetRouteResponseService {
     ApiResponse GetTimes(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
                            @Field("FilterId") long filterId);
 
+    @POST(Constants.Http.GET_PASSENGER_TRIP_URL)
+    @FormUrlEncoded
+    ApiResponse GetPassengerTrip(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
+                                   @Field("FilteringId") long Id);
 
 }

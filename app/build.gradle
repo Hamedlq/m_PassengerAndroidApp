@@ -13,15 +13,21 @@ buildscript {
     }
 }
 
+plugins {
+    id 'com.onesignal.androidsdk.onesignal-gradle-plugin' version '0.5.0'
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 apply plugin: 'com.neenbedankt.android-apt'
+apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
 
 repositories {
     maven { url 'https://github.com/donnfelker/mvn-repo/raw/master/' }
     mavenLocal()
     jcenter()
     maven { url 'https://maven.fabric.io/public' }
+    maven { url 'https://maven.google.com' }
 }
 
 //def computeVersionCode() {
@@ -50,7 +56,7 @@ android {
     defaultConfig {
         minSdkVersion 17
         targetSdkVersion 25
-        versionName "3.1"
+        versionName "4.0.0"
 
 //        versionCode computeVersionCode()
 //        versionName computeVersionName()
@@ -71,6 +77,10 @@ android {
         // Stops the Gradle plugin's automatic rasterization of vectors
         //generatedDensities = []
         //vectorDrawables.useSupportLibrary = true
+
+        manifestPlaceholders = [onesignal_app_id: "e9f04afc-b00a-43d6-a73d-5e4863effd6a",
+                                // Project number pulled from dashboard, local value is ignored.
+                                onesignal_google_project_number: "REMOTE"]
 
     }
 
@@ -101,6 +111,10 @@ android {
 
     lintOptions {
         abortOnError false
+    }
+
+    dexOptions {
+        jumboMode true
     }
 
     buildTypes {
@@ -159,13 +173,21 @@ dependencies {
     //compile 'com.google.android.gms:play-services:9.0.1'
 
     //https://developers.google.com/android/guides/setup
-    compile 'com.google.android.gms:play-services-base:9.4.0'
-    compile 'com.google.android.gms:play-services-appindexing:9.4.0'
-    compile 'com.google.android.gms:play-services-gcm:9.4.0'
-    compile 'com.google.android.gms:play-services-location:9.4.0'
-    compile 'com.google.android.gms:play-services-maps:9.4.0'
-    compile 'com.google.android.gms:play-services-ads:9.4.0'
-    compile 'com.google.android.gms:play-services-analytics:9.4.0'
+//    compile 'com.google.android.gms:play-services-base:9.4.0'
+    compile 'com.google.android.gms:play-services-base:11.2.0'
+//    compile 'com.google.android.gms:play-services-appindexing:9.4.0'
+//    compile 'com.google.android.gms:play-services-appindexing:11.2.0'
+//    compile 'com.google.android.gms:play-services-gcm:9.4.0'
+    compile 'com.google.android.gms:play-services-gcm:11.2.0'
+
+//    compile 'com.google.android.gms:play-services-location:9.4.0'
+    compile 'com.google.android.gms:play-services-location:11.2.0'
+//    compile 'com.google.android.gms:play-services-maps:9.4.0'
+    compile 'com.google.android.gms:play-services-maps:11.2.0'
+//    compile 'com.google.android.gms:play-services-ads:9.4.0'
+    compile 'com.google.android.gms:play-services-ads:11.2.0'
+//    compile 'com.google.android.gms:play-services-analytics:9.4.0'
+    compile 'com.google.android.gms:play-services-analytics:11.2.0'
     //badge
     compile 'com.github.nekocode:Badge:1.6.2'
     //Osmdroid
@@ -243,6 +265,8 @@ dependencies {
 
     compile 'com.airbnb.android:lottie:1.5.3'
 
+    compile 'com.onesignal:OneSignal:[3.6.0, 3.99.99]'
+
 //    compile 'com.airbnb.android:lottie:2.3.1-SNAPSHOT'
 
 //    compile 'com.airbnb.android:lottie:2.3.0'
@@ -277,5 +301,6 @@ dependencies {
     //androidTestCompile 'com.android.support:support-annotations:23.2.0'
     apt 'com.google.dagger:dagger-compiler:2.0'
     provided 'javax.annotation:jsr250-api:1.0'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
 }
 apply plugin: 'com.google.gms.google-services'

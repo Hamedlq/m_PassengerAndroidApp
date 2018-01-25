@@ -100,9 +100,11 @@
 
     <color name="white">#FFFFFF</color>
     <color name="main_black">#000000</color>
+    <color name="charge_activity">#B2DFDB</color>
 
     <color name="pressed_color">#4d90fe</color>
     <color name="default_color">#ffffff</color>
+    <color name="add_amount_button_color">#005a96</color>
 
     <color name="gray_background">#e6e6e6</color>
 

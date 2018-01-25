@@ -4,6 +4,7 @@ import com.mibarim.main.core.Constants;
 import com.mibarim.main.models.ApiResponse;
 import com.mibarim.main.models.ImageResponse;
 import com.mibarim.main.models.InviteModel;
+import com.mibarim.main.models.Plus.PaymentDetailModel;
 import com.mibarim.main.models.ScoreModel;
 import com.mibarim.main.models.UserInfoModel;
 import com.mibarim.main.models.UserInitialModel;
@@ -31,12 +32,12 @@ public interface GetUserInfoService {
     @POST(Constants.Http.URL_REGISTER_USER)
     @FormUrlEncoded
     ApiResponse registerUser(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
-                                     @Field("Name") String name,
-                                     @Field("Family") String family,
-                                     @Field("NationalCode") String nationalCode,
-                                     @Field("Gender") String gender,
-                                     @Field("Email") String email,
-                                     @Field("Code") String code);
+                             @Field("Name") String name,
+                             @Field("Family") String family,
+                             @Field("NationalCode") String nationalCode,
+                             @Field("Gender") String gender,
+                             @Field("Email") String email,
+                             @Field("Code") String code);
 
     @POST(Constants.Http.URL_GET_USER_INFO)
     @FormUrlEncoded
@@ -59,27 +60,27 @@ public interface GetUserInfoService {
     @POST(Constants.Http.URL_SET_BANK_INFO)
     @FormUrlEncoded
     ApiResponse SaveBankInfo(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
-                            @Field("BankName") String bankName,
-                            @Field("BankAccountNo") String bankAccountNo,
-                            @Field("BankShaba") String bankShaba
+                             @Field("BankName") String bankName,
+                             @Field("BankAccountNo") String bankAccountNo,
+                             @Field("BankShaba") String bankShaba
     );
 
 
     @POST(Constants.Http.URL_SET_USER_INFO)
     @FormUrlEncoded
     ApiResponse SaveUserInfo(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
-                                     @Field("Name") String name,
-                                     @Field("Family") String family,
-                                     @Field("NationalCode") String nationalCode,
-                                     @Field("Gender") String gender,
-                                     @Field("Email") String email,
-                                     @Field("Code") String code,
-                                     @Field("CarType") String carType,
-                                     @Field("CarPlateNo") String carPlateNo,
-                                     @Field("carColor") String CarColor,
-                                     @Field("BankShaba") String BankShaba,
-                                     @Field("BankName") String BankName,
-                                     @Field("BankAccountNo") String BankAccount
+                             @Field("Name") String name,
+                             @Field("Family") String family,
+                             @Field("NationalCode") String nationalCode,
+                             @Field("Gender") String gender,
+                             @Field("Email") String email,
+                             @Field("Code") String code,
+                             @Field("CarType") String carType,
+                             @Field("CarPlateNo") String carPlateNo,
+                             @Field("carColor") String CarColor,
+                             @Field("BankShaba") String BankShaba,
+                             @Field("BankName") String BankName,
+                             @Field("BankAccountNo") String BankAccount
     );
 
 
@@ -99,13 +100,12 @@ public interface GetUserInfoService {
 
     @POST(Constants.Http.URL_SET_GOOGLE_TOKEN)
     @FormUrlEncoded
-    ApiResponse SaveGoogleToken(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
-                                @Field("Token") String Token);
+    ApiResponse SaveGoogleToken(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken);
 
     @POST(Constants.Http.URL_GET_IMAGE)
     @FormUrlEncoded
     ImageResponse GetImageById(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
-                                @Field("ImageId") String imageId);
+                               @Field("ImageId") String imageId);
 
     @POST(Constants.Http.URL_SET_DISCOUNT)
     @FormUrlEncoded
@@ -122,23 +122,23 @@ public interface GetUserInfoService {
     @POST(Constants.Http.URL_GET_WITHDRAW)
     @FormUrlEncoded
     ApiResponse getWithdrawRequests(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
-                             @Field("UserId") String userId);
+                                    @Field("UserId") String userId);
 
     @POST(Constants.Http.URL_SET_ABOUT_ME)
     @FormUrlEncoded
     ApiResponse saveAboutMe(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
-                             @Field("Desc") String desc);
+                            @Field("Desc") String desc);
 
     @POST(Constants.Http.URL_SET_WITHDRAW)
     @FormUrlEncoded
     ApiResponse submitWithdrawRequest(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
-                               @Field("WithdrawAmount") String withdrawAmount);
+                                      @Field("WithdrawAmount") String withdrawAmount);
 
     @POST(Constants.Http.URL_TOGGLE_CONTACT)
     @FormUrlEncoded
     ApiResponse toggleContactState(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
-                                      @Field("ContactId") String contactId,
-                                         @Field("State") boolean state
+                                   @Field("ContactId") String contactId,
+                                   @Field("State") boolean state
     );
 
     @POST(Constants.Http.URL_GET_INVITE)
@@ -149,8 +149,8 @@ public interface GetUserInfoService {
     @POST(Constants.Http.URL_SEND_FEEDBACK)
     @FormUrlEncoded
     ApiResponse sendFeedback(@Field("Name") String mobile,
-                                  @Field("Email") String email,
-                                  @Field("Text") String txt);
+                             @Field("Email") String email,
+                             @Field("Text") String txt);
 
     @POST(Constants.Http.URL_GET_INITIAL_INFO)
     @FormUrlEncoded
@@ -159,9 +159,11 @@ public interface GetUserInfoService {
 
     @POST(Constants.Http.URL_GET_SCORE)
     @FormUrlEncoded
-    ScoreModel getUserScores(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken,
-                             @Field("SeatPrice") long price,
-                             @Field("TripId") long tripId);
+    ScoreModel getUserScores(@Header(Constants.Http.PARAM_AUTHORIZATION) String authToken, @Field("Name") String fake);
+
+    @POST(Constants.Http.URL_SEND_AMOUNT)
+    @FormUrlEncoded
+    PaymentDetailModel sendChargeAmount(@Field("Mobile") String mobile, @Field("ChargeAmount") String amount);
 
     /*@POST(Constants.Http.URL_GET_RATE)
     @FormUrlEncoded

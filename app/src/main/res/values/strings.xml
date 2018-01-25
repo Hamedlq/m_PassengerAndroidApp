@@ -42,7 +42,7 @@
     <string name="no_news">No News</string>
     <string name="avatar">Avatar</string>
     <string name="choose">Choose</string>
-    <string name="version">3.1.1</string>
+    <string name="version">4.0.1</string>
     <string name="testVersion">نسخه آزمایشی</string>
 
     <!-- AuthenticatorActivity -->
@@ -122,6 +122,7 @@
     <string name="do_continue">ادامه...</string>
     <string name="click_on_map">روی نقشه مشخص کنید</string>
     <string name="rial">ریال</string>
+    <string name="toman"> تومان</string>
     <string name="src_dst_not_empty">با لمس بر روی نقشه مبدا و مقصد را مشخص کنید</string>
     <string name="route_saved">مسیر جدید با موفقیت ثبت شد</string>
 
@@ -415,7 +416,7 @@
     <string name="afternoon">بعدازظهر</string>
     <string name="noon">ظهر</string>
 
-    <string name="waiting_text">در حال فرستادن درخواست به سایر راننده ها و مسافران</string>
+    <string name="waiting_text">در حال فرستادن درخواست به سایر راننده‌ها و مسافران</string>
 
     <string name="observe_trip">مشاهده سفر</string>
 
@@ -431,6 +432,16 @@
 
     <string name="select_suggested_time">انتخاب کنید</string>
     <string name="service_worker_name">سرویس ماهانه کارمندان</string>
+
+    <string name="return_to_route_filters">بازگشت به لیست مسیرها</string>
+
+    <string name="pay">پرداخت</string>
+
+    <string name="enter_amount_footer">مقادیر پیش فرض :</string>
+    <string name="enter_amount">مبلغ مورد نظر</string>
+    <string name="charge">افزایش اعتبار</string>
+    <string name="payment">پرداخت</string>
+    <string name="low_charge_amount">مبلغ وارد شده کم است</string>
 
 
 </resources>

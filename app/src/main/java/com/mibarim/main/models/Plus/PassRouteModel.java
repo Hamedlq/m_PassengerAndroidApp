@@ -8,7 +8,7 @@ import java.io.Serializable;
  */
 public class PassRouteModel implements Serializable {
     public int TripId;
-    public int TripState;
+    public int TripState; //
     public String Name;
     public String Family;
     public String MobileNo;

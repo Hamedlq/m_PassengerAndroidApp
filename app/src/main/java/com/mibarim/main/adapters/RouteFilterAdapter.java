@@ -21,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.airbnb.lottie.LottieAnimationView;
 import com.mibarim.main.R;
 import com.mibarim.main.models.FilterModel;
 import com.mibarim.main.ui.activities.MainActivity;
@@ -73,6 +74,8 @@ public class RouteFilterAdapter extends ArrayAdapter<FilterModel> {
 //        TextView observeTrip = (TextView) view.findViewById(R.id.observe_trip);
 
         RelativeLayout deleteRoute = (RelativeLayout) view.findViewById(R.id.delete_route);
+
+        LottieAnimationView waitingAnimation = (LottieAnimationView) view.findViewById(R.id.waiting_animation_item);
 
 
         deleteRoute.setOnClickListener(new View.OnClickListener() {
@@ -153,8 +156,9 @@ public class RouteFilterAdapter extends ArrayAdapter<FilterModel> {
 
 
                     ((MainActivity) myContext).hideFloatingActionButton();
+                    ((MainActivity) myContext).chosenFilter(listItem.FilterId);
 
-                    RouteDetailsFragment routeDetailsFragment = new RouteDetailsFragment();
+                    /*RouteDetailsFragment routeDetailsFragment = new RouteDetailsFragment();
 
                     Bundle bundle = new Bundle();
 
@@ -165,7 +169,6 @@ public class RouteFilterAdapter extends ArrayAdapter<FilterModel> {
 
 
                     FragmentManager fragmentManager = ((MainActivity) myContext).getSupportFragmentManager();
-                    ((MainActivity) myContext).chosenFilter(listItem.FilterId);
                     fragmentManager.beginTransaction()
                             .replace(R.id.main_activity, routeDetailsFragment)
                             .addToBackStack("Payment")
@@ -173,7 +176,9 @@ public class RouteFilterAdapter extends ArrayAdapter<FilterModel> {
 //                        .addSharedElement(textView, textTransitionName)
                             .addSharedElement(sourceText, "textTransitionNameForDest")
                             .addSharedElement(destText, "whatsoever")
-                            .commit();
+                            .commit();*/
+
+                    ((MainActivity)myContext).getPassengetTripFromServer();
 
                 }
 
@@ -185,7 +190,7 @@ public class RouteFilterAdapter extends ArrayAdapter<FilterModel> {
         sourceText.setText(listItem.SrcStation);
         destText.setText(listItem.DstStation);
 
-        if (listItem.IsActive == true) {
+        if (listItem.IsActive) {
             NumberFormat numberFormat = new DecimalFormat("00");
             hourTime.setText(numberFormat.format(listItem.TimeHour));
             minuteTime.setText( numberFormat.format(listItem.TimeMinute));
@@ -199,6 +204,7 @@ public class RouteFilterAdapter extends ArrayAdapter<FilterModel> {
             anim.setRepeatMode(Animation.REVERSE);
             anim.setRepeatCount(5);
             suggestTime.startAnimation(anim);
+            waitingAnimation.setVisibility(View.VISIBLE);
 
         } else {
             suggestTime.setText(R.string.request_trip);

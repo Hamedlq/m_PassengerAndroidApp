@@ -59,6 +59,8 @@ import com.mibarim.main.ui.BootstrapActivity;
 import com.mibarim.main.ui.fragments.FabFragment;
 import com.mibarim.main.ui.fragments.PlusFragments.PassengerCardFragment;
 import com.mibarim.main.util.SafeAsyncTask;
+import com.onesignal.OSPermissionSubscriptionState;
+import com.onesignal.OneSignal;
 import com.squareup.otto.Subscribe;
 
 import javax.inject.Inject;
@@ -91,7 +93,7 @@ public class MainCardActivity extends BootstrapActivity {
     private Toolbar toolbar;
     ImageView invite_btn;
     ImageView upload_btn;
-    ImageView testButton;
+    ImageView user_panel;
 
     private String authToken;
     private String url;
@@ -106,6 +108,7 @@ public class MainCardActivity extends BootstrapActivity {
     private int REFRESH_TOKEN_REQUEST = 3456;
     private boolean refreshingToken = false;
     String googletoken = "";
+    String oneSignaltoken = "";
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private int FINISH_USER_INFO = 5649;
     private int FINISH_PAYMENT = 5659;
@@ -154,7 +157,7 @@ public class MainCardActivity extends BootstrapActivity {
 
 
 
-//        testButton = (ImageView) toolbar.findViewById(R.id.test_button);
+//        user_panel = (ImageView) toolbar.findViewById(R.id.test_button);
 
 
     }
@@ -195,16 +198,6 @@ public class MainCardActivity extends BootstrapActivity {
                 Intent upload_intent = new Intent(MainCardActivity.this, UserInfoDetailActivity.class);
                 upload_intent.putExtra(Constants.Auth.AUTH_TOKEN, authToken);
                 startActivity(upload_intent);
-            }
-        });
-
-
-        testButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainCardActivity.this, MainActivity.class);
-//                intent.putExtra(Constants.Auth.AUTH_TOKEN, authToken);
-                startActivity(intent);
             }
         });
     }
@@ -500,6 +493,8 @@ public class MainCardActivity extends BootstrapActivity {
                 public Boolean call() throws Exception {
                     googletoken = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
                             GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+                    OSPermissionSubscriptionState status = OneSignal.getPermissionSubscriptionState();
+                    oneSignaltoken=status.getSubscriptionStatus().getUserId();
                     return true;
                 }
 
@@ -541,7 +536,7 @@ public class MainCardActivity extends BootstrapActivity {
                     serviceProvider.invalidateAuthToken();
                     authToken = serviceProvider.getAuthToken(MainCardActivity.this);
                 }
-                userInfoService.SaveGoogleToken(authToken, googletoken);
+                userInfoService.SaveGoogleToken(authToken, googletoken,oneSignaltoken);
                 return true;
             }
 

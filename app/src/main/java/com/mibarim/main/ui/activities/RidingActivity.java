@@ -73,8 +73,11 @@ import com.mibarim.main.services.UserInfoService;
 import com.mibarim.main.ui.BootstrapActivity;
 import com.mibarim.main.ui.HandleApiMessages;
 import com.mibarim.main.ui.fragments.MapFragment;
+import com.mibarim.main.ui.fragments.RouteFilterFragment;
 import com.mibarim.main.util.SafeAsyncTask;
 import com.squareup.otto.Subscribe;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
@@ -114,10 +117,10 @@ public class RidingActivity extends BootstrapActivity {
     protected TextView carString;
     @Bind(R.id.username)
     protected TextView username;
-/*
-    @Bind(R.id.enable_text)
-    protected TextView enable_text;
-*/
+    /*
+        @Bind(R.id.enable_text)
+        protected TextView enable_text;
+    */
     @Bind(R.id.trip_time)
     protected TextView trip_time;
     @Bind(R.id.call_driver)
@@ -126,12 +129,14 @@ public class RidingActivity extends BootstrapActivity {
     protected TextView cancel_trip;
     @Bind(R.id.userimage)
     protected BootstrapCircleThumbnail userimage;
-   /* @Bind(R.id.call_btn)
-    protected AppCompatButton call_btn;*/
+    /* @Bind(R.id.call_btn)
+     protected AppCompatButton call_btn;*/
     @Bind(R.id.map_container)
     protected FrameLayout map_container;
     @Bind(R.id.map_container_web)
     protected WebView map_container_web;
+    @Bind(R.id.pay)
+    protected TextView pay;
 
 
     Intent googleServiceIntent;
@@ -157,6 +162,7 @@ public class RidingActivity extends BootstrapActivity {
     private ImageResponse imageResponse;
     private AlertDialog gpsAlert;
     private Location driverLocation;
+    private int FINISH_PAYMENT = 5659;
     //private int stationDistance = 500;
 
 
@@ -175,6 +181,10 @@ public class RidingActivity extends BootstrapActivity {
 
         super.onCreate(savedInstanceState);
         BootstrapApplication.component().inject(this);
+
+        SharedPreferences sharedPreferences = getSharedPreferences(
+                "com.mibarim.main", Context.MODE_PRIVATE);
+        sharedPreferences.edit().putInt("AllowBackButton", 1).apply();
 
         if (getIntent() != null && getIntent().getExtras() != null) {
             authToken = getIntent().getExtras().getString(Constants.Auth.AUTH_TOKEN);
@@ -203,8 +213,6 @@ public class RidingActivity extends BootstrapActivity {
         }
 
 
-
-
         toolbar = (Toolbar) findViewById(R.id.ride_toolbar);
         setSupportActionBar(toolbar);
         //cancel_btn = (TextView) toolbar.findViewById(R.id.trip_cancel);
@@ -226,13 +234,12 @@ public class RidingActivity extends BootstrapActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    if (passTripModel.TripState == TripStates.InPreTripTime.toInt() ||
-                            passTripModel.TripState == TripStates.InRiding.toInt() ||
-                            passTripModel.TripState == TripStates.InTripTime.toInt()) {
-                        call(passTripModel.MobileNo);
-                    }else{
+
+                    if (passTripModel.TripState == TripStates.Scheduled.toInt()) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(RidingActivity.this);
                         builder.setMessage(getString(R.string.enable_call)).setPositiveButton("باشه", dialogClickListener).show();
+                    } else {
+                        call(passTripModel.MobileNo);
                         //call_driver.setEnabled(false);
                     }
                     return true;
@@ -244,7 +251,7 @@ public class RidingActivity extends BootstrapActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    cancelPassTripModel=passTripModel;
+                    cancelPassTripModel = passTripModel;
                     showDialog(getString(R.string.sure_disable));
                     return true;
                 }
@@ -259,6 +266,13 @@ public class RidingActivity extends BootstrapActivity {
                     return true;
                 }
                 return false;
+            }
+        });
+
+        pay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                gotoPayActivity(passTripModel);
             }
         });
         driverLocation = new Location();
@@ -451,10 +465,10 @@ public class RidingActivity extends BootstrapActivity {
 
     private void showStation() {
         Location loc = new Location();
-        loc.lat=null;
-        loc.lng=null;
-        driverLocation.lat=passTripModel.SrcLatitude;
-        driverLocation.lng=passTripModel.SrcLongitude;
+        loc.lat = null;
+        loc.lng = null;
+        driverLocation.lat = passTripModel.SrcLatitude;
+        driverLocation.lng = passTripModel.SrcLongitude;
         showOnMap(loc);
     }
 
@@ -499,7 +513,7 @@ public class RidingActivity extends BootstrapActivity {
                     gpsAlert.show();
                 }
             }
-        }else{
+        } else {
             showStation();
         }
     }
@@ -749,8 +763,8 @@ public class RidingActivity extends BootstrapActivity {
     private void finishIt() {
         mHandler.removeCallbacks(mRunnable);
         LocationService.destroy(RidingActivity.this);
-        Intent i= getIntent();
-        setResult(RESULT_OK,i);
+        Intent i = getIntent();
+        setResult(RESULT_OK, i);
         finish();
     }
 
@@ -760,4 +774,16 @@ public class RidingActivity extends BootstrapActivity {
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
+
+    public void gotoPayActivity(final PassRouteModel selectedItem) {
+        Intent intent = new Intent(this, PayActivity.class);
+        intent.putExtra(Constants.GlobalConstants.PASS_ROUTE_MODEL, selectedItem);
+        intent.putExtra(Constants.Auth.AUTH_TOKEN, authToken);
+        this.startActivityForResult(intent, FINISH_PAYMENT);
+    }
+
+
+
+
+
 }

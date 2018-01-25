@@ -66,6 +66,8 @@
                 </LinearLayout>
 
                 <com.airbnb.lottie.LottieAnimationView
+                    android:visibility="gone"
+                    android:id="@+id/waiting_animation_item"
                     android:layout_alignParentEnd="true"
                     android:layout_width="30dp"
                     android:layout_height="30dp"

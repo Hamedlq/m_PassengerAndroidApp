@@ -83,6 +83,11 @@ public class RouteResponseService {
     }
 
 
+    public ApiResponse GetPassengerTrip(String authToken, long filterId) {
+        ApiResponse res = getService().GetPassengerTrip("Bearer " + authToken, filterId);
+        return res;
+    }
+
 
 
 }

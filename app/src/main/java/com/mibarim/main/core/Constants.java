@@ -56,7 +56,7 @@ public final class Constants {
 //        public static final String URL_BASE = "http://mibarim.ir/CoreApi";
         public static final String URL_BASE = "http://mibarimapp.com/newtestapp";
 //        public static final String URL_BASE = "http://mibarimapp.com/CoreApi";
-//          public static final String URL_BASE = "http://CoreApi.mibarim.ir/";
+//          public static final String URL_BASE = "http://CoreAp    i.mibarim.ir/";
 //        public static final String URL_BASE = "http://mibarim.ir/testApp/CoreApi";
 
 
@@ -92,6 +92,7 @@ public final class Constants {
         public static final String URL_REQUEST_RIDE_SHARE = "/RequestRideShare";
         public static final String URL_BOOK_REQUEST = "/RequestBooking";
         public static final String URL_PAY_BOOK_REQUEST = "/RequestPayBooking";
+        public static final String URL_PAY_REQUEST = "/PayTrip";
         public static final String URL_ACCEPT_RIDE_SHARE = "/AcceptRideShare";
         public static final String URL_GET_ROUTE_INFO = "/GetRouteInfo";
         public static final String URL_INSERT_RIDE_REQUEST = "/InsertRideRequest";
@@ -124,6 +125,7 @@ public final class Constants {
         public static final String URL_SET_BANK_CARD_IMAGE = "/InsertBankCardPic";
         public static final String URL_GET_VERSION = "/GetAppVersion";
         public static final String URL_GET_SCORE = "/GetPassengerScores";
+        public static final String URL_SEND_AMOUNT = "/RequestInvoiceByForm";
         public static final String URL_GET_RATE = "/GetRatings";
         public static final String URL_GET_SCORE_CONTACT = "/GetUserScoresByContact";
         public static final String URL_GET_SCORE_Route = "/GetUserScoresByRoute";
@@ -200,6 +202,7 @@ public final class Constants {
         public static final String ROUTE_IMAGE_URL = "/GetRouteUserImage";
         public static final String SUGGEST_ROUTE_URL = "/GetSuggestWeekRoute";
         public static final String GET_PASSENGER_ROUTE_URL = "/GetPassengerRoutes";
+        public static final String GET_PASSENGER_TRIP_URL = "/GetPassengerTrip";
         public static final String SIMILAR_SUGGEST_ROUTE_URL = "/GetSimilarSuggestRoute";
         public static final String TRIP_PROFILE_URL = "/GetTripProfile";
         public static final String URL_SET_TRIP_LOCATION = "/SetPassLocation";
