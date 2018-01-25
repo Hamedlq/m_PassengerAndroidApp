@@ -430,8 +430,7 @@
     <string name="cancel_card">آیا مایل به لغو مسیر مورد نظر هستید؟</string>
 
     <string name="select_suggested_time">انتخاب کنید</string>
-
-
+    <string name="service_worker_name">سرویس ماهانه کارمندان</string>
 
 
 </resources>

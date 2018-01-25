@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,6 +44,7 @@ import com.mibarim.main.ui.ThrowableLoader;
 import com.mibarim.main.ui.activities.MainActivity;
 import com.mibarim.main.ui.activities.MainCardActivity;
 import com.mibarim.main.ui.activities.UserInfoDetailActivity;
+import com.mibarim.main.ui.activities.worker.workerServiceActivity;
 //import com.mibarim.main.ui.activities.MainCardActivity;
 
 
@@ -69,6 +71,7 @@ public class RouteFilterFragment extends Fragment implements AbsListView.OnItemC
     Toolbar toolbar;
     ImageView invite_btn;
     ImageView upload_btn;
+    LinearLayout workerServiceLayout;
 
     SwipeRefreshLayout swipeRefreshLayout;
 
@@ -105,6 +108,17 @@ public class RouteFilterFragment extends Fragment implements AbsListView.OnItemC
 
         //initScreen();
         upload_btn = (ImageView) toolbar.findViewById(R.id.upload_btn);
+        workerServiceLayout  = (LinearLayout)view.findViewById(R.id.worker_service_toolbar);
+
+
+        workerServiceLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(),workerServiceActivity.class);
+                intent.putExtra("worker_token", ((MainActivity) getActivity()).getAuthToken());
+                startActivity(intent);
+            }
+        });
 
         invite_btn.setOnTouchListener(new View.OnTouchListener() {
             @Override

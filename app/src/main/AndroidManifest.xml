@@ -157,7 +157,7 @@
             android:name=".ui.activities.WebViewActivity"
             android:label=""
             android:screenOrientation="portrait" />
-
+        <activity android:name=".ui.activities.worker.workerServiceActivity"/>
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
             android:exported="true"
