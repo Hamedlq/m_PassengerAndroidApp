@@ -60,8 +60,8 @@ public class UserInfoService {
     }
 
 
-    public ApiResponse SaveGoogleToken(String authToken) {
-        ApiResponse res = getService().SaveGoogleToken("Bearer " + authToken);
+    public ApiResponse SaveGoogleToken(String authToken,String googletoken,String oneSignaltoken) {
+        ApiResponse res = getService().SaveGoogleToken("Bearer " + authToken,googletoken,oneSignaltoken);
         return res;
     }
 

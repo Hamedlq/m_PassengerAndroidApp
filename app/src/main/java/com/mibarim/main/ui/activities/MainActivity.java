@@ -259,7 +259,7 @@ public class MainActivity extends BootstrapActivity {
                     serviceProvider.invalidateAuthToken();
                     authToken = serviceProvider.getAuthToken(MainActivity.this);
                 }
-                userInfoService.SaveGoogleToken(authToken);
+                userInfoService.SaveGoogleToken(authToken, googletoken,oneSignaltoken);
                 return true;
             }
 
