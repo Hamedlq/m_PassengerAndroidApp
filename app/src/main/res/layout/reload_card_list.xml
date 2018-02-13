@@ -20,14 +20,14 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-    <TextView
-        android:id="@android:id/empty"
-        style="@style/ListSubtitleText"
+
+
+    <ImageView
+        android:id="@+id/empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/no_trip"
-        android:textColor="@color/primary_dark"
-        android:visibility="gone" />
+        android:src="@drawable/select_route"
+        android:visibility="visible"/>
+
 
 </RelativeLayout>

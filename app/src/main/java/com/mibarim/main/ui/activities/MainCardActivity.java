@@ -1,5 +1,3 @@
-
-
 package com.mibarim.main.ui.activities;
 
 
@@ -27,6 +25,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.analytics.HitBuilders;
@@ -56,6 +55,7 @@ import com.mibarim.main.services.AuthenticateService;
 import com.mibarim.main.services.RouteResponseService;
 import com.mibarim.main.services.UserInfoService;
 import com.mibarim.main.ui.BootstrapActivity;
+import com.mibarim.main.ui.activities.worker.workerServiceActivity;
 import com.mibarim.main.ui.fragments.FabFragment;
 import com.mibarim.main.ui.fragments.PlusFragments.PassengerCardFragment;
 import com.mibarim.main.util.SafeAsyncTask;
@@ -77,8 +77,10 @@ import butterknife.ButterKnife;
  */
 public class MainCardActivity extends BootstrapActivity {
 
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     @Inject
     protected BootstrapServiceProvider serviceProvider;
+    protected Bitmap result;//concurrency must be considered
     @Inject
     LogoutService getLogoutService;
     @Inject
@@ -87,41 +89,48 @@ public class MainCardActivity extends BootstrapActivity {
     UserInfoService userInfoService;
     @Inject
     UserData userData;
-
-
-    private CharSequence title;
-    private Toolbar toolbar;
     ImageView invite_btn;
     ImageView upload_btn;
     ImageView user_panel;
-
+    String googletoken = "";
+    String oneSignaltoken = "";
+    boolean doubleBackToExitPressedOnce = false;
+    ApiResponse apiResponse;
+    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.update_link)));
+                    startActivity(browserIntent);
+                    break;
+                case DialogInterface.BUTTON_NEGATIVE:
+                    finishAffinity();
+                    break;
+            }
+        }
+    };
+    private CharSequence title;
+    //private RouteResponse selfRoute;
+    private Toolbar toolbar;
     private String authToken;
     private String url;
     private ApiResponse response;
     private ApiResponse userTrip;
     private int appVersion = 0;
     private ApiResponse theSuggestRoute;
-    //private RouteResponse selfRoute;
-
     private Tracker mTracker;
-    protected Bitmap result;//concurrency must be considered
     private int REFRESH_TOKEN_REQUEST = 3456;
     private boolean refreshingToken = false;
-    String googletoken = "";
-    String oneSignaltoken = "";
-    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     private int FINISH_USER_INFO = 5649;
     private int FINISH_PAYMENT = 5659;
     private int FINISH_TRIP = 5669;
     private View parentLayout;
     private boolean netErrorMsg = false;
-    boolean doubleBackToExitPressedOnce = false;
     private UserInfoModel userInfoModel;
     private InviteModel inviteModel;
     private int USER_DETAIL_INFO_REQUEST_CODE = 1239;
-    private int SEARCH_STATION_REQUEST_CODE =7464;
-
-    ApiResponse apiResponse;
+    private int SEARCH_STATION_REQUEST_CODE = 7464;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -156,11 +165,16 @@ public class MainCardActivity extends BootstrapActivity {
         }
 
 
-
 //        user_panel = (ImageView) toolbar.findViewById(R.id.test_button);
 
 
     }
+
+    /*@Override
+    protected void onResume() {
+        checkAuth();
+        super.onResume();
+    }*/
 
     private void initScreen() {
         checkVersion();
@@ -202,12 +216,6 @@ public class MainCardActivity extends BootstrapActivity {
         });
     }
 
-    /*@Override
-    protected void onResume() {
-        checkAuth();
-        super.onResume();
-    }*/
-
     private void checkAuth() {
         new SafeAsyncTask<Boolean>() {
 
@@ -240,7 +248,6 @@ public class MainCardActivity extends BootstrapActivity {
             }
         }.execute();
     }
-
 
     private void setInfoValues(boolean IsUserRegistered) {
         SharedPreferences prefs = this.getSharedPreferences(
@@ -288,7 +295,6 @@ public class MainCardActivity extends BootstrapActivity {
         }
     }
 
-
     @Subscribe
     public void onUnAuthorizedErrorEvent(UnAuthorizedErrorEvent event) {
         refreshToken();
@@ -301,15 +307,6 @@ public class MainCardActivity extends BootstrapActivity {
     }
 
 
-    private void refreshToken() {
-        if (!refreshingToken) {
-            refreshingToken = true;
-            final Intent i = new Intent(this, TokenRefreshActivity.class);
-            startActivityForResult(i, REFRESH_TOKEN_REQUEST);
-        }
-    }
-
-
 /*    @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -318,6 +315,14 @@ public class MainCardActivity extends BootstrapActivity {
         }
         return super.onKeyUp(keyCode, event);
     }*/
+
+    private void refreshToken() {
+        if (!refreshingToken) {
+            refreshingToken = true;
+            final Intent i = new Intent(this, TokenRefreshActivity.class);
+            startActivityForResult(i, REFRESH_TOKEN_REQUEST);
+        }
+    }
 
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
@@ -329,7 +334,6 @@ public class MainCardActivity extends BootstrapActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -359,7 +363,6 @@ public class MainCardActivity extends BootstrapActivity {
         }
     }
 
-
     private void refresh() {
         final FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment fragment = fragmentManager.findFragmentById(R.id.main_container);
@@ -367,7 +370,6 @@ public class MainCardActivity extends BootstrapActivity {
             ((PassengerCardFragment) fragment).refresh();
         }
     }
-
 
     @Override
     public void onBackPressed() {
@@ -420,7 +422,6 @@ public class MainCardActivity extends BootstrapActivity {
         intent.putExtra(Constants.Auth.AUTH_TOKEN, authToken);
         this.startActivity(intent);
     }
-
 
     public Bitmap getImageById(String imageId, int defaultDrawableId) {
         Bitmap icon = BitmapFactory.decodeResource(getResources(), defaultDrawableId);
@@ -484,7 +485,6 @@ public class MainCardActivity extends BootstrapActivity {
         return selfRoute;
     }
 
-
     private void sendRegistrationToServer() {
         if (checkPlayServices()) {
             final InstanceID instanceID = InstanceID.getInstance(this);
@@ -494,7 +494,7 @@ public class MainCardActivity extends BootstrapActivity {
                     googletoken = instanceID.getToken(getString(R.string.gcm_defaultSenderId),
                             GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
                     OSPermissionSubscriptionState status = OneSignal.getPermissionSubscriptionState();
-                    oneSignaltoken=status.getSubscriptionStatus().getUserId();
+                    oneSignaltoken = status.getSubscriptionStatus().getUserId();
                     return true;
                 }
 
@@ -536,7 +536,7 @@ public class MainCardActivity extends BootstrapActivity {
                     serviceProvider.invalidateAuthToken();
                     authToken = serviceProvider.getAuthToken(MainCardActivity.this);
                 }
-                userInfoService.SaveGoogleToken(authToken, googletoken,oneSignaltoken);
+                userInfoService.SaveGoogleToken(authToken, googletoken, oneSignaltoken);
                 return true;
             }
 
@@ -552,14 +552,12 @@ public class MainCardActivity extends BootstrapActivity {
         }.execute();
     }
 
-
     public void gotoPayActivity(final PassRouteModel selectedItem) {
         Intent intent = new Intent(this, PayActivity.class);
         intent.putExtra(Constants.GlobalConstants.PASS_ROUTE_MODEL, selectedItem);
         intent.putExtra(Constants.Auth.AUTH_TOKEN, authToken);
         this.startActivityForResult(intent, FINISH_PAYMENT);
     }
-
 
     public int getVersion() {
         int v = 1000;
@@ -621,26 +619,10 @@ public class MainCardActivity extends BootstrapActivity {
         this.startActivityForResult(intent, FINISH_TRIP);
     }
 
-
     private void showUpdateDialog(String msg) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(msg).setPositiveButton("باشه", dialogClickListener).setNegativeButton("بستن برنامه", dialogClickListener).show();
     }
-
-    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            switch (which) {
-                case DialogInterface.BUTTON_POSITIVE:
-                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.update_link)));
-                    startActivity(browserIntent);
-                    break;
-                case DialogInterface.BUTTON_NEGATIVE:
-                    finishAffinity();
-                    break;
-            }
-        }
-    };
 
     private void getUserInfoFromServer() {
         new SafeAsyncTask<Boolean>() {

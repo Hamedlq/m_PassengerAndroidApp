@@ -14,6 +14,7 @@ import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.brnunes.swipeablerecyclerview.SwipeableRecyclerViewTouchListener;
@@ -36,8 +37,10 @@ import com.mibarim.main.models.enums.TripStates;
 import com.mibarim.main.services.RouteResponseService;
 import com.mibarim.main.services.UserInfoService;
 import com.mibarim.main.ui.ThrowableLoader;
+import com.mibarim.main.ui.activities.MainActivity;
 import com.mibarim.main.ui.activities.MainCardActivity;
 import com.mibarim.main.ui.activities.UserInfoDetailActivity;
+import com.mibarim.main.ui.activities.worker.workerServiceActivity;
 import com.mibarim.main.util.SafeAsyncTask;
 
 import java.util.ArrayList;
@@ -69,6 +72,7 @@ public class PassengerCardFragment extends Fragment
     private RecyclerView mRecyclerView;
     SwipeRefreshLayout mSwipeRefreshLayout;
     private TextView mEmptyView;
+    private ImageView selectRoute;
     //private ProgressBar mProgressView;
     private PassengerRouteRecyclerAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -98,6 +102,9 @@ public class PassengerCardFragment extends Fragment
 
         mRecyclerView = (RecyclerView) mRecycler.findViewById(android.R.id.list);
         mSwipeRefreshLayout = (SwipeRefreshLayout) mRecycler.findViewById(R.id.swipe_refresh_layout);
+        selectRoute = (ImageView) container.findViewById(R.id.empty);
+        selectRoute.setAlpha((float) 0.5);
+        selectRoute.setVisibility(View.GONE);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -105,8 +112,7 @@ public class PassengerCardFragment extends Fragment
             }
         });
 
-        mEmptyView = (TextView) mRecycler.findViewById(android.R.id.empty);
-        mEmptyView.setVisibility(View.GONE);
+        selectRoute = (ImageView) mRecycler.findViewById(android.R.id.empty);
         /*mProgressView = (ProgressBar) mRecycler.findViewById(R.id.pb_loading);*/
 
         // use a linear layout manager
@@ -229,7 +235,7 @@ public class PassengerCardFragment extends Fragment
 
     @Override
     public Loader<List<PassRouteModel>> onCreateLoader(int id, Bundle args) {
-        mEmptyView.setVisibility(View.GONE);
+        selectRoute.setVisibility(View.GONE);
 
         mSwipeRefreshLayout.setRefreshing(true);
         items = new ArrayList<PassRouteModel>();
@@ -277,7 +283,7 @@ public class PassengerCardFragment extends Fragment
     public void onLoadFinished(Loader<List<PassRouteModel>> loader, List<PassRouteModel> data) {
         items = data;
         if (items.size() == 0) {
-            mEmptyView.setVisibility(View.VISIBLE);
+            selectRoute.setVisibility(View.VISIBLE);
         }
         // specify an adapter (see also next example)
         mAdapter = new PassengerRouteRecyclerAdapter(getActivity(), items, itemTouchListener);

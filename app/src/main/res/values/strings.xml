@@ -334,7 +334,7 @@
     <string name="ride_down">ثبت محل پیاده شدن</string>
     <string name="zero">0</string>
     <string name="empty_list">موردی ثبت نشده است</string>
-    <string name="no_trip">سفری ثبت نشده است.</string>
+    <string name="no_trip">رزرو سفر</string>
     <string name="invite_friends">دعوت از دوستان</string>
     <string name="about_me">درباره من</string>
     <string name="bank_info">اطلاعات حساب بانکی</string>
@@ -442,6 +442,8 @@
     <string name="charge">افزایش اعتبار</string>
     <string name="payment">پرداخت</string>
     <string name="low_charge_amount">مبلغ وارد شده کم است</string>
+    <string name="monthly_service">هزینه یک ماه را پرداخت کنید، سرویس‌های روزانه هر روز نزدیک خانه شما را سوار می‌کنند.</string>
+    <string name="daily_service">برای تاکسی اشتراکی هربار زمان سوار شدن را بر اساس همسفرهای دیگر وارد کنید.</string>
 
 
 </resources>

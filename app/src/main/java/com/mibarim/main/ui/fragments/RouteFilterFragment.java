@@ -1,5 +1,6 @@
 package com.mibarim.main.ui.fragments;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -31,16 +33,15 @@ import com.mibarim.main.models.RouteResponse;
 import com.mibarim.main.services.RouteResponseService;
 import com.mibarim.main.ui.ThrowableLoader;
 import com.mibarim.main.ui.activities.MainActivity;
-import com.mibarim.main.ui.activities.MainCardActivity;
-import com.mibarim.main.ui.activities.UserInfoDetailActivity;
 import com.mibarim.main.ui.activities.worker.workerServiceActivity;
-//import com.mibarim.main.ui.activities.MainCardActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
+
+//import com.mibarim.main.ui.activities.MainCardActivity;
 
 //import com.mibarim.main.ui.activities.MainCardActivity;
 //import com.mibarim.main.adapters.RouteFilterAdapter;
@@ -56,15 +57,16 @@ public class RouteFilterFragment extends Fragment implements AbsListView.OnItemC
     List<FilterModel> latest;
     RouteFilterAdapter mAdapter;
     ListView listView;
-    TextView mEmptyView;
+    RelativeLayout mEmptyView;
     Toolbar toolbar;
     ImageView invite_btn;
     ImageView upload_btn;
-    LinearLayout workerServiceLayout;
+    ImageView user_panel;
 
     SwipeRefreshLayout swipeRefreshLayout;
     private RouteResponse routeResponse;
     private ApiResponse suggestRouteResponse;
+    private LinearLayout staffService;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,8 +88,16 @@ public class RouteFilterFragment extends Fragment implements AbsListView.OnItemC
 
         listView = (ListView) view.findViewById(R.id.listView);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
-        mEmptyView = (TextView) view.findViewById(R.id.empty);
-
+        mEmptyView = (RelativeLayout) view.findViewById(R.id.empty);
+        staffService = (LinearLayout) view.findViewById(R.id.worker_service_toolbar);
+        staffService.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), workerServiceActivity.class);
+                intent.putExtra("worker_token", ((MainActivity) getActivity()).getAuthToken());
+                startActivity(intent);
+            }
+        });
         toolbar = (Toolbar) view.findViewById(R.id.main_toolbar);
 //        setSupportActionBar(toolbar);
         invite_btn = (ImageView) toolbar.findViewById(R.id.invite_btn);
@@ -96,17 +106,7 @@ public class RouteFilterFragment extends Fragment implements AbsListView.OnItemC
 
         //initScreen();
         upload_btn = (ImageView) toolbar.findViewById(R.id.upload_btn);
-        workerServiceLayout  = (LinearLayout)view.findViewById(R.id.worker_service_toolbar);
 
-
-        workerServiceLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(),workerServiceActivity.class);
-                intent.putExtra("worker_token", ((MainActivity) getActivity()).getAuthToken());
-                startActivity(intent);
-            }
-        });
 
         invite_btn.setOnTouchListener(new View.OnTouchListener() {
             @Override

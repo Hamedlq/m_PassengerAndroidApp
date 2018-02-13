@@ -12,9 +12,7 @@
         android:background="#fff"
         android:orientation="vertical">
 
-        <include layout="@layout/toolbar_main">
-
-        </include>
+        <include layout="@layout/toolbar_main" />
         <!-- The tm content view -->
 
         <FrameLayout

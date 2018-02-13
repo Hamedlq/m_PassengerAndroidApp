@@ -45,7 +45,7 @@
     </style>
 
     <style name="ListSubtitleText">
-        <item name="android:textSize">14sp</item>
+        <item name="android:textAppearance">?android:textAppearanceSmall</item>
         <item name="android:textColor">@color/table_text_light</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>

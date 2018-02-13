@@ -19,13 +19,69 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/toolbar_main"></include>
+        <include layout="@layout/toolbar_main" />
+
+        <LinearLayout
+            android:id="@+id/worker_service_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/shape"
+            android:elevation="5dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/service_worker_name"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="20dp"
+                android:drawableTop="@drawable/ic_show_up"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:text="@string/monthly_service"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:textColor="@android:color/black" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="10dp"
+                android:drawablePadding="5dp"
+                android:layout_marginBottom="5dp"
+                android:drawableStart="@drawable/ic_show_down"
+                android:layout_marginStart="80dp"
+                android:gravity="center"
+                android:text="@string/daily_service"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:textColor="@android:color/black" />
+
+        </RelativeLayout>
 
         <android.support.v4.widget.SwipeRefreshLayout
 
             android:id="@+id/swipe_refresh_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
 
             <ListView
                 android:id="@+id/listView"
@@ -38,15 +94,5 @@
 
     </LinearLayout>
 
-
-    <TextView
-        android:id="@+id/empty"
-        style="@style/ListSubtitleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="@string/no_trip"
-        android:textColor="@color/main_black"
-        android:visibility="gone" />
 
 </RelativeLayout>
